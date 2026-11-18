@@ -54,3 +54,13 @@
   - المنشورات (`posts/posts.php`, `posts/css/posts.css`).
   - المفضلة وعملاء VIP (`favorite/favorite.php`, `favorite/css/favorite.css`).
   - الإعدادات (`settings/settings.php`, `settings/css/settings.css`).
+
+### 5. جعل المشروع يعمل دون إنترنت (100% Offline-Ready Assets):
+- **الخطوط**:
+  - تحميل ملف خط `Cairo.ttf` وحفظه في المجلد `fonts/`.
+  - إنشاء ملف `fonts/cairo.css` مع قاعدة `@font-face` المحلية.
+- **الأيقونات**:
+  - تحميل حزمة Font Awesome الكاملة وحفظها في `fontawesome/css/all.min.css` وملفات خطوط الويب `fontawesome/webfonts/`.
+- **المكتبات**:
+  - تحميل وتوفير مكتبة `js/chart.min.js` محلياً بدلاً من روابط CDN.
+  - تأكيد ارتباط كافة الصفحات بالأصول المحلية لضمان تشغيل الموقع بكفاءة تامة وبدون أي اتصال بالإنترنت.
