@@ -1,27 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Css/login.css">
-    <title>Login</title>
+    <title>تسجيل الدخول</title>
 </head>
 <body>
     <div class="login">
         <div class="box">
-            <h1>Login</h1>
+            <h1>تسجيل الدخول</h1>
             <form action="login_process.php" method="post" id="login-form">
                 <div>
-                    <label for="email">Email</label><br>
-                    <input type="email" id="email" name="email" placeholder="Enter the email" required>
+                    <label for="email">البريد الإلكتروني</label><br>
+                    <input type="email" id="email" name="email" placeholder="أدخل البريد الإلكتروني" required>
                 </div><br>
                 <div>
-                    <label for="password">Password</label><br>
-                    <input type="password" id="password" name="password" placeholder="Enter the password" required>
+                    <label for="password">كلمة المرور</label><br>
+                    <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" required>
                 </div>
                 <br>
                 <div>
-                    <button type="submit">Login</button>
+                    <button type="submit">تسجيل الدخول</button>
                 </div>
             </form>
         </div>

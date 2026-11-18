@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (typeof Chart !== 'undefined') {
         Chart.defaults.color = '#ccc';
         Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
-        Chart.defaults.font.family = 'sans-serif';
+        Chart.defaults.font.family = "'Cairo', sans-serif";
     } else {
         console.error("Chart.js is not loaded!");
         return;

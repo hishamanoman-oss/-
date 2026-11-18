@@ -52,8 +52,8 @@ form.addEventListener("submit", function (e) {
                     <td>${phone}</td>
                     <td>${email}</td>
                     <td class='actions'>
-                        <button class='edit' data-id='new'>edit</button> 
-                        <button class='delete' data-id='new'>delete</button>
+                        <button class='edit' data-id='new'>تعديل</button> 
+                        <button class='delete' data-id='new'>حذف</button>
                     </td>
                 `;
                     // ملاحظة: الأزرار الجديدة تحتاج تحديث الصفحة لتأخذ ID حقيقي من قاعدة البيانات
@@ -103,7 +103,7 @@ tableBody.addEventListener("click", function (e) {
 
         // تفعيل وضع التعديل
         editingClientId = id;
-        submitButton.innerText = "Update Data"; // تغيير نص الزر
+        submitButton.innerText = "تحديث البيانات"; // تغيير نص الزر
         submitButton.style.backgroundColor = "#ffa500"; // تمييز لون الزر (اختياري)
     }
 });
@@ -112,6 +112,6 @@ tableBody.addEventListener("click", function (e) {
 function resetForm() {
     form.reset();
     editingClientId = null;
-    submitButton.innerText = "Addition";
+    submitButton.innerText = "إضافة عميل";
     submitButton.style.backgroundColor = ""; // استعادة اللون الأصلي
 }

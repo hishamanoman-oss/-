@@ -2,12 +2,14 @@
     padding: 0;
     margin: 0;
     color: white;
-    font-family: 'Cairo', sans-serif;
+    font-family: 'Cairo', sans-serif !important;
 }
 
 body {
     background-color: #001;
     display: flex;
+    direction: rtl;
+    text-align: right;
 }
 
 .img-box {
@@ -102,7 +104,7 @@ ul li a i {
 
 /* Glassmorphism Design */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Cairo', sans-serif !important;
     color: #e2e0e0;
     /* Light text for dark background */
 }

@@ -28,7 +28,7 @@ form.addEventListener("submit", function (e) {
                     row.cells[1].innerText = productData.price;
                     row.cells[2].innerText = productData.count;
 
-                    submitButton.innerText = "Addition";
+                    submitButton.innerText = "إضافة منتج";
                     submitButton.style.backgroundColor = ""; // إعادة لون الزر للأصل
                     form.reset();
                     editMode = false;
@@ -51,7 +51,7 @@ form.addEventListener("submit", function (e) {
                     newRow.insertCell(0).innerText = productData.name;
                     newRow.insertCell(1).innerText = productData.price;
                     newRow.insertCell(2).innerText = productData.count;
-                    newRow.insertCell(3).innerHTML = `<button class='edit' data-id='${data.new_id || ''}'>edit</button> <button class='delete' data-id='${data.new_id || ''}'>delete</button>`;
+                    newRow.insertCell(3).innerHTML = `<button class='edit' data-id='${data.new_id || ''}'>تعديل</button> <button class='delete' data-id='${data.new_id || ''}'>حذف</button>`;
                     submitButton.style.backgroundColor = ""; // إعادة لون الزر للأصل
                     form.reset();
                     location.reload(); // لتحديث ال IDs
@@ -77,7 +77,7 @@ tableBody.addEventListener("click", function (e) {
                     if (data.trim() === "success") {
                         e.target.closest("tr").remove();
                         if (editMode && editId == id) {
-                            submitButton.innerText = "Addition";
+                            submitButton.innerText = "إضافة منتج";
                             submitButton.style.backgroundColor = ""; // إعادة لون الزر للأصل
                             form.reset();
                             editMode = false;
@@ -101,7 +101,7 @@ tableBody.addEventListener("click", function (e) {
         document.getElementById("price").value = row.cells[1].innerText;
         document.getElementById("count").value = row.cells[2].innerText;
 
-        submitButton.innerText = "Update data";
+        submitButton.innerText = "تحديث البيانات";
         submitButton.style.backgroundColor = "#ffa500"; // تغيير اللون للأصفر
         editMode = true;
     }

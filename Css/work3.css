@@ -2,11 +2,13 @@
     padding: 0;
     margin: 0;
     color: white;
-    font-family: sans-serif;
+    font-family: 'Cairo', sans-serif !important;
 }
 body{
     background-color: #001;
     display: flex;
+    direction: rtl;
+    text-align: right;
 }
 .img-box{
     width: 50px;
@@ -61,6 +63,7 @@ ul li a:hover, .data-info .box:hover, td:hover{
     position: absolute;
     bottom: 0;
     width: 100%;
+    right: 0;
 }
 .log-out a{
     background-color: #a00;
@@ -107,8 +110,3 @@ ul li a i{
 .data-info .box .data span{
     font-size: 30px;
 }
-
-
-
-
-
