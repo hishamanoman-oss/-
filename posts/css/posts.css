@@ -1,0 +1,365 @@
+* {
+    padding: 0;
+    margin: 0;
+    color: white;
+    font-family: 'Cairo', sans-serif;
+}
+
+body {
+    background-color: #001;
+    display: flex;
+}
+
+.img-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid white;
+    flex-shrink: 0;
+}
+
+.img-box img {
+    width: 100%;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile h2 {
+    font-size: 13px;
+}
+
+.menu {
+    background-color: #123;
+    width: 50px;
+    height: 100vh;
+    padding: 20px;
+    overflow: hidden;
+    transition: .5s;
+}
+
+.menu:hover {
+    width: 250px;
+}
+
+ul {
+    list-style: none;
+    position: relative;
+    height: 95%;
+}
+
+ul li a {
+    display: block;
+    text-decoration: none;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    transition: .5s;
+}
+
+ul li a:hover,
+.data-info .box:hover,
+td:hover {
+    background-color: #ffffff55;
+}
+
+.log-out {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.log-out a {
+    background-color: #a00;
+}
+
+ul li a i {
+    font-size: 25px;
+}
+
+.content {
+    width: 100%;
+    margin: 10px;
+}
+
+.title-info {
+    background: linear-gradient(135deg, #0481ff, #00c6ff);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+
+/* Glassmorphism Design */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #e2e0e0;
+    /* Light text for dark background */
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.posts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.post-card {
+    background: rgba(255, 255, 255, 0.95);
+    /* Light background for readability */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    direction: rtl;
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.post-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    border-color: #0481ff;
+    /* Accent color on hover */
+}
+
+/* New User Icon Style */
+.user-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #0481ff, #0056b3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 28px;
+    box-shadow: 0 4px 15px rgba(4, 129, 255, 0.3);
+}
+
+
+.post-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #dcdcdc;
+    /* Darker border */
+}
+
+.user-info h3 {
+    color: #1a1a1a;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.user-info span {
+    color: #555;
+    font-weight: 600;
+}
+
+.post-content {
+    margin-bottom: 20px;
+    color: #222;
+    /* High contrast text */
+    line-height: 1.8;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.post-actions {
+    display: flex;
+    gap: 15px;
+    border-top: 1px solid #dcdcdc;
+    /* Darker border */
+    padding-top: 15px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    color: #444;
+    /* Darker text */
+    transition: all 0.2s ease;
+    background: #eaeaea;
+    /* Slightly darker background */
+    border: 1px solid #ccc;
+    font-weight: 600;
+}
+
+.action-btn:hover {
+    background: #0481ff;
+    color: white;
+    /* White text on hover */
+    border-color: #0481ff;
+    transform: translateY(-2px);
+}
+
+.action-btn i {
+    font-size: 1.2rem;
+    color: #0481ff;
+    /* Accent color for icons */
+}
+
+.action-btn:hover i {
+    color: white;
+    /* Icons turn white on hover */
+}
+
+/* Scrollbar for webkit */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #001;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+
+    .post-card {
+        padding: 15px;
+    }
+
+    .action-btn span {
+        display: none;
+        /* Hide text on very small screens if needed, mostly fine though */
+    }
+}
+
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.posts-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.post-card {
+    background: rgba(255, 255, 255, 0.637);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-right: 4px solid #667eea;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.post-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.post-date {
+    background: #e8f4fd;
+    color: #2980b9;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.post-content {
+    color: #585858;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.post-stats {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.stat-number {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.no-posts {
+    text-align: center;
+    padding: 60px 20px;
+    color: #7f8c8d;
+}
+
+.no-posts h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 500px) {
+    .container {
+        padding: 15px;
+    }
+
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .post-card {
+        padding: 20px;
+    }
+
+    .post-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

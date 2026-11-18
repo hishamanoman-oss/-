@@ -1,0 +1,200 @@
+* {
+    padding: 0;
+    margin: 0;
+    color: white;
+    font-family: sans-serif;
+}
+
+body {
+    background-color: #001;
+    display: flex;
+}
+
+.img-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid white;
+    flex-shrink: 0;
+}
+
+.img-box img {
+    width: 100%;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile h2 {
+    font-size: 13px;
+}
+
+.menu {
+    background-color: #123;
+    width: 50px;
+    height: 100vh;
+    padding: 20px;
+    overflow: hidden;
+    transition: .5s;
+}
+
+.menu:hover {
+    width: 250px;
+}
+
+ul {
+    list-style: none;
+    position: relative;
+    height: 95%;
+}
+
+ul li a {
+    display: block;
+    text-decoration: none;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    transition: .5s;
+}
+
+ul li a:hover,
+.data-info .box:hover,
+td:hover {
+    background-color: #ffffff55;
+}
+
+.log-out {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.log-out a {
+    background-color: #a00;
+}
+
+ul li a i {
+    font-size: 25px;
+}
+
+/* =========================================
+   تنسيق منطقة المحتوى والرسوم البيانية (تصميم إبداعي)
+   ========================================= */
+
+.content {
+    flex: 1;
+    /* يخلي المحتوى ياخذ باقي المساحة جنب القائمة */
+    /* margin: 5px; */
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+/* الترويسة بلمسة فنية */
+.title-info {
+    background: linear-gradient(135deg, #0481ff, #00c6ff);
+    /* تدرج سماوي */
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* شبكة الرسوم البيانية */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    /* بطاقات أعرض */
+    gap: 25px;
+    margin-top: 20px;
+}
+
+/* بطاقة الرسم البياني (زجاجية فاخرة) */
+.chart-card {
+    background: rgba(255, 255, 255, 0.05);
+    /* شفافية داكنة */
+    backdrop-filter: blur(12px);
+    /* تمويه الخلفية */
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    /* ظل عميق */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 400px;
+    /* ارتفاع ثابت ومناسب */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chart-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(4, 129, 255, 0.15);
+    /* توهج أزرق خفيف */
+    border-color: rgba(4, 129, 255, 0.3);
+}
+
+/* عناوين الرسوم البيانية */
+.chart-card h3 {
+    margin: 0 0 15px 0;
+    text-align: center;
+    color: #e0e0e0;
+    font-size: 16px;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 10px;
+    flex-shrink: 0;
+}
+
+/* خط تجميلي تحت العنوان */
+.chart-card h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #0481ff, transparent);
+    border-radius: 2px;
+}
+
+/* حاوية الكانفاس لتصحيح القياسات */
+.chart-container {
+    flex-grow: 1;
+    /* تعبئة المساحة المتبقية */
+    min-height: 0;
+    /* مهم لشبكات الفليكس */
+    position: relative;
+    width: 100%;
+}
+
+/* تخصيص الكانفاس */
+canvas {
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+/* تحسينات للجوال */
+@media (max-width: 768px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+        /* عمود واحد */
+    }
+
+    .chart-card {
+        height: 350px;
+        /* ارتفاع أصغر قليلاً */
+    }
+}
