@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../includes/auth.php';
+require_auth(true);
+
 // إخراج بيانات تجريبية (Test Data) كما طلب المستخدم
 header('Content-Type: application/json');
 

@@ -1,13 +1,31 @@
 <?php
-session_start();
+/**
+ * إنهاء الجلسة وتسجيل الخروج بأمان
+ * Secure Logout Handler
+ */
 
-// مسح كل بيانات الجلسة
-session_unset();
+require_once __DIR__ . '/includes/security.php';
 
-// إنهاء الجلسة بالكامل
+// تفريغ مصفوفة الجلسة
+$_SESSION = [];
+
+// إنهاء وإبطال كوكيز الجلسة في المتصفح
+if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(
+        session_name(),
+        '',
+        time() - 42000,
+        $params["path"],
+        $params["domain"],
+        $params["secure"],
+        $params["httponly"]
+    );
+}
+
+// تدمير الجلسة في السيرفر
 session_destroy();
 
-// إعادة التوجيه لصفحة تسجيل الدخول
+// إعادة التوجيه لصفحة الدخول
 header("Location: Login.php");
 exit();
-?>

@@ -1,10 +1,9 @@
 <?php
-session_start();
-// التحقق من تسجيل الدخول
-if(!isset($_SESSION['email'])){
-    header("Location: Login.php");
-    exit();
-}
+require_once __DIR__ . '/includes/security.php';
+require_once __DIR__ . '/includes/auth.php';
+
+require_auth();
+$currentUser = current_user();
 ?>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -22,8 +21,11 @@ if(!isset($_SESSION['email'])){
                 <div class="img-box">
                     <img src="work.jpg" alt="profile">
                 </div>
-                <!-- نعرض البريد أو الاسم من الجلسة -->
-                <h2><?php echo $_SESSION['email']; ?></h2>
+                <!-- نعرض الاسم أو البريد مع الدور من الجلسة بأمان -->
+                <div>
+                    <h2><?php echo e($currentUser['full_name'] ?: $currentUser['email']); ?></h2>
+                    <span style="font-size: 11px; color: #00c6ff; display: block;"><?php echo $currentUser['role'] === 'admin' ? 'مدير النظام' : 'موظف مبيعات'; ?></span>
+                </div>
             </li>
             <li>
                 <a href="index.php">

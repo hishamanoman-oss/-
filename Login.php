@@ -1,3 +1,13 @@
+<?php
+require_once __DIR__ . '/includes/security.php';
+require_once __DIR__ . '/includes/auth.php';
+
+// إذا كان المستخدم مسجلاً بالفعل، يتم توجيهه مباشرة إلى لوحة التحكم
+if (is_logged_in()) {
+    header("Location: index.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -12,6 +22,7 @@
         <div class="box">
             <h1>تسجيل الدخول</h1>
             <form action="login_process.php" method="post" id="login-form">
+                <?php echo csrf_field(); ?>
                 <div>
                     <label for="email">البريد الإلكتروني</label><br>
                     <input type="email" id="email" name="email" placeholder="أدخل البريد الإلكتروني" required>

@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../includes/auth.php';
+require_auth(true);
 include("../db_connect.php");
 
 if(isset($_POST['id'])){

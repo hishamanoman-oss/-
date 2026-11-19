@@ -64,3 +64,31 @@
 - **المكتبات**:
   - تحميل وتوفير مكتبة `js/chart.min.js` محلياً بدلاً من روابط CDN.
   - تأكيد ارتباط كافة الصفحات بالأصول المحلية لضمان تشغيل الموقع بكفاءة تامة وبدون أي اتصال بالإنترنت.
+
+### 6. تنفيذ المرحلة الأولى: البنية التحتية، المخطط العلائقي، والمصادقة متعددة الأدوار (Step 1 Foundation):
+- **التاريخ**: 2026-11-20
+- **إعدادات البيئة (Environment & Config)**:
+  - إنشاء ملفي `.env` و `.env.example` لضبط متغيرات السيرفر وقاعدة البيانات.
+  - إنشاء `.gitignore` لمنع تتبع الملفات الحساسة وسجلات السيرفر.
+  - إنشاء `config/config.php` لقراءة ملفات البيئة مع توفير قيم احتياطية آمنة.
+  - إنشاء `config/database.php` لإدارة اتصالات **PDO** بترميز `utf8mb4`، تفعيل الاستعلامات المجهزة الحقيقية، وإخفاء أخطاء قواعد البيانات عن المستخدم مع تسجيلها داخلياً عبر `error_log`.
+  - تحديث المحول القديم `db_connect.php` ليعتمد على `config/config.php` بدون كسر الصفحات القديمة.
+- **المخطط العلائقي وغرس البيانات (Relational Schema & Seeder)**:
+  - إنشاء `database/schema.sql` بالجداول السبعة المتكاملة والمفاتيح الأجنبية:
+    1. `users` (id, full_name, email UNIQUE, password_hash, role ENUM('admin','staff'), is_active, timestamps).
+    2. `clients` (id, name, phone, email, address, is_vip, notes, timestamps).
+    3. `products` (id, name, sku UNIQUE, category, price, count, min_stock_alert, status, timestamps).
+    4. `orders` (id, order_number UNIQUE, client_id FK, user_id FK, total_amount, status, timestamps).
+    5. `order_items` (id, order_id FK, product_id FK, quantity, unit_price, subtotal).
+    6. `posts` (id, user_id FK, title, content, status, timestamps).
+    7. `settings` (id, setting_key UNIQUE, setting_value, updated_at).
+  - إعادة بناء `setup_db.php` ليعمل بنظام Idempotent آمن ومحصور في البيئة المحلية (APP_ENV=local أو CLI).
+  - غرس بيانات عربية واقعية لـ 3 مستخدمين مشفرين (Admin و Staff)، و 5 عملاء (بينهم VIP)، و 6 منتجات، و 4 طلبات مبيعات مع بنودها، و 3 منشورات، وإعدادات المتجر.
+- **طبقة الأمان والمصادقة (Security & Multi-Role Auth)**:
+  - إنشاء `includes/security.php`: جلسات محمية (`httponly`, `samesite=Lax`, `use_strict_mode`), دالة `e()` لفلترة XSS، وحماية متكاملة ضد CSRF (`csrf_token`, `csrf_field`, `verify_csrf_token`).
+  - إنشاء `includes/auth.php`: دوال `current_user()`, `is_logged_in()`, `has_role()`, `require_auth()`, و `require_role()`.
+  - إعادة بناء مسار تسجيل الدخول في `Login.php`, `login_process.php`, `js/login.js`, و `logout.php` مع تجديد معرف الجلسة بعد الدخول والتشفير بـ `password_hash` و `password_verify`.
+  - إغلاق وتأمين كافة نقاط النهاية المفتوحة (Endpoints) السبعة لمنع أي وصول غير مصرح.
+- **التحقق الآلي**:
+  - نجاح فحص `php -l` بنسبة 100% لكافة ملفات المشروع (24 ملفاً).
+  - نجاح ملف الفحص الآلي `tests/verify_step1.php` بنسبة 100%.
