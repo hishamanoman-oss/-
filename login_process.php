@@ -54,7 +54,9 @@ try {
         }
 
         // 6. تجديد معرف الجلسة لمنع هجمات تثبيت الجلسة (Session Fixation)
-        session_regenerate_id(true);
+        if (!headers_sent()) {
+            session_regenerate_id(true);
+        }
 
         // 7. تخزين بيانات المستخدم والأدوار في الجلسة
         $_SESSION['user_id']   = (int)$user['id'];
@@ -72,7 +74,7 @@ try {
     } else {
         echo "البريد الإلكتروني أو كلمة المرور غير صحيحة";
     }
-} catch (Exception $e) {
+} catch (Throwable $e) {
     error_log("Login processing error: " . $e->getMessage());
     echo "حدث خطأ غير متوقع أثناء معالجة تسجيل الدخول. يرجى المحاولة لاحقاً.";
 }
