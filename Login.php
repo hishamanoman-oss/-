@@ -13,8 +13,8 @@ if (is_logged_in()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="fonts/cairo.css">
-    <link rel="stylesheet" href="Css/login.css">
+    <link rel="stylesheet" href="fonts/cairo.css?v=2">
+    <link rel="stylesheet" href="Css/login.css?v=2">
     <title>تسجيل الدخول</title>
 </head>
 <body>

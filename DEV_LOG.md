@@ -106,3 +106,23 @@
   - التأكد من ضبط `secure => false` تلقائياً على خوادم HTTP المحلية (`localhost`)، وتفعيل `secure => true` فقط عند العمل عبر HTTPS.
 - **التحقق الآلي**:
   - إنشاء وتشغيل `tests/test_login_flow.php` وتأكيد نجاح الدخول ببيانات `admin@store.com` / `Admin@123` بنسبة 100%، والتأكد من إرجاع رسائل أخطاء كلمة المرور ورمز CSRF بدقة.
+
+### 8. حل مشكلة أيقونات Font Awesome والقائمة الجانبية ومنع الكاش (Font Awesome & Layout Fix):
+- **التاريخ**: 2026-11-20
+- **إصلاح حجب أيقونات Font Awesome**:
+  - إزالة `font-family: 'Cairo', sans-serif !important;` من المحدد الشامل `*` عبر كافة ملفات CSS في المشروع (`Css/work3.css`, `Css/login.css`, `clients/css/clients.css`, `Products/css/products.css`, `charts/css/charts.css`, `posts/css/posts.css`, `favorite/css/favorite.css`, `settings/css/settings.css`).
+  - تطبيق خط 'Cairo' حصراً على عناصر النصوص (`body, button, input, select, textarea, p, h1, h2, h3, h4, h5, h6, a, span, label, table, td, th`).
+  - حماية وتثبيت خطوط Font Awesome الصريحة (`Font Awesome 6 Free`, `Font Awesome 6 Brands`) مع إعطاء الأولوية القصوى لأوزانها.
+  - إضافة دعم مباشر ومتبادل لفئات تسجيل الخروج `.fa-sign-out:before, .fa-sign-out-alt:before { content: "\f2f5"; }` لضمان ظهور أيقونة تسجيل الخروج في كل الحالات.
+- **إصلاح طي القائمة الجانبية (Sidebar Collapse Behavior)**:
+  - ضبط `.menu ul li a` و `.menu ul li a p` بقواعد `white-space: nowrap; overflow: hidden;` لمنع تسرب النصوص أو التفافها الرأسي فوق عمود الأيقونات أثناء تصغير القائمة إلى `50px`.
+  - تثبيت أبعاد الأيقونات بـ `min-width: 25px; text-align: center; flex-shrink: 0;` لتبقى متوسطة وثابتة بدقة.
+- **تصحيح وسوم HTML والأخطاء الإملائية**:
+  - تصحيح الخطأ الإملائي لفئة الإدخال `<div class="inpit1">` إلى `<div class="input1">` في `clients/clients.php`.
+  - التحقق من سلامة وإغلاق كافة وسوم `<li class="log-out">` واستخدام `<i class="fas fa-sign-out-alt"></i>` عبر كافة الصفحات الـ 8.
+  - ضبط محاذاة النص في أزرار النماذج عمودياً وأفقياً عبر `display: inline-flex; align-items: center; justify-content: center; height: 42px;`.
+- **منع تخزين المتصفحات القديم للملفات (Cache-Busting)**:
+  - إضافة الوسيط `?v=2` لكافة روابط ملفات CSS في رؤوس الصفحات الـ 8 لضمان تحميل التحديثات المرئية فوراً لدى المستخدم دون الحاجة لمسح الذاكرة المؤقتة يدوياً.
+- **التحقق الآلي**:
+  - اجتياز فحص `php -l` بنسبة 100% لكافة ملفات PHP الـ 25 في المشروع دون أي أخطاء.
+  - نجاح كافة سيناريوهات اختبارات المصادقة وقاعدة البيانات والجلسات.

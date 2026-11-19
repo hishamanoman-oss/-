@@ -2,8 +2,29 @@
     padding: 0;
     margin: 0;
     color: white;
-    font-family: 'Cairo', sans-serif !important;
+    box-sizing: border-box;
 }
+body, button, input, select, textarea, p, h1, h2, h3, h4, h5, h6, a, span, label, table, td, th {
+    font-family: 'Cairo', sans-serif;
+}
+.fa, .fas, .far, .fab, .fa-solid, .fa-regular, .fa-brands {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+}
+.fa-brands, .fab {
+    font-family: "Font Awesome 6 Brands" !important;
+}
+.fa-regular, .far {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 400 !important;
+}
+.fa-solid, .fas {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+}
+.fa-sign-out:before, .fa-sign-out-alt:before {
+    content: "\f2f5";
+}
+
 body{
     background-color: #001;
     display: flex;
@@ -35,7 +56,8 @@ body{
     height: 100vh;
     padding: 20px;
     overflow: hidden;
-    transition: .5s;
+    transition: width .5s;
+    flex-shrink: 0;
 }
 .menu:hover{
     width: 250px;
@@ -46,7 +68,6 @@ ul{
     height: 95%;
 }
 ul li a{
-    display: block;
     text-decoration: none;
     padding: 10px;
     margin: 10px 0;
@@ -55,6 +76,8 @@ ul li a{
     align-items: center;
     gap: 40px;
     transition: .5s;
+    white-space: nowrap;
+    overflow: hidden;
 }
 ul li a:hover, .data-info .box:hover, td:hover{
     background-color: #ffffff55;
@@ -70,6 +93,13 @@ ul li a:hover, .data-info .box:hover, td:hover{
 }
 ul li a i{
     font-size: 25px;
+    min-width: 25px;
+    text-align: center;
+    flex-shrink: 0;
+}
+ul li a p{
+    white-space: nowrap;
+    overflow: hidden;
 }
 .content{
     width: 100%;

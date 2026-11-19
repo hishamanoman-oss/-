@@ -9,9 +9,9 @@ $currentUser = current_user();
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="fonts/cairo.css">
-    <link rel="stylesheet" href="fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="Css/work3.css">
+    <link rel="stylesheet" href="fonts/cairo.css?v=2">
+    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=2">
+    <link rel="stylesheet" href="Css/work3.css?v=2">
     <title>لوحة التحكم</title>
 </head>
 <body>
@@ -71,7 +71,7 @@ $currentUser = current_user();
             </li>
             <li class="log-out">
                 <a href="logout.php" id="log-out">
-                    <i class="fas fa-sign-out"></i>
+                    <i class="fas fa-sign-out-alt"></i>
                     <p>تسجيل الخروج</p>
                 </a>
             </li>

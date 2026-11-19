@@ -9,9 +9,9 @@ $currentUser = current_user();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../fonts/cairo.css">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="css/products.css">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=2">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=2">
+    <link rel="stylesheet" href="css/products.css?v=2">
     <title>المنتجات</title>
 </head>
 <body>
@@ -33,7 +33,7 @@ $currentUser = current_user();
             <li><a href="../posts/posts.php"><i class="fas fa-pen"></i><p>المنشورات</p></a></li>
             <li><a href="../favorite/favorite.php"><i class="fas fa-star"></i><p>المفضلة</p></a></li>
             <li><a href="../settings/settings.php"><i class="fas fa-cog"></i><p>الإعدادات</p></a></li>
-            <li class="log-out"><a href="../logout.php"><i class="fas fa-sign-out"></i><p>تسجيل الخروج</p></a></li>
+            <li class="log-out"><a href="../logout.php"><i class="fas fa-sign-out-alt"></i><p>تسجيل الخروج</p></a></li>
         </ul>
     </div>
     <div class="content">
