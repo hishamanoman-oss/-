@@ -9,9 +9,9 @@ $currentUser = current_user();
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="fonts/cairo.css?v=2">
-    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=2">
-    <link rel="stylesheet" href="Css/work3.css?v=2">
+    <link rel="stylesheet" href="fonts/cairo.css?v=3">
+    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=3">
+    <link rel="stylesheet" href="Css/work3.css?v=3">
     <title>لوحة التحكم</title>
 </head>
 <body>
