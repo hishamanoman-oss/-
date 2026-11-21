@@ -1,117 +1,137 @@
-const form = document.getElementById("form");
-const tableBody = document.getElementById("table").getElementsByTagName('tbody')[0];
-const submitButton = form.querySelector('button[type="submit"]');
+/**
+ * إدارة واجهة العملاء (Clients Management)
+ */
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('form');
+    const table = document.getElementById('table');
+    const tableBody = table ? table.getElementsByTagName('tbody')[0] : null;
+    const submitBtn = document.getElementById('submit_btn');
+    const cancelBtn = document.getElementById('cancel_btn');
+    const clientIdInput = document.getElementById('client_id');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') 
+        || document.getElementById('csrf_token')?.value || '';
 
-// متغير لتخزين ID العميل المراد تعديله
-let editingClientId = null;
+    // دالة لإعادة تعيين النموذج للوضع الافتراضي
+    function resetForm() {
+        form.reset();
+        clientIdInput.value = '';
+        submitBtn.innerText = 'إضافة عميل';
+        submitBtn.style.background = '';
+        if (cancelBtn) cancelBtn.style.display = 'none';
+    }
 
-// دالة واحدة تعالج الإرسال (إضافة أو تعديل)
-form.addEventListener("submit", function (e) {
-    e.preventDefault();
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', resetForm);
+    }
 
-    const name = document.getElementById("name").value;
-    const phone = document.getElementById("phone").value;
-    const email = document.getElementById("email").value;
+    // معالجة إرسال النموذج (إضافة أو تعديل)
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
 
-    if (editingClientId) {
-        // --- وضع التعديل (Update) ---
-        fetch("update_client.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `id=${editingClientId}&name=${name}&phone=${phone}&email=${email}`
-        })
-            .then(response => response.text())
+            const isEdit = !!clientIdInput.value;
+            const targetUrl = isEdit ? 'update_client.php' : 'clients_process.php';
+
+            const formData = new FormData(form);
+            if (!formData.get('csrf_token')) {
+                formData.append('csrf_token', csrfToken);
+            }
+
+            // إرسال الطلب عبر Fetch
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.7';
+
+            fetch(targetUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json().catch(() => ({ success: false, error: 'حدث خطأ في قراءة استجابة الخادم.' })))
             .then(data => {
-                if (data.trim() === "success") {
-                    // تحديث الصف في الجدول مباشرة
-                    const row = document.querySelector(`button[data-id='${editingClientId}']`).closest("tr");
-                    row.cells[0].innerText = name;
-                    row.cells[1].innerText = phone;
-                    row.cells[2].innerText = email;
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
 
-                    resetForm(); // إعادة النموذج لوضعه الطبيعي
-                } else {
-                    alert("خطأ في التحديث: " + data);
-                }
-            });
-
-    } else {
-        // --- وضع الإضافة (Add) ---
-        fetch("clients_process.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `name=${name}&phone=${phone}&email=${email}`
-        })
-            .then(response => response.text())
-            .then(data => {
-                if (data.trim() === "success") {
-                    // إضافة صف جديد للجدول
-                    const newRow = tableBody.insertRow(0); // إضافة في الأعلى
-                    newRow.innerHTML = `
-                    <td>${name}</td>
-                    <td>${phone}</td>
-                    <td>${email}</td>
-                    <td class='actions'>
-                        <button class='edit' data-id='new'>تعديل</button> 
-                        <button class='delete' data-id='new'>حذف</button>
-                    </td>
-                `;
-                    // ملاحظة: الأزرار الجديدة تحتاج تحديث الصفحة لتأخذ ID حقيقي من قاعدة البيانات
-                    // أو يمكننا تعديل ملف PHP ليرجع ID العنصر المضاف. 
-                    // حالياً سنكتفي بإعادة تحميل الصفحة أو تنبيه بسيط
+                if (data.success) {
+                    alert(data.message || (isEdit ? 'تم تحديث البيانات بنجاح.' : 'تمت الإضافة بنجاح.'));
+                    resetForm();
                     location.reload();
                 } else {
-                    alert("خطأ في الإضافة: " + data);
+                    alert(data.error || 'تعذر إتمام العملية. يرجى المحاولة لاحقاً.');
                 }
-            });
-    }
-});
-
-// معالجة أزرار الحذف والتعديل في الجدول
-tableBody.addEventListener("click", function (e) {
-    // 1. زر الحذف
-    if (e.target.classList.contains("delete")) {
-        const id = e.target.getAttribute("data-id");
-        if (confirm("هل أنت متأكد من الحذف؟")) {
-            fetch("delete_client.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: `id=${id}`
             })
-                .then(response => response.text())
-                .then(data => {
-                    if (data.trim() === "success") {
-                        e.target.closest("tr").remove();
-                        // إذا كنا نعدل هذا الشخص وحذفناه، نلغي التعديل
-                        if (editingClientId == id) resetForm();
-                    } else {
-                        alert("خطأ في الحذف: " + data);
-                    }
-                });
-        }
+            .catch(err => {
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+                console.error('Network error:', err);
+                alert('حدث خطأ في الاتصال بالسيرفر.');
+            });
+        });
     }
 
-    // 2. زر التعديل
-    if (e.target.classList.contains("edit")) {
-        const row = e.target.closest("tr");
-        const id = e.target.getAttribute("data-id");
+    // معالجة أزرار التعديل والحذف داخل الجدول
+    if (tableBody) {
+        tableBody.addEventListener('click', function (e) {
+            const editBtn = e.target.closest('.edit');
+            const deleteBtn = e.target.closest('.delete');
 
-        // نقل البيانات للنموذج
-        document.getElementById("name").value = row.cells[0].innerText;
-        document.getElementById("phone").value = row.cells[1].innerText;
-        document.getElementById("email").value = row.cells[2].innerText;
+            // 1. زر التعديل
+            if (editBtn) {
+                const id = editBtn.getAttribute('data-id');
+                const name = editBtn.getAttribute('data-name') || '';
+                const phone = editBtn.getAttribute('data-phone') || '';
+                const email = editBtn.getAttribute('data-email') || '';
+                const address = editBtn.getAttribute('data-address') || '';
+                const isVip = editBtn.getAttribute('data-vip') === '1';
 
-        // تفعيل وضع التعديل
-        editingClientId = id;
-        submitButton.innerText = "تحديث البيانات"; // تغيير نص الزر
-        submitButton.style.backgroundColor = "#ffa500"; // تمييز لون الزر (اختياري)
+                clientIdInput.value = id;
+                document.getElementById('name').value = name;
+                document.getElementById('phone').value = phone;
+                document.getElementById('email').value = email;
+                document.getElementById('address').value = address;
+                document.getElementById('is_vip').checked = isVip;
+
+                submitBtn.innerText = 'تحديث بيانات العميل';
+                submitBtn.style.background = 'linear-gradient(135deg, #ff9800, #f57c00)';
+                if (cancelBtn) cancelBtn.style.display = 'inline-block';
+
+                // التمرير السلس إلى النموذج
+                form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            // 2. زر الحذف (خاص بالمدير)
+            if (deleteBtn) {
+                const id = deleteBtn.getAttribute('data-id');
+                if (!id) return;
+
+                if (confirm('هل أنت متأكد من رغبتك في حذف هذا العميل؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                    deleteBtn.disabled = true;
+
+                    const formData = new FormData();
+                    formData.append('id', id);
+                    formData.append('csrf_token', csrfToken);
+
+                    fetch('delete_client.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(res => res.json().catch(() => ({ success: false, error: 'حدث خطأ في قراءة استجابة الخادم.' })))
+                    .then(data => {
+                        deleteBtn.disabled = false;
+                        if (data.success) {
+                            const row = deleteBtn.closest('tr');
+                            if (row) row.remove();
+                            if (clientIdInput.value === id) resetForm();
+                            alert(data.message || 'تم حذف العميل بنجاح.');
+                        } else {
+                            alert(data.error || 'فشل حذف العميل.');
+                        }
+                    })
+                    .catch(err => {
+                        deleteBtn.disabled = false;
+                        console.error('Delete error:', err);
+                        alert('حدث خطأ في الاتصال أثناء محاولة الحذف.');
+                    });
+                }
+            }
+        });
     }
 });
-
-// دالة لإعادة النموذج لوضعه الافتراضي (الإضافة)
-function resetForm() {
-    form.reset();
-    editingClientId = null;
-    submitButton.innerText = "إضافة عميل";
-    submitButton.style.backgroundColor = ""; // استعادة اللون الأصلي
-}

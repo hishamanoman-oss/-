@@ -119,6 +119,12 @@ td:hover {
     background-color: #ffffff55;
 }
 
+.menu ul li.active a,
+.menu ul li a.active {
+    background: rgba(4, 129, 255, 0.4);
+    border-right: 4px solid #00c6ff;
+}
+
 .log-out {
     position: absolute;
     bottom: 0;
@@ -257,6 +263,26 @@ form input:focus {
     border-color: #0481ff;
     background: rgba(0, 0, 0, 0.5);
     box-shadow: 0 0 10px rgba(4, 129, 255, 0.3);
+}
+
+form input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #ffd700;
+}
+
+.badge-vip {
+    background: rgba(255, 215, 0, 0.15);
+    color: #ffd700;
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 }
 
 /* زر الإضافة - توسيط رأسي متطابق */

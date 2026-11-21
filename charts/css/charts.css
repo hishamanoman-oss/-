@@ -119,6 +119,12 @@ td:hover {
     background-color: #ffffff55;
 }
 
+.menu ul li.active a,
+.menu ul li a.active {
+    background: rgba(4, 129, 255, 0.4);
+    border-right: 4px solid #00c6ff;
+}
+
 .log-out {
     position: absolute;
     bottom: 0;
