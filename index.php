@@ -73,9 +73,9 @@ $lastUpdated = date('H:i:s');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="fonts/cairo.css?v=5">
-    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=5">
-    <link rel="stylesheet" href="Css/work3.css?v=5">
+    <link rel="stylesheet" href="fonts/cairo.css?v=6">
+    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=6">
+    <link rel="stylesheet" href="Css/work3.css?v=6">
     <title>لوحة التحكم والمتابعة - <?= e($storeName) ?></title>
 </head>
 <body>
@@ -259,6 +259,6 @@ $lastUpdated = date('H:i:s');
         </div>
     </div>
 
-    <script src="js/dashboard.js?v=5"></script>
+    <script src="js/dashboard.js?v=6"></script>
 </body>
 </html>

@@ -25,9 +25,9 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=5">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=5">
-    <link rel="stylesheet" href="css/settings.css?v=5">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=6">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=6">
+    <link rel="stylesheet" href="css/settings.css?v=6">
     <title>إعدادات النظام والمتجر</title>
 </head>
 <body>

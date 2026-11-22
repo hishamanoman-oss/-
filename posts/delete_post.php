@@ -11,7 +11,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-verify_csrf_token();
+if (!verify_csrf_token($_POST['csrf_token'] ?? null)) {
+    http_response_code(403);
+    $_SESSION['flash_error'] = 'خطأ أمني: رمز الحماية (CSRF Token) غير صالح أو انتهت صلاحية الجلسة.';
+    header('Location: posts.php');
+    exit;
+}
 
 $postId = filter_input(INPUT_POST, 'post_id', FILTER_VALIDATE_INT);
 

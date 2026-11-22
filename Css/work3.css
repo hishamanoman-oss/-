@@ -81,7 +81,6 @@ body{
 }
 .menu:hover{
     width: 260px;
-    min-width: 260px;
 }
 ul{
     list-style: none;
@@ -241,9 +240,19 @@ ul li a p{
     gap: 8px;
     transition: all 0.2s ease;
 }
+.btn-refresh,
+.btn-refresh span,
+.btn-refresh i {
+    color: #0481ff;
+}
 .btn-refresh:hover {
     background: #e6f2ff;
     transform: translateY(-1px);
+}
+.btn-refresh:hover,
+.btn-refresh:hover span,
+.btn-refresh:hover i {
+    color: #0056b3;
 }
 
 /* شبكة بطاقات المراقبة */
