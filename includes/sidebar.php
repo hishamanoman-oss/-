@@ -53,6 +53,13 @@ $roleBadge = ($currentUser['role'] ?? '') === 'admin' ? 'مدير عام' : 'م�
             </a>
         </li>
 
+        <li class="<?php echo $activePage === 'orders' ? 'active' : ''; ?>">
+            <a href="<?php echo e($basePath . 'orders/orders.php'); ?>" class="<?php echo $activePage === 'orders' ? 'active' : ''; ?>">
+                <i class="fas fa-shopping-cart"></i>
+                <p>المبيعات والطلبات</p>
+            </a>
+        </li>
+
         <li class="<?php echo $activePage === 'charts' ? 'active' : ''; ?>">
             <a href="<?php echo e($basePath . 'charts/charts.php'); ?>" class="<?php echo $activePage === 'charts' ? 'active' : ''; ?>">
                 <i class="fas fa-chart-pie"></i>
