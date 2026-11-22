@@ -246,3 +246,23 @@ canvas {
         height: 350px;
     }
 }
+
+/* تنسيق التنبيه عند عدم توفر بيانات كافية */
+.empty-chart-notice {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #8899aa;
+    text-align: center;
+    font-size: 14px;
+    gap: 12px;
+    padding: 20px;
+}
+.empty-chart-notice i {
+    font-size: 36px;
+    color: #0481ff;
+    opacity: 0.7;
+}
+

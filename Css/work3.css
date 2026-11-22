@@ -149,27 +149,210 @@ ul li a p{
 }
 .data-info{
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
 }
 .data-info .box{
     background-color: #123;
-    height: 200px;
-    flex-basis: 200px;
+    min-height: 140px;
+    height: auto;
+    flex-basis: 220px;
     flex-grow: 1;
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: space-around;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.data-info .box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 .data-info .box i{
-    font-size: 40px;
+    font-size: 38px;
+    color: #00c6ff;
 }
 .data-info .box .data{
     text-align: center;
 }
-.data-info .box .data span{
-    font-size: 30px;
+.data-info .box .data p {
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 5px;
 }
+.data-info .box .data span{
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    display: block;
+}
+.data-info .box .data small {
+    font-size: 12px;
+    color: #8899aa;
+    margin-top: 4px;
+    display: block;
+}
+
+/* عناصر شريط المراقبة الحية */
+.live-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 5px 12px;
+    border-radius: 20px;
+    color: #e0e0e0;
+}
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #00ff88;
+    box-shadow: 0 0 8px #00ff88;
+    display: inline-block;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+    100% { opacity: 1; transform: scale(1); }
+}
+.btn-refresh {
+    background: #ffffff;
+    color: #0481ff;
+    border: none;
+    padding: 7px 15px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+.btn-refresh:hover {
+    background: #e6f2ff;
+    transform: translateY(-1px);
+}
+
+/* شبكة بطاقات المراقبة */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+.monitoring-card {
+    background-color: #123;
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+.monitoring-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+}
+.monitoring-card-header h3 {
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #00c6ff;
+}
+.monitoring-card-header a {
+    font-size: 12px;
+    color: #0481ff;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.monitoring-card-header a:hover {
+    color: #00c6ff;
+    text-decoration: underline;
+}
+.table-responsive {
+    overflow-x: auto;
+}
+.dash-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.dash-table th, .dash-table td {
+    padding: 10px 8px;
+    text-align: right;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.dash-table th {
+    color: #8899aa;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.dash-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+}
+.badge-status {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.badge-completed {
+    background: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+    border: 1px solid #28a745;
+}
+.badge-pending {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border: 1px solid #ffc107;
+}
+.badge-cancelled {
+    background: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+.btn-sm-action {
+    background: rgba(4, 129, 255, 0.2);
+    color: #00c6ff;
+    border: 1px solid #0481ff;
+    padding: 3px 9px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+.btn-sm-action:hover {
+    background: #0481ff;
+    color: #fff;
+}
+.text-warning {
+    color: #ffaa00 !important;
+}
+.text-danger {
+    color: #ff4d4f !important;
+}
+.text-success {
+    color: #00ff88 !important;
+}
+

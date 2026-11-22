@@ -55,9 +55,9 @@ $orders = $ordersStmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=4">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=4">
-    <link rel="stylesheet" href="css/orders.css?v=4">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=5">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=5">
+    <link rel="stylesheet" href="css/orders.css?v=5">
     <title>المبيعات والطلبات</title>
 </head>
 <body>
@@ -257,6 +257,6 @@ $orders = $ordersStmt->fetchAll();
     <script type="application/json" id="products_data">
         <?php echo json_encode($productsCatalog, JSON_UNESCAPED_UNICODE); ?>
     </script>
-    <script src="js/orders.js?v=4"></script>
+    <script src="js/orders.js?v=5"></script>
 </body>
 </html>

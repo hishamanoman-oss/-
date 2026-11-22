@@ -433,3 +433,110 @@ body {
         align-items: flex-start;
     }
 }
+
+/* تنسيقات نموذج إضافة التعميمات وصلاحيات المدير */
+.create-post-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+.create-post-card h3 {
+    font-size: 16px;
+    color: #00c6ff;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.create-post-card .form-group {
+    margin-bottom: 12px;
+}
+.create-post-card label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: #ccc;
+}
+.create-post-card input[type="text"],
+.create-post-card textarea {
+    width: 100%;
+    background: #001122;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #fff;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+.create-post-card input[type="text"]:focus,
+.create-post-card textarea:focus {
+    border-color: #00c6ff;
+    outline: none;
+}
+.btn-publish {
+    background: linear-gradient(135deg, #0481ff, #00c6ff);
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.2s;
+}
+.btn-publish:hover {
+    opacity: 0.9;
+}
+.btn-delete-post {
+    background: rgba(220, 53, 69, 0.15);
+    color: #dc3545;
+    border: 1px solid #dc3545;
+    border-radius: 6px;
+    padding: 5px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.btn-delete-post:hover {
+    background: #dc3545;
+    color: #fff;
+}
+.badge-role {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-right: 8px;
+    font-weight: 600;
+}
+.badge-admin {
+    background: #0481ff;
+    color: #fff;
+}
+.badge-staff {
+    background: #6c757d;
+    color: #fff;
+}
+.alert-flash {
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+.alert-success {
+    background: rgba(40, 167, 69, 0.2);
+    border: 1px solid #28a745;
+    color: #28a745;
+}
+.alert-danger {
+    background: rgba(220, 53, 69, 0.2);
+    border: 1px solid #dc3545;
+    color: #dc3545;
+}
