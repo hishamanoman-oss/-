@@ -56,7 +56,7 @@ $monitoredProducts = $monitoredStmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="../Css/sidebar.css?v=9">
     <link rel="stylesheet" href="../Css/ui.css?v=9">
     <link rel="stylesheet" href="css/favorite.css?v=9">
-    <link rel="stylesheet" href="../Css/responsive.css?v=9">
+    <link rel="stylesheet" href="../Css/responsive.css?v=11">
     <title>المفضلة وقائمة المراقبة</title>
 </head>
 <body>

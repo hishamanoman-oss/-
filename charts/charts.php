@@ -14,7 +14,7 @@ $currentUser = current_user();
     <link rel="stylesheet" href="../Css/sidebar.css?v=9">
     <link rel="stylesheet" href="../Css/ui.css?v=9">
     <link rel="stylesheet" href="css/charts.css?v=9">
-    <link rel="stylesheet" href="../Css/responsive.css?v=9">
+    <link rel="stylesheet" href="../Css/responsive.css?v=11">
     <title>الإحصائيات والرسوم البيانية</title>
 </head>
 <body>

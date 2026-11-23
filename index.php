@@ -78,7 +78,7 @@ $lastUpdated = date('H:i:s');
     <link rel="stylesheet" href="Css/sidebar.css?v=9">
     <link rel="stylesheet" href="Css/ui.css?v=9">
     <link rel="stylesheet" href="Css/work3.css?v=9">
-    <link rel="stylesheet" href="Css/responsive.css?v=9">
+    <link rel="stylesheet" href="Css/responsive.css?v=11">
     <title>لوحة التحكم والمتابعة - <?= e($storeName) ?></title>
 </head>
 <body>

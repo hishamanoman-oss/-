@@ -30,7 +30,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
     <link rel="stylesheet" href="../Css/sidebar.css?v=9">
     <link rel="stylesheet" href="../Css/ui.css?v=9">
     <link rel="stylesheet" href="css/settings.css?v=9">
-    <link rel="stylesheet" href="../Css/responsive.css?v=9">
+    <link rel="stylesheet" href="../Css/responsive.css?v=11">
     <title>إعدادات النظام والمتجر</title>
 </head>
 <body>

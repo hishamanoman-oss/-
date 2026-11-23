@@ -102,7 +102,7 @@ $orders = $ordersStmt->fetchAll();
     <link rel="stylesheet" href="../Css/sidebar.css?v=10">
     <link rel="stylesheet" href="../Css/ui.css?v=10">
     <link rel="stylesheet" href="css/orders.css?v=10">
-    <link rel="stylesheet" href="../Css/responsive.css?v=10">
+    <link rel="stylesheet" href="../Css/responsive.css?v=11">
     <title>المبيعات والطلبات</title>
 </head>
 <body>

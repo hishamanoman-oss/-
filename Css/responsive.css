@@ -147,17 +147,28 @@
         box-sizing: border-box !important;
     }
 
+    /* حاوية النماذج في الهواتف المحمولة */
+    .body {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 15px !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+    }
+
     /* نماذج الإدخال والتعديل في الهواتف المحمولة */
     .body form#form,
     form#form,
     .body form,
     .body form#order_form {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 12px !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
         width: 100% !important;
         max-width: 100% !important;
-        align-items: stretch !important;
+        height: auto !important;
         box-sizing: border-box !important;
     }
 
@@ -167,14 +178,14 @@
     form#form .form-group {
         display: flex !important;
         flex-direction: column !important;
+        flex: none !important;
         width: 100% !important;
         max-width: 100% !important;
+        height: auto !important;
         min-width: 0 !important;
-        flex: 1 1 100% !important;
-        box-sizing: border-box !important;
         margin: 0 !important;
         gap: 6px !important;
-        align-items: stretch !important;
+        box-sizing: border-box !important;
     }
 
     .body form#form label,
@@ -207,9 +218,11 @@
 
     .body form#form .form-group-checkbox,
     form#form .form-group-checkbox {
+        display: flex !important;
         flex-direction: row !important;
         align-items: center !important;
         justify-content: flex-start !important;
+        height: auto !important;
         padding: 4px 0 !important;
     }
 
@@ -225,9 +238,11 @@
 
     .body form#form .form-group-buttons,
     form#form .form-group-buttons {
+        display: flex !important;
         flex-direction: column !important;
+        gap: 10px !important;
         width: 100% !important;
-        gap: 8px !important;
+        height: auto !important;
         margin-top: 4px !important;
     }
 
@@ -238,6 +253,7 @@
     form#form button {
         width: 100% !important;
         max-width: 100% !important;
+        min-width: 0 !important;
         height: 44px !important;
         min-height: 44px !important;
         font-size: 15px !important;
@@ -305,49 +321,51 @@
 
     /* جداول البيانات المتجاوبة عبر شريط التمرير الأفقي الداخلي السلس */
     .table-responsive {
+        display: block !important;
         width: 100% !important;
         max-width: 100% !important;
         overflow-x: auto !important;
+        overflow-y: hidden !important;
         -webkit-overflow-scrolling: touch !important;
-        display: block !important;
         border-radius: 8px !important;
         box-sizing: border-box !important;
         margin-bottom: 20px !important;
     }
 
     .table-responsive table,
-    .table-responsive #table,
-    table {
+    .table-responsive #table {
+        display: table !important;
         width: 100% !important;
-        min-width: 620px !important;
+        min-width: 650px !important;
         border-collapse: separate !important;
+        border-spacing: 0 8px !important;
         margin: 0 !important;
     }
 
-    .actions,
-    td.actions {
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 6px !important;
+    .table-responsive th,
+    .table-responsive td {
+        display: table-cell !important;
+        vertical-align: middle !important;
         white-space: nowrap !important;
-        flex-wrap: nowrap !important;
-        min-width: 110px !important;
+        padding: 10px 12px !important;
+        font-size: 13px !important;
     }
 
-    .actions button,
-    .actions a,
-    .actions form,
-    .actions .btn-action,
+    td.actions {
+        display: table-cell !important;
+        white-space: nowrap !important;
+        text-align: center !important;
+    }
+
     td.actions button,
     td.actions a,
     td.actions form {
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
+        vertical-align: middle !important;
+        margin: 0 3px !important;
         white-space: nowrap !important;
-        flex: 0 0 auto !important;
-        margin: 0 !important;
     }
 
     /* بنود الطلب في صفحة المبيعات */

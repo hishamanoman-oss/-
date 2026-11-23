@@ -338,3 +338,21 @@
   - تحديث سكربت الفحص `tests/test_responsive_order.php` لدعم باراميترات الإصدار المحدثة واجتياز جميع الصفحات بنسبة 100%.
   - اجتياز اختبار التحقق الشامل `tests/verify_step5.php` (25/25 بنجاح تام).
   - اجتياز الفحص اللغوي لمفسر PHP لكافة ملفات المشروع (39 ملفاً) بدون أي أخطاء.
+
+### 18. الإصلاح الجذري لتخطيط النماذج وجداول الجوال في `Css/responsive.css` (Strict CSS Grid Form & Mobile Table Fix):
+- **التاريخ**: 2026-11-23
+- **معالجة السبب الجذري لتشوه النماذج في الهواتف المحمولة (`clients/` و `Products/`)**:
+  - ضبط حاوية النماذج `.body` على شاشات الجوال لتكون `display: block !important; width: 100% !important; height: auto !important; min-height: 0 !important; padding: 15px !important; overflow: visible !important;`.
+  - استبدال قواعد الـ flexbox المتسببة في الالتفاف غير المرغوب بقواعد CSS Grid القياسية (`display: grid !important; grid-template-columns: 1fr !important; gap: 14px !important; width: 100% !important; height: auto !important;`) لمنع تمدد أو التفاف الحقول أفقياً نهائياً.
+  - إزالة `flex: 1 1 100% !important;` بالكامل واستبدالها بـ `flex: none !important; width: 100% !important; height: auto !important; min-width: 0 !important;` على كافة مجموعات الحقول `.form-group`.
+  - الحفاظ على محاذاة مربعات الاختيار في سطر أفقي `.form-group-checkbox` وأزرار الإجراءات كعمود عمودي كامل `.form-group-buttons`.
+- **معالجة السبب الجذري لتشوه جداول البيانات في الجوال (`clients/`, `Products/`, `orders/`)**:
+  - حذف `display: inline-flex` بالكامل عن خلايا الجدول `td.actions` لمنع كسر بنية خلايا الجدول وضمان بقائها `display: table-cell !important;` بمحاذاة وسطية.
+  - قصر `display: inline-flex !important;` فقط على أزرار وعناصر العمليات داخل الخلية (`td.actions button, td.actions a, td.actions form`).
+  - تحديث قواعد `.table-responsive` لتشمل `overflow-x: auto !important; overflow-y: hidden !important; -webkit-overflow-scrolling: touch !important;`.
+  - إلزام الجداول بـ `display: table !important; min-width: 650px !important; border-collapse: separate !important; border-spacing: 0 8px !important;` والخلايا بـ `display: table-cell !important; vertical-align: middle !important; white-space: nowrap !important;`.
+- **التحقق وترقية التخزين المؤقت (Cache Busting)**:
+  - ترقية وسائط منع التخزين المؤقت إلى `?v=11` لملف `responsive.css` عبر كافة صفحات لوحة التحكم الـ 8 بالإضافة إلى صفحة تسجيل الدخول `Login.php`.
+  - التأكد البرمجي من خلو `Css/responsive.css` بنسبة 100% من أي وجود لـ `flex: 1 1 100%` على مجموعات الحقول أو `display: inline-flex` على `td.actions`.
+  - اجتياز فحص `php -l` لكافة ملفات الـ PHP المعدلة دون أي خطأ صياغي.
+  - اجتياز اختبار `tests/test_responsive_order.php` واختبار `tests/verify_step5.php` (25/25) بنسبة 100%.

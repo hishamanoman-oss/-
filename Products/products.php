@@ -75,7 +75,7 @@ $products = $stmt->fetchAll();
     <link rel="stylesheet" href="../Css/sidebar.css?v=10">
     <link rel="stylesheet" href="../Css/ui.css?v=10">
     <link rel="stylesheet" href="css/products.css?v=10">
-    <link rel="stylesheet" href="../Css/responsive.css?v=10">
+    <link rel="stylesheet" href="../Css/responsive.css?v=11">
     <title>إدارة المنتجات والمخزون</title>
 </head>
 <body>

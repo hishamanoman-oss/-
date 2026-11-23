@@ -17,7 +17,7 @@ if (is_logged_in()) {
     <link rel="stylesheet" href="fontawesome/css/all.min.css?v=9">
     <link rel="stylesheet" href="Css/ui.css?v=9">
     <link rel="stylesheet" href="Css/login.css?v=9">
-    <link rel="stylesheet" href="Css/responsive.css?v=9">
+    <link rel="stylesheet" href="Css/responsive.css?v=11">
     <title>تسجيل الدخول</title>
 </head>
 <body>
