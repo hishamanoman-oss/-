@@ -110,6 +110,13 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error'], $_SESSION['flash_inf
         </li>
         <?php endif; ?>
 
+        <li class="theme-toggle-item">
+            <a href="javascript:void(0);" id="themeToggleBtn" role="button" aria-label="تبديل المظهر">
+                <i class="fas fa-sun" id="themeToggleIcon"></i>
+                <p id="themeToggleText">الوضع الفاتح</p>
+            </a>
+        </li>
+
         <li class="log-out">
             <a href="<?php echo e($basePath . 'logout.php'); ?>" id="log-out">
                 <i class="fas fa-sign-out-alt"></i>

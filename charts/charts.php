@@ -9,12 +9,19 @@ $currentUser = current_user();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=9">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=9">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=9">
-    <link rel="stylesheet" href="../Css/ui.css?v=9">
-    <link rel="stylesheet" href="css/charts.css?v=9">
-    <link rel="stylesheet" href="../Css/responsive.css?v=11">
+    <script>
+        (function() {
+            var theme = localStorage.getItem('store_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <link rel="stylesheet" href="../fonts/cairo.css?v=13">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=13">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=13">
+    <link rel="stylesheet" href="../Css/ui.css?v=13">
+    <link rel="stylesheet" href="css/charts.css?v=13">
+    <link rel="stylesheet" href="../Css/theme.css?v=13">
+    <link rel="stylesheet" href="../Css/responsive.css?v=13">
     <title>الإحصائيات والرسوم البيانية</title>
 </head>
 <body>
@@ -26,7 +33,7 @@ $currentUser = current_user();
 
     <div class="content">
         <div class="title-info">
-            <p><i class="fas fa-chart-pie" style="margin-left:8px;"></i> الإحصائيات والرسوم البيانية الحية</p>
+            <p>الإحصائيات والرسوم البيانية الحية</p>
             <i class="fas fa-chart-line"></i>
         </div>
 
@@ -58,7 +65,7 @@ $currentUser = current_user();
     </div>
 
     <script src="../js/chart.min.js"></script>
-    <script src="../js/ui.js?v=9"></script>
-    <script src="js/charts.js?v=9"></script>
+    <script src="../js/ui.js?v=13"></script>
+    <script src="js/charts.js?v=13"></script>
 </body>
 </html>

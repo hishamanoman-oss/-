@@ -25,12 +25,19 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=9">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=9">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=9">
-    <link rel="stylesheet" href="../Css/ui.css?v=9">
-    <link rel="stylesheet" href="css/settings.css?v=9">
-    <link rel="stylesheet" href="../Css/responsive.css?v=11">
+    <script>
+        (function() {
+            var theme = localStorage.getItem('store_theme') || '<?= $theme ?>' || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <link rel="stylesheet" href="../fonts/cairo.css?v=13">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=13">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=13">
+    <link rel="stylesheet" href="../Css/ui.css?v=13">
+    <link rel="stylesheet" href="css/settings.css?v=13">
+    <link rel="stylesheet" href="../Css/theme.css?v=13">
+    <link rel="stylesheet" href="../Css/responsive.css?v=13">
     <title>إعدادات النظام والمتجر</title>
 </head>
 <body>
@@ -43,8 +50,8 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
     <div class="content">
         <!-- عنوان الصفحة -->
         <div class="title-info">
-            <p><i class="fas fa-sliders-h" style="margin-left:8px;"></i> إعدادات المتجر والأمان</p>
-            <i class="fas fa-cog"></i>
+            <p>إعدادات المتجر والأمان</p>
+            <i class="fas fa-sliders-h"></i>
         </div>
 
         <!-- رسائل التنبيه -->
@@ -184,6 +191,6 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
         </div>
     </div>
 
-    <script src="../js/ui.js?v=9"></script>
+    <script src="../js/ui.js?v=13"></script>
 </body>
 </html>

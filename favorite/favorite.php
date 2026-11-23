@@ -51,12 +51,19 @@ $monitoredProducts = $monitoredStmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=9">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=9">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=9">
-    <link rel="stylesheet" href="../Css/ui.css?v=9">
-    <link rel="stylesheet" href="css/favorite.css?v=9">
-    <link rel="stylesheet" href="../Css/responsive.css?v=11">
+    <script>
+        (function() {
+            var theme = localStorage.getItem('store_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <link rel="stylesheet" href="../fonts/cairo.css?v=13">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=13">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=13">
+    <link rel="stylesheet" href="../Css/ui.css?v=13">
+    <link rel="stylesheet" href="css/favorite.css?v=13">
+    <link rel="stylesheet" href="../Css/theme.css?v=13">
+    <link rel="stylesheet" href="../Css/responsive.css?v=13">
     <title>المفضلة وقائمة المراقبة</title>
 </head>
 <body>
@@ -68,8 +75,8 @@ $monitoredProducts = $monitoredStmt->fetchAll(PDO::FETCH_ASSOC);
 
     <div class="content">
         <div class="title-info">
-            <p><i class="fas fa-crown" style="margin-left:8px; color:#ffd700;"></i> المفضلة وقائمة المراقبة الخاصة</p>
-            <i class="fas fa-star" style="color:#ffd700;"></i>
+            <p>المفضلة وقائمة المراقبة الخاصة</p>
+            <i class="fas fa-star"></i>
         </div>
         
         <div class="favorites-container">
@@ -185,6 +192,6 @@ $monitoredProducts = $monitoredStmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    <script src="../js/ui.js?v=9"></script>
+    <script src="../js/ui.js?v=13"></script>
 </body>
 </html>

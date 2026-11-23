@@ -35,12 +35,21 @@ body {
 /* الترويسة */
 .title-info {
     background: linear-gradient(135deg, #0481ff, #00c6ff);
-    padding: 10px;
+    padding: 12px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-radius: 8px;
-    margin: 10px 0;
+    margin-bottom: 20px;
+}
+
+.title-info p {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.title-info i {
+    font-size: 22px;
 }
 
 .prog {

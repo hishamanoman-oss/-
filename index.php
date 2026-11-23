@@ -73,12 +73,19 @@ $lastUpdated = date('H:i:s');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="fonts/cairo.css?v=9">
-    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=9">
-    <link rel="stylesheet" href="Css/sidebar.css?v=9">
-    <link rel="stylesheet" href="Css/ui.css?v=9">
-    <link rel="stylesheet" href="Css/work3.css?v=9">
-    <link rel="stylesheet" href="Css/responsive.css?v=11">
+    <script>
+        (function() {
+            var theme = localStorage.getItem('store_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <link rel="stylesheet" href="fonts/cairo.css?v=13">
+    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=13">
+    <link rel="stylesheet" href="Css/sidebar.css?v=13">
+    <link rel="stylesheet" href="Css/ui.css?v=13">
+    <link rel="stylesheet" href="Css/work3.css?v=13">
+    <link rel="stylesheet" href="Css/theme.css?v=13">
+    <link rel="stylesheet" href="Css/responsive.css?v=13">
     <title>لوحة التحكم والمتابعة - <?= e($storeName) ?></title>
 </head>
 <body>
@@ -262,7 +269,7 @@ $lastUpdated = date('H:i:s');
         </div>
     </div>
 
-    <script src="js/ui.js?v=9"></script>
-    <script src="js/dashboard.js?v=9"></script>
+    <script src="js/ui.js?v=13"></script>
+    <script src="js/dashboard.js?v=13"></script>
 </body>
 </html>

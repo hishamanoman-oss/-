@@ -1,0 +1,460 @@
+/**
+ * ورقة أنماط الثيم والوضع الفاتح (Light Mode Theme)
+ * يتم تفعيل القواعد حصرياً عند وجود السمة html[data-theme="light"]
+ * ويبقى الوضع الداكن بنسبة 100% كما هو دون أي تغيير في الوضع الافتراضي أو data-theme="dark"
+ */
+
+/* ==========================================================================
+   1. الخلفية العامة والألوان الأساسية (Global & Typography)
+   ========================================================================== */
+html[data-theme="light"] body {
+    background-color: #f1f5f9 !important;
+    background-image: none !important;
+    color: #0f172a !important;
+}
+
+/* إلغاء تأثير * { color: white; } للنصوص في الوضع الفاتح مع ضمان قراءتها */
+html[data-theme="light"] h1,
+html[data-theme="light"] h2,
+html[data-theme="light"] h3,
+html[data-theme="light"] h4,
+html[data-theme="light"] h5,
+html[data-theme="light"] h6,
+html[data-theme="light"] p,
+html[data-theme="light"] span:not(.badge):not(.status-badge):not(.user-role-badge),
+html[data-theme="light"] label,
+html[data-theme="light"] td,
+html[data-theme="light"] div:not(.title-info):not(.alert-flash):not(.alert-box):not(.btn):not(.toast) {
+    color: #0f172a;
+}
+
+html[data-theme="light"] small,
+html[data-theme="light"] .text-muted,
+html[data-theme="light"] .filter-summary,
+html[data-theme="light"] .empty-chart-notice {
+    color: #64748b !important;
+}
+
+/* ==========================================================================
+   2. الحفاظ الصارم على النص والأيقونات البيضاء على العناصر الملونة
+   ========================================================================== */
+html[data-theme="light"] .title-info,
+html[data-theme="light"] .title-info p,
+html[data-theme="light"] .title-info i,
+html[data-theme="light"] .title-info * {
+    color: #ffffff !important;
+}
+
+html[data-theme="light"] .mobile-menu-btn,
+html[data-theme="light"] .mobile-menu-btn i,
+html[data-theme="light"] .mobile-menu-btn * {
+    color: #ffffff !important;
+    background: #0481ff !important;
+}
+
+html[data-theme="light"] table th,
+html[data-theme="light"] th {
+    color: #ffffff !important;
+}
+
+/* أزرار الإجراءات والعمليات */
+html[data-theme="light"] button[type="submit"]:not(.password-toggle),
+html[data-theme="light"] .btn-login,
+html[data-theme="light"] .save-btn,
+html[data-theme="light"] .btn-filter,
+html[data-theme="light"] .btn-action,
+html[data-theme="light"] .btn-print,
+html[data-theme="light"] .btn-add,
+html[data-theme="light"] .btn-submit-order,
+html[data-theme="light"] .btn-danger,
+html[data-theme="light"] .btn-success,
+html[data-theme="light"] .btn-warning,
+html[data-theme="light"] .btn-edit,
+html[data-theme="light"] .btn-delete,
+html[data-theme="light"] .btn-invoice,
+html[data-theme="light"] .btn-cancel-order,
+html[data-theme="light"] .confirm-modal-btn.confirm {
+    color: #ffffff !important;
+}
+
+html[data-theme="light"] button[type="submit"] *,
+html[data-theme="light"] .btn-login *,
+html[data-theme="light"] .save-btn *,
+html[data-theme="light"] .btn-filter *,
+html[data-theme="light"] .btn-action *,
+html[data-theme="light"] .btn-print *,
+html[data-theme="light"] .btn-add *,
+html[data-theme="light"] .btn-submit-order *,
+html[data-theme="light"] .btn-danger *,
+html[data-theme="light"] .btn-success *,
+html[data-theme="light"] .btn-warning *,
+html[data-theme="light"] .btn-edit *,
+html[data-theme="light"] .btn-delete *,
+html[data-theme="light"] .btn-invoice *,
+html[data-theme="light"] .btn-cancel-order *,
+html[data-theme="light"] .confirm-modal-btn.confirm * {
+    color: #ffffff !important;
+}
+
+/* شارات الحالة الملونة */
+html[data-theme="light"] .status-completed {
+    background: rgba(16, 185, 129, 0.2) !important;
+    color: #065f46 !important;
+    border: 1px solid #10b981 !important;
+}
+
+html[data-theme="light"] .status-pending {
+    background: rgba(245, 158, 11, 0.2) !important;
+    color: #92400e !important;
+    border: 1px solid #f59e0b !important;
+}
+
+html[data-theme="light"] .status-cancelled {
+    background: rgba(239, 68, 68, 0.2) !important;
+    color: #991b1b !important;
+    border: 1px solid #ef4444 !important;
+}
+
+/* ==========================================================================
+   3. الحاويات والبطاقات والنماذج (Cards, Forms & Grids)
+   ========================================================================== */
+html[data-theme="light"] .body,
+html[data-theme="light"] .box,
+html[data-theme="light"] .monitoring-card,
+html[data-theme="light"] .data-info .box,
+html[data-theme="light"] .chart-card,
+html[data-theme="light"] .post-card,
+html[data-theme="light"] .container,
+html[data-theme="light"] .settings-card,
+html[data-theme="light"] .filter-bar,
+html[data-theme="light"] .pagination-container,
+html[data-theme="light"] .vip-card,
+html[data-theme="light"] .favorites-container,
+html[data-theme="light"] .order-summary-box,
+html[data-theme="light"] .order-item-row,
+html[data-theme="light"] .items-controls,
+html[data-theme="light"] .order-header-fields,
+html[data-theme="light"] .stat-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] .data-info .box .data p {
+    color: #64748b !important;
+}
+
+html[data-theme="light"] .data-info .box .data span {
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] .monitoring-card-header {
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html[data-theme="light"] .live-indicator-badge {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] .btn-refresh-live {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+    color: #0481ff !important;
+}
+
+html[data-theme="light"] .btn-refresh-live:hover {
+    background: #e0f2fe !important;
+}
+
+html[data-theme="light"] .stock-alert-item {
+    background: #fff7ed !important;
+    border: 1px solid #ffedd5 !important;
+}
+
+html[data-theme="light"] .stock-alert-item p strong {
+    color: #9a3412 !important;
+}
+
+/* ==========================================================================
+   4. حقول الإدخال والاختيار (Inputs, Selects & Forms)
+   ========================================================================== */
+html[data-theme="light"] input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="light"] select,
+html[data-theme="light"] textarea,
+html[data-theme="light"] .filter-input,
+html[data-theme="light"] .filter-select,
+html[data-theme="light"] .lang-select {
+    background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] input::placeholder,
+html[data-theme="light"] textarea::placeholder {
+    color: #64748b !important;
+}
+
+html[data-theme="light"] input:focus,
+html[data-theme="light"] select:focus,
+html[data-theme="light"] textarea:focus,
+html[data-theme="light"] .filter-input:focus,
+html[data-theme="light"] .filter-select:focus {
+    background-color: #ffffff !important;
+    border-color: #0481ff !important;
+    box-shadow: 0 0 0 3px rgba(4, 129, 255, 0.18) !important;
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] .btn-filter-reset {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #475569 !important;
+}
+
+html[data-theme="light"] .btn-filter-reset:hover {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+/* ترقيم الصفحات */
+html[data-theme="light"] .page-link {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #1e293b !important;
+}
+
+html[data-theme="light"] .page-link:hover {
+    background: #e0f2fe !important;
+    border-color: #0481ff !important;
+    color: #0481ff !important;
+}
+
+html[data-theme="light"] .page-link.active {
+    background: #0481ff !important;
+    border-color: #0481ff !important;
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   5. جداول البيانات في الوضع الفاتح (Tables)
+   ========================================================================== */
+html[data-theme="light"] .table-responsive {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+html[data-theme="light"] table {
+    background: #ffffff !important;
+}
+
+html[data-theme="light"] table th,
+html[data-theme="light"] .table-responsive th {
+    background: linear-gradient(135deg, #1e293b, #334155) !important;
+    color: #ffffff !important;
+    border-bottom: 2px solid #0481ff !important;
+}
+
+html[data-theme="light"] table td,
+html[data-theme="light"] .table-responsive td {
+    background: #ffffff !important;
+    color: #1e293b !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+}
+
+html[data-theme="light"] table tr:hover td,
+html[data-theme="light"] .table-responsive tr:hover td,
+html[data-theme="light"] td:hover {
+    background-color: #f8fafc !important;
+}
+
+/* ==========================================================================
+   6. القائمة الجانبية في الوضع الفاتح (Sidebar Overrides)
+   ========================================================================== */
+html[data-theme="light"] .menu {
+    background-color: #ffffff !important;
+    border-left: 1px solid #e2e8f0 !important;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+html[data-theme="light"] .menu .profile h2 {
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] .menu .user-role-badge {
+    color: #0481ff !important;
+}
+
+html[data-theme="light"] .menu ul li a {
+    color: #334155 !important;
+}
+
+html[data-theme="light"] .menu ul li a i {
+    color: #64748b !important;
+}
+
+html[data-theme="light"] .menu ul li a p {
+    color: #334155 !important;
+}
+
+html[data-theme="light"] .menu ul li a:hover {
+    background-color: #eff6ff !important;
+    color: #0481ff !important;
+}
+
+html[data-theme="light"] .menu ul li a:hover i,
+html[data-theme="light"] .menu ul li a:hover p {
+    color: #0481ff !important;
+}
+
+html[data-theme="light"] .menu ul li.active a,
+html[data-theme="light"] .menu ul li a.active {
+    background: #0481ff !important;
+    color: #ffffff !important;
+    border-right: 4px solid #0056b3 !important;
+}
+
+html[data-theme="light"] .menu ul li.active a *,
+html[data-theme="light"] .menu ul li a.active * {
+    color: #ffffff !important;
+}
+
+/* زر تبديل الثيم */
+html[data-theme="light"] .menu ul li.theme-toggle-item a {
+    background-color: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] .menu ul li.theme-toggle-item a i {
+    color: #f59e0b !important;
+}
+
+html[data-theme="light"] .menu ul li.theme-toggle-item a:hover {
+    background-color: #fef3c7 !important;
+    border-color: #f59e0b !important;
+    color: #b45309 !important;
+}
+
+/* زر تسجيل الخروج */
+html[data-theme="light"] .menu ul li.log-out {
+    border-top: 1px solid #e2e8f0 !important;
+}
+
+html[data-theme="light"] .menu ul li.log-out a {
+    background-color: #fee2e2 !important;
+    border: 1px solid #fca5a5 !important;
+    color: #b91c1c !important;
+}
+
+html[data-theme="light"] .menu ul li.log-out a:hover {
+    background-color: #dc2626 !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="light"] .menu ul li.log-out a:hover * {
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   7. صفحة تسجيل الدخول في الوضع الفاتح (Login Page)
+   ========================================================================== */
+html[data-theme="light"] .login-wrapper {
+    z-index: 1;
+}
+
+html[data-theme="light"] .login-glow {
+    background: radial-gradient(circle, rgba(4, 129, 255, 0.15) 0%, rgba(241, 245, 249, 0) 70%) !important;
+}
+
+html[data-theme="light"] .login-card {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.1) !important;
+}
+
+html[data-theme="light"] .login-title {
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] .login-subtitle {
+    color: #64748b !important;
+}
+
+html[data-theme="light"] .login-card .input-group label {
+    color: #334155 !important;
+}
+
+html[data-theme="light"] .login-card .input-wrapper input {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] .login-card .input-wrapper input:focus {
+    background: #ffffff !important;
+    border-color: #0481ff !important;
+    box-shadow: 0 0 0 3px rgba(4, 129, 255, 0.2) !important;
+}
+
+html[data-theme="light"] .login-card .password-toggle {
+    color: #64748b !important;
+}
+
+html[data-theme="light"] .login-card .password-toggle:hover {
+    color: #0481ff !important;
+    background: #f1f5f9 !important;
+}
+
+html[data-theme="light"] .login-footer {
+    border-top: 1px solid #e2e8f0 !important;
+}
+
+html[data-theme="light"] .login-footer p {
+    color: #64748b !important;
+}
+
+/* ==========================================================================
+   8. نوافذ التأكيد والتنبيهات (Modals & Alerts)
+   ========================================================================== */
+html[data-theme="light"] .confirm-modal-box {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #0f172a !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
+}
+
+html[data-theme="light"] .confirm-modal-box h3 {
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] .confirm-modal-box p {
+    color: #475569 !important;
+}
+
+html[data-theme="light"] .confirm-modal-btn.cancel {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #475569 !important;
+}
+
+html[data-theme="light"] .confirm-modal-btn.cancel:hover {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] .alert-flash.alert-success,
+html[data-theme="light"] .alert-box.alert-success {
+    background: #ecfdf5 !important;
+    border-color: #a7f3d0 !important;
+    color: #065f46 !important;
+}
+
+html[data-theme="light"] .alert-flash.alert-danger,
+html[data-theme="light"] .alert-box.alert-danger {
+    background: #fef2f2 !important;
+    border-color: #fecaca !important;
+    color: #991b1b !important;
+}

@@ -5,31 +5,31 @@
 
 $pages = [
     'index.php' => [
-        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'Css/work3.css', 'Css/responsive.css']
+        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'Css/work3.css', 'Css/theme.css', 'Css/responsive.css']
     ],
     'clients/clients.php' => [
-        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'css/clients.css', 'Css/responsive.css']
+        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'css/clients.css', 'Css/theme.css', 'Css/responsive.css']
     ],
     'Products/products.php' => [
-        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'css/products.css', 'Css/responsive.css']
+        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'css/products.css', 'Css/theme.css', 'Css/responsive.css']
     ],
     'orders/orders.php' => [
-        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'css/orders.css', 'Css/responsive.css']
+        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'css/orders.css', 'Css/theme.css', 'Css/responsive.css']
     ],
     'charts/charts.php' => [
-        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'css/charts.css', 'Css/responsive.css']
+        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'css/charts.css', 'Css/theme.css', 'Css/responsive.css']
     ],
     'posts/posts.php' => [
-        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'css/posts.css', 'Css/responsive.css']
+        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'css/posts.css', 'Css/theme.css', 'Css/responsive.css']
     ],
     'favorite/favorite.php' => [
-        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'css/favorite.css', 'Css/responsive.css']
+        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'css/favorite.css', 'Css/theme.css', 'Css/responsive.css']
     ],
     'settings/settings.php' => [
-        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'css/settings.css', 'Css/responsive.css']
+        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/sidebar.css', 'Css/ui.css', 'css/settings.css', 'Css/theme.css', 'Css/responsive.css']
     ],
     'Login.php' => [
-        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/ui.css', 'Css/login.css', 'Css/responsive.css']
+        'expected_css' => ['fonts/cairo.css', 'fontawesome/css/all.min.css', 'Css/ui.css', 'Css/login.css', 'Css/theme.css', 'Css/responsive.css']
     ],
 ];
 

@@ -219,6 +219,99 @@
             });
         }
 
+        // ======================================================================
+        // 4. نظام إدارة وتبديل المظهر (Theme Management: Dark / Light Mode)
+        // ======================================================================
+        function updateThemeButtonUI(theme) {
+            const toggleIcon = document.getElementById('themeToggleIcon');
+            const toggleText = document.getElementById('themeToggleText');
+            const toggleBtn = document.getElementById('themeToggleBtn');
+
+            if (theme === 'light') {
+                if (toggleIcon) {
+                    toggleIcon.className = 'fas fa-moon';
+                }
+                if (toggleText) {
+                    toggleText.textContent = 'الوضع الداكن';
+                }
+                if (toggleBtn) {
+                    toggleBtn.setAttribute('title', 'التحويل إلى الوضع الداكن');
+                }
+            } else {
+                if (toggleIcon) {
+                    toggleIcon.className = 'fas fa-sun';
+                }
+                if (toggleText) {
+                    toggleText.textContent = 'الوضع الفاتح';
+                }
+                if (toggleBtn) {
+                    toggleBtn.setAttribute('title', 'التحويل إلى الوضع الفاتح');
+                }
+            }
+        }
+
+        function applyTheme(theme, saveToStorage) {
+            if (theme !== 'light' && theme !== 'dark') {
+                theme = 'dark';
+            }
+
+            document.documentElement.setAttribute('data-theme', theme);
+            if (saveToStorage) {
+                try {
+                    localStorage.setItem('store_theme', theme);
+                } catch (e) {
+                    console.warn('تعذر حفظ الثيم في التخزين المحلي:', e);
+                }
+            }
+
+            updateThemeButtonUI(theme);
+
+            // تحديث قائمة الاختيار في صفحة الإعدادات إن وُجدت
+            const themeSelect = document.getElementById('themeSelect');
+            if (themeSelect && themeSelect.value !== theme) {
+                themeSelect.value = theme;
+            }
+
+            // إشعار المكونات التفاعلية (كالرسوم البيانية) بتغير المظهر
+            window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: theme } }));
+        }
+
+        // قراءة وتطبيق الثيم الأولي
+        let currentTheme = 'dark';
+        try {
+            const savedTheme = localStorage.getItem('store_theme');
+            if (savedTheme === 'light' || savedTheme === 'dark') {
+                currentTheme = savedTheme;
+            } else {
+                currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            }
+        } catch (e) {
+            currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        }
+        applyTheme(currentTheme, false);
+
+        // ربط النقر على زر تبديل المظهر
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const activeTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+                const nextTheme = activeTheme === 'light' ? 'dark' : 'light';
+                applyTheme(nextTheme, true);
+                if (typeof window.showToast === 'function') {
+                    window.showToast(nextTheme === 'light' ? 'تم التبديل إلى الوضع الفاتح' : 'تم التبديل إلى الوضع الداكن', 'info');
+                }
+            });
+        }
+
+        // مزامنة قائمة صفحة الإعدادات إن كانت مفتوحة
+        const settingsThemeSelect = document.getElementById('themeSelect');
+        if (settingsThemeSelect) {
+            settingsThemeSelect.addEventListener('change', function () {
+                applyTheme(this.value, true);
+            });
+        }
+
         // اعتراض النماذج التي تحتوي على data-confirm
         document.addEventListener('submit', function (e) {
             const form = e.target;

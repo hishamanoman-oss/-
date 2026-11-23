@@ -13,11 +13,18 @@ if (is_logged_in()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="fonts/cairo.css?v=12">
-    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=12">
-    <link rel="stylesheet" href="Css/ui.css?v=12">
-    <link rel="stylesheet" href="Css/login.css?v=12">
-    <link rel="stylesheet" href="Css/responsive.css?v=12">
+    <script>
+        (function() {
+            var theme = localStorage.getItem('store_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <link rel="stylesheet" href="fonts/cairo.css?v=13">
+    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=13">
+    <link rel="stylesheet" href="Css/ui.css?v=13">
+    <link rel="stylesheet" href="Css/login.css?v=13">
+    <link rel="stylesheet" href="Css/theme.css?v=13">
+    <link rel="stylesheet" href="Css/responsive.css?v=13">
     <title>تسجيل الدخول | لوحة متابعة المتجر والمبيعات عن بُعد</title>
 </head>
 <body>
@@ -73,7 +80,7 @@ if (is_logged_in()) {
     <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
     <script src="js/jquery-3.7.1.js"></script>
-    <script src="js/ui.js?v=12"></script>
-    <script src="js/login.js?v=12"></script>
+    <script src="js/ui.js?v=13"></script>
+    <script src="js/login.js?v=13"></script>
 </body>
 </html>

@@ -4,10 +4,48 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    // إعدادات عامة للرسوم البيانية (المظهر الداكن والخط العربي)
-    Chart.defaults.color = '#ccc';
-    Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.08)';
+    let chartInstances = [];
+
+    // دالة استخراج ألوان الثيم النشط
+    function getThemeColors() {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        return {
+            isLight: isLight,
+            textColor: isLight ? '#0f172a' : '#cbd5e1',
+            borderColor: isLight ? 'rgba(15, 23, 42, 0.08)' : 'rgba(255, 255, 255, 0.08)',
+            gridColor: isLight ? 'rgba(15, 23, 42, 0.06)' : 'rgba(255, 255, 255, 0.06)',
+            doughnutBorder: isLight ? '#ffffff' : '#112233'
+        };
+    }
+
+    const currentColors = getThemeColors();
+    Chart.defaults.color = currentColors.textColor;
+    Chart.defaults.borderColor = currentColors.borderColor;
     Chart.defaults.font.family = "'Cairo', sans-serif";
+
+    // الاستماع لحدث تبديل المظهر لتحديث الرسوم فوراً دون إعادة تحميل
+    window.addEventListener('themeChanged', function () {
+        const colors = getThemeColors();
+        Chart.defaults.color = colors.textColor;
+        Chart.defaults.borderColor = colors.borderColor;
+
+        chartInstances.forEach(function (chart) {
+            if (chart.options && chart.options.scales) {
+                if (chart.options.scales.x && chart.options.scales.x.grid) {
+                    chart.options.scales.x.grid.color = colors.gridColor;
+                }
+                if (chart.options.scales.y && chart.options.scales.y.grid) {
+                    chart.options.scales.y.grid.color = colors.gridColor;
+                }
+            }
+            if (chart.config && chart.config.type === 'doughnut') {
+                chart.data.datasets.forEach(function (ds) {
+                    ds.borderColor = colors.doughnutBorder;
+                });
+            }
+            chart.update();
+        });
+    });
 
     fetch("charts_data.php")
         .then(response => {
@@ -16,6 +54,8 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(data => {
             if (!data || !data.success) return;
+
+            const themeColors = getThemeColors();
 
             // ==========================================
             // 1. مسار نمو المبيعات اليومية (Line Chart)
@@ -31,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const labels = data.sales_trend.map(row => row.order_date);
                 const salesValues = data.sales_trend.map(row => parseFloat(row.total_sales));
 
-                new Chart(ctx, {
+                const chart1 = new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: labels,
@@ -68,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         },
                         scales: {
                             y: {
-                                grid: { color: 'rgba(255, 255, 255, 0.06)' },
+                                grid: { color: themeColors.gridColor },
                                 ticks: {
                                     callback: function (val) {
                                         return val.toLocaleString();
@@ -81,6 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
                 });
+                chartInstances.push(chart1);
             } else if (salesContainer) {
                 salesContainer.innerHTML = '<div class="empty-chart-notice"><i class="fas fa-chart-line"></i> لا توجد بيانات مبيعات كافية لعرض مسار المبيعات حتى الآن</div>';
             }
@@ -110,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     '#9b51e0'
                 ];
 
-                new Chart(ctx2, {
+                const chart2 = new Chart(ctx2, {
                     type: 'bar',
                     data: {
                         labels: labels2,
@@ -133,7 +174,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         },
                         scales: {
                             x: {
-                                grid: { color: 'rgba(255, 255, 255, 0.06)' },
+                                grid: { color: themeColors.gridColor },
                                 ticks: { precision: 0 }
                             },
                             y: {
@@ -142,6 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
                 });
+                chartInstances.push(chart2);
             } else if (topProductsContainer) {
                 topProductsContainer.innerHTML = '<div class="empty-chart-notice"><i class="fas fa-box-open"></i> لا توجد مبيعات منتجات مسجلة حتى الآن</div>';
             }
@@ -167,14 +209,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     '#e17055'
                 ];
 
-                new Chart(ctx3, {
+                const chart3 = new Chart(ctx3, {
                     type: 'doughnut',
                     data: {
                         labels: catLabels,
                         datasets: [{
                             data: stockValues,
                             backgroundColor: doughnutColors.slice(0, catLabels.length),
-                            borderColor: '#112233',
+                            borderColor: themeColors.doughnutBorder,
                             borderWidth: 2
                         }]
                     },
@@ -200,6 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         cutout: '65%'
                     }
                 });
+                chartInstances.push(chart3);
             } else if (stockContainer) {
                 stockContainer.innerHTML = '<div class="empty-chart-notice"><i class="fas fa-layer-group"></i> لا توجد أصناف مسجلة في المخزن حتى الآن</div>';
             }
