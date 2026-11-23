@@ -5,6 +5,7 @@ require_once __DIR__ . '/../config/database.php';
 
 // التحقق من تسجيل الدخول وإرجاع 401 في حال عدم وجود جلسة نشطة
 require_auth(true);
+require_role(['admin', 'staff'], true);
 
 if (!headers_sent()) {
     header('Content-Type: application/json; charset=utf-8');
@@ -46,15 +47,15 @@ try {
         SELECT 
             o.id,
             o.order_number,
-            c.name AS client_name,
-            c.is_vip,
-            u.full_name AS user_name,
+            COALESCE(c.name, 'عميل محذوف') AS client_name,
+            COALESCE(c.is_vip, 0) AS is_vip,
+            COALESCE(u.full_name, 'غير معروف') AS user_name,
             o.total_amount,
             o.status,
             o.created_at
         FROM orders o
-        JOIN clients c ON o.client_id = c.id
-        JOIN users u ON o.user_id = u.id
+        LEFT JOIN clients c ON o.client_id = c.id
+        LEFT JOIN users u ON o.user_id = u.id
         ORDER BY o.created_at DESC, o.id DESC
         LIMIT 5
     ");

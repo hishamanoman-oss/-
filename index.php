@@ -35,15 +35,15 @@ $recentOrdersStmt = $pdo->query("
     SELECT 
         o.id,
         o.order_number,
-        c.name AS client_name,
-        c.is_vip,
-        u.full_name AS user_name,
+        COALESCE(c.name, 'عميل محذوف') AS client_name,
+        COALESCE(c.is_vip, 0) AS is_vip,
+        COALESCE(u.full_name, 'غير معروف') AS user_name,
         o.total_amount,
         o.status,
         o.created_at
     FROM orders o
-    JOIN clients c ON o.client_id = c.id
-    JOIN users u ON o.user_id = u.id
+    LEFT JOIN clients c ON o.client_id = c.id
+    LEFT JOIN users u ON o.user_id = u.id
     ORDER BY o.created_at DESC, o.id DESC
     LIMIT 5
 ");
@@ -73,9 +73,10 @@ $lastUpdated = date('H:i:s');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="fonts/cairo.css?v=6">
-    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=6">
-    <link rel="stylesheet" href="Css/work3.css?v=6">
+    <link rel="stylesheet" href="fonts/cairo.css?v=7">
+    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=7">
+    <link rel="stylesheet" href="Css/sidebar.css?v=7">
+    <link rel="stylesheet" href="Css/work3.css?v=7">
     <title>لوحة التحكم والمتابعة - <?= e($storeName) ?></title>
 </head>
 <body>
@@ -259,6 +260,6 @@ $lastUpdated = date('H:i:s');
         </div>
     </div>
 
-    <script src="js/dashboard.js?v=6"></script>
+    <script src="js/dashboard.js?v=7"></script>
 </body>
 </html>

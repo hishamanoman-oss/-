@@ -51,9 +51,10 @@ $monitoredProducts = $monitoredStmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=6">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=6">
-    <link rel="stylesheet" href="css/favorite.css?v=6">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=7">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=7">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=7">
+    <link rel="stylesheet" href="css/favorite.css?v=7">
     <title>المفضلة وقائمة المراقبة</title>
 </head>
 <body>

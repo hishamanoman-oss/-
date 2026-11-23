@@ -34,9 +34,10 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=6">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=6">
-    <link rel="stylesheet" href="css/posts.css?v=6">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=7">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=7">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=7">
+    <link rel="stylesheet" href="css/posts.css?v=7">
     <title>التوجيهات والتعميمات الإدارية</title>
 </head>
 <body>

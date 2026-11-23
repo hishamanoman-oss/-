@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../includes/security.php';
 require_once __DIR__ . '/../includes/auth.php';
-require_auth();
+require_role(['admin', 'staff']);
 $currentUser = current_user();
 ?>
 <!DOCTYPE html>
@@ -9,9 +9,10 @@ $currentUser = current_user();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=6">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=6">
-    <link rel="stylesheet" href="css/charts.css?v=6">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=7">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=7">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=7">
+    <link rel="stylesheet" href="css/charts.css?v=7">
     <title>الإحصائيات والرسوم البيانية</title>
 </head>
 <body>
@@ -24,7 +25,7 @@ $currentUser = current_user();
     <div class="content">
         <div class="title-info">
             <p><i class="fas fa-chart-pie" style="margin-left:8px;"></i> الإحصائيات والرسوم البيانية الحية</p>
-            <i class="fas fa-analytics"></i>
+            <i class="fas fa-chart-line"></i>
         </div>
 
         <div class="charts-grid">
@@ -55,6 +56,6 @@ $currentUser = current_user();
     </div>
 
     <script src="../js/chart.min.js"></script>
-    <script src="js/charts.js?v=5"></script>
+    <script src="js/charts.js?v=7"></script>
 </body>
 </html>

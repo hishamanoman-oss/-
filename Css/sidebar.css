@@ -1,0 +1,200 @@
+/**
+ * المكون الموحد لتنسيقات القائمة الجانبية وتخطيط RTL
+ * Unified Shared Sidebar Stylesheet (Overlay Expansion & Zero Flickering)
+ */
+
+/* إعدادات القائمة الجانبية الأساسية */
+.menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 80px;
+    z-index: 1000;
+    background-color: #112233;
+    padding: 15px 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+    transition: width 0.28s ease, box-shadow 0.28s ease;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+    direction: rtl;
+}
+
+/* تمدد القائمة الجانبية كطبقة طافية دون دفع المحتوى لمنع الاهتزاز */
+.menu:hover {
+    width: 260px;
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.55);
+}
+
+/* شريط التمرير الداخلي للقائمة */
+.menu::-webkit-scrollbar {
+    width: 4px;
+}
+.menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+/* قائمة الروابط */
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    min-height: calc(100% - 10px);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ملف المستخدم التعريفي في رأس القائمة */
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.img-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #00c6ff;
+    flex-shrink: 0;
+}
+
+.img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* إخفاء نصوص البروفايل عند طي القائمة وإظهارها بسلاسة عند التحويم */
+.profile > div:not(.img-box) {
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 0;
+    opacity: 0;
+    transition: opacity 0.2s ease, max-width 0.25s ease;
+}
+
+.menu:hover .profile > div:not(.img-box) {
+    max-width: 180px;
+    opacity: 1;
+}
+
+.profile h2 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-role-badge {
+    font-size: 11px;
+    color: #00c6ff;
+    display: block;
+    font-weight: 700;
+}
+
+/* عناصر القائمة والروابط */
+.menu ul li {
+    margin: 4px 0;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    padding: 10px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #e2e8f0;
+    font-size: 14px;
+}
+
+.menu ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+}
+
+.menu ul li.active a,
+.menu ul li a.active {
+    background: rgba(4, 129, 255, 0.35);
+    border-right: 4px solid #00c6ff;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* أيقونات القائمة */
+.menu ul li a i {
+    font-size: 20px;
+    min-width: 30px;
+    text-align: center;
+    flex-shrink: 0;
+    color: #ffffff;
+}
+
+/* إخفاء نصوص الروابط عند طي القائمة وإظهارها بنعومة */
+.menu ul li a p {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 0;
+    opacity: 0;
+    transition: opacity 0.2s ease, max-width 0.25s ease;
+    color: #e2e8f0;
+}
+
+.menu:hover ul li a p {
+    opacity: 1;
+    max-width: 180px;
+}
+
+/* زر تسجيل الخروج في أسفل القائمة */
+.menu ul li.log-out {
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.menu ul li.log-out a {
+    background-color: rgba(220, 53, 69, 0.2);
+    border: 1px solid rgba(220, 53, 69, 0.4);
+    color: #ff6b6b;
+}
+
+.menu ul li.log-out a:hover {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+.menu ul li.log-out a i {
+    color: inherit;
+}
+
+/* إزاحة وضبط المحتوى الرئيسي في اتجاه RTL ليتناسب مع القائمة الثابتة */
+body {
+    display: block !important;
+}
+
+.content {
+    margin-right: 80px;
+    width: calc(100% - 80px);
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    transition: margin-right 0.28s ease, width 0.28s ease;
+}

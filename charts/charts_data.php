@@ -5,6 +5,7 @@ require_once __DIR__ . '/../config/database.php';
 
 // التحقق من المصادقة وإرجاع 401 في حال عدم وجود جلسة
 require_auth(true);
+require_role(['admin', 'staff'], true);
 
 if (!headers_sent()) {
     header('Content-Type: application/json; charset=utf-8');
@@ -13,7 +14,7 @@ if (!headers_sent()) {
 try {
     $pdo = get_db_connection();
 
-    // 1. مسار نمو المبيعات (المبيعات اليومية للطلبات غير الملغاة)
+    // 1. مسار نمو المبيعات (أحدث 14 يوماً للمبيعات اليومية للطلبات غير الملغاة مرتبة زمنياً)
     $salesTrendStmt = $pdo->query("
         SELECT 
             DATE(created_at) AS order_date,
@@ -22,10 +23,10 @@ try {
         FROM orders
         WHERE status != 'cancelled'
         GROUP BY DATE(created_at)
-        ORDER BY order_date ASC
+        ORDER BY order_date DESC
         LIMIT 14
     ");
-    $salesTrend = $salesTrendStmt->fetchAll(PDO::FETCH_ASSOC);
+    $salesTrend = array_reverse($salesTrendStmt->fetchAll(PDO::FETCH_ASSOC));
 
     // 2. المنتجات الأكثر مبيعاً (أعلى 5 منتجات مبيعاً في الطلبات غير الملغاة)
     $topProductsStmt = $pdo->query("

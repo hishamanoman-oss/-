@@ -97,8 +97,8 @@ $statusArabic = match($order['status']) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=5">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=5">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=7">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=7">
     <title>فاتورة ضريبية - <?php echo e($order['order_number']); ?></title>
     <style>
         * {
