@@ -34,7 +34,7 @@ if (is_logged_in()) {
         <div class="login-card">
             <div class="login-header">
                 <div class="brand-logo">
-                    <img src="assets/images/store-logo.png" alt="شعار المتجر">
+                    <img src="assets/images/store-logo.jpg?v=14" alt="شعار المتجر">
                 </div>
                 <h1 class="login-title">لوحة متابعة المتجر والمبيعات عن بُعد</h1>
                 <p class="login-subtitle">سجّل الدخول لمتابعة المبيعات والمخزون والعملاء</p>

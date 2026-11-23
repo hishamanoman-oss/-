@@ -355,7 +355,7 @@ $statusArabic = match($order['status']) {
     <!-- ترويسة الفاتورة -->
     <div class="invoice-header">
         <div class="store-brand" style="display: flex; align-items: center; gap: 14px;">
-            <img src="../assets/images/store-logo.png" alt="Logo" style="width: 48px; height: 48px; object-fit: cover; border-radius: 8px; border: 1px solid #30363d;">
+            <img src="../assets/images/store-logo.jpg?v=14" alt="Logo" style="width: 48px; height: 48px; object-fit: cover; border-radius: 8px; border: 1px solid #30363d;">
             <div>
                 <h1><?php echo e($storeName); ?></h1>
                 <p>نظام إدارة المبيعات والمخزون المتكامل</p>
