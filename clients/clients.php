@@ -63,12 +63,12 @@ $clients = $stmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=8">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=8">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=8">
-    <link rel="stylesheet" href="../Css/ui.css?v=8">
-    <link rel="stylesheet" href="../Css/responsive.css?v=8">
-    <link rel="stylesheet" href="css/clients.css?v=8">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=9">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=9">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=9">
+    <link rel="stylesheet" href="../Css/ui.css?v=9">
+    <link rel="stylesheet" href="css/clients.css?v=9">
+    <link rel="stylesheet" href="../Css/responsive.css?v=9">
     <title>إدارة العملاء</title>
 </head>
 <body>
@@ -249,7 +249,7 @@ $clients = $stmt->fetchAll();
     </div>
 
     <script src="../js/jquery-3.7.1.js"></script>
-    <script src="../js/ui.js?v=8"></script>
-    <script src="js/clients.js?v=8"></script>
+    <script src="../js/ui.js?v=9"></script>
+    <script src="js/clients.js?v=9"></script>
 </body>
 </html>

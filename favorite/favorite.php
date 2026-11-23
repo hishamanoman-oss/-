@@ -51,12 +51,12 @@ $monitoredProducts = $monitoredStmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=8">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=8">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=8">
-    <link rel="stylesheet" href="../Css/ui.css?v=8">
-    <link rel="stylesheet" href="../Css/responsive.css?v=8">
-    <link rel="stylesheet" href="css/favorite.css?v=8">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=9">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=9">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=9">
+    <link rel="stylesheet" href="../Css/ui.css?v=9">
+    <link rel="stylesheet" href="css/favorite.css?v=9">
+    <link rel="stylesheet" href="../Css/responsive.css?v=9">
     <title>المفضلة وقائمة المراقبة</title>
 </head>
 <body>
@@ -185,6 +185,6 @@ $monitoredProducts = $monitoredStmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    <script src="../js/ui.js?v=8"></script>
+    <script src="../js/ui.js?v=9"></script>
 </body>
 </html>

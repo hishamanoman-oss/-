@@ -25,12 +25,12 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=8">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=8">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=8">
-    <link rel="stylesheet" href="../Css/ui.css?v=8">
-    <link rel="stylesheet" href="../Css/responsive.css?v=8">
-    <link rel="stylesheet" href="css/settings.css?v=8">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=9">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=9">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=9">
+    <link rel="stylesheet" href="../Css/ui.css?v=9">
+    <link rel="stylesheet" href="css/settings.css?v=9">
+    <link rel="stylesheet" href="../Css/responsive.css?v=9">
     <title>إعدادات النظام والمتجر</title>
 </head>
 <body>
@@ -184,6 +184,6 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
         </div>
     </div>
 
-    <script src="../js/ui.js?v=8"></script>
+    <script src="../js/ui.js?v=9"></script>
 </body>
 </html>

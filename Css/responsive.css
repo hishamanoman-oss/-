@@ -18,6 +18,12 @@
    2. وضع الشاشات المتوسطة والصغيرة (Tablets & Mobile <= 900px)
    ========================================================================== */
 @media (max-width: 900px) {
+    /* منع التمرير الأفقي على مستوى الصفحة بالكامل */
+    html, body {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
     /* زر فتح وإغلاق القائمة في الجوال */
     .mobile-menu-btn {
         display: flex !important;
@@ -88,23 +94,29 @@
         transform: translateX(0) !important;
     }
 
-    /* إظهار نصوص الروابط والبروفايل دائماً في القائمة المنزلقة */
+    /* إظهار نصوص الروابط والبروفايل دائماً في القائمة المفتوحة على الجوال دون الحاجة للتحويم */
+    .menu.open .profile > div:not(.img-box),
     .menu .profile > div:not(.img-box) {
         max-width: 180px !important;
         opacity: 1 !important;
+        visibility: visible !important;
     }
 
+    .menu.open ul li a p,
     .menu ul li a p {
         max-width: 180px !important;
         opacity: 1 !important;
+        display: block !important;
+        visibility: visible !important;
     }
 
-    /* إلغاء إزاحة المحتوى وتوسيعه ليملأ الشاشة مع ترك مسافة لزر القائمة العلوي */
+    /* إلغاء إزاحة المحتوى وتوسيعه ليملأ الشاشة مع ترك مسافة 72px لزر القائمة العلوي */
     .content {
         margin-right: 0 !important;
         width: 100% !important;
+        max-width: 100% !important;
         padding: 12px !important;
-        padding-top: 70px !important;
+        padding-top: 72px !important;
         box-sizing: border-box !important;
     }
 
@@ -112,22 +124,50 @@
     .data-info {
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
         gap: 12px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .data-info .box {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        min-width: 0 !important;
     }
 
     /* بطاقات المراقبة في لوحة التحكم */
     .monitoring-grid {
         grid-template-columns: 1fr !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .monitoring-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     /* نماذج الإدخال والتعديل */
     .body form#form,
     .body form#order_form {
         flex-direction: column !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .body form#form > div {
         width: 100% !important;
+        max-width: 100% !important;
         flex: 1 1 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .body form#form input,
+    .body form#form select,
+    .body form#form textarea {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     /* شريط البحث والفلترة في الجوال */
@@ -135,6 +175,8 @@
         flex-direction: column !important;
         align-items: stretch !important;
         gap: 12px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .filter-form {
@@ -142,19 +184,23 @@
         align-items: stretch !important;
         width: 100% !important;
         gap: 10px !important;
+        box-sizing: border-box !important;
     }
 
     .filter-input,
     .filter-select {
         width: 100% !important;
         min-width: 0 !important;
+        max-width: 100% !important;
         flex: 1 1 auto !important;
+        box-sizing: border-box !important;
     }
 
     .filter-actions {
         display: flex;
         gap: 8px;
         width: 100%;
+        box-sizing: border-box;
     }
 
     .btn-filter,
@@ -170,6 +216,8 @@
         align-items: center !important;
         text-align: center !important;
         gap: 12px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .pagination {
@@ -177,13 +225,15 @@
         justify-content: center !important;
     }
 
-    /* جداول البيانات المتجاوبة عبر شريط التمرير الأفقي الناعم */
+    /* جداول البيانات المتجاوبة عبر شريط التمرير الأفقي الداخلي السلس */
     .table-responsive {
         width: 100% !important;
+        max-width: 100% !important;
         overflow-x: auto !important;
         -webkit-overflow-scrolling: touch !important;
         display: block !important;
         border-radius: 8px;
+        box-sizing: border-box !important;
     }
 
     table {
@@ -193,6 +243,8 @@
     /* بنود الطلب في صفحة المبيعات */
     .order-header-fields {
         flex-direction: column !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .order-item-row {
@@ -200,17 +252,22 @@
         align-items: stretch !important;
         gap: 10px !important;
         padding: 15px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .order-item-row > div {
         width: 100% !important;
         flex: 1 1 100% !important;
+        box-sizing: border-box !important;
     }
 
     .items-controls {
         flex-direction: column !important;
         align-items: stretch !important;
         gap: 15px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .order-summary-box {
@@ -222,19 +279,43 @@
         width: 100% !important;
         justify-content: center !important;
     }
+
+    /* حاويات الرسوم البيانية */
+    .chart-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .charts-grid,
+    .chart-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
 }
 
 /* ==========================================================================
    3. وضع الشاشات الصغيرة جداً والهواتف الذكية (Mobile <= 576px)
    ========================================================================== */
 @media (max-width: 576px) {
+    html, body {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
     .content {
         padding: 10px !important;
-        padding-top: 68px !important;
+        padding-top: 72px !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .title-info {
         padding: 10px 14px !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
     }
 
     .title-info p {
@@ -263,5 +344,14 @@
         height: 32px;
         font-size: 12px;
         padding: 0 6px;
+    }
+
+    /* تحسينات الشاشات حتى 375px */
+    .filter-actions {
+        flex-direction: column !important;
+    }
+
+    .order-summary-box {
+        padding: 10px !important;
     }
 }

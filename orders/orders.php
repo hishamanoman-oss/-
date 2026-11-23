@@ -97,12 +97,12 @@ $orders = $ordersStmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=8">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=8">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=8">
-    <link rel="stylesheet" href="../Css/ui.css?v=8">
-    <link rel="stylesheet" href="../Css/responsive.css?v=8">
-    <link rel="stylesheet" href="css/orders.css?v=8">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=9">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=9">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=9">
+    <link rel="stylesheet" href="../Css/ui.css?v=9">
+    <link rel="stylesheet" href="css/orders.css?v=9">
+    <link rel="stylesheet" href="../Css/responsive.css?v=9">
     <title>المبيعات والطلبات</title>
 </head>
 <body>
@@ -380,7 +380,7 @@ $orders = $ordersStmt->fetchAll();
         <?php echo json_encode($productsCatalog, JSON_UNESCAPED_UNICODE); ?>
     </script>
     <script src="../js/jquery-3.7.1.js"></script>
-    <script src="../js/ui.js?v=8"></script>
-    <script src="js/orders.js?v=8"></script>
+    <script src="../js/ui.js?v=9"></script>
+    <script src="js/orders.js?v=9"></script>
 </body>
 </html>
