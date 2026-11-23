@@ -34,10 +34,12 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=7">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=7">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=7">
-    <link rel="stylesheet" href="css/posts.css?v=7">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=8">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=8">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=8">
+    <link rel="stylesheet" href="../Css/ui.css?v=8">
+    <link rel="stylesheet" href="../Css/responsive.css?v=8">
+    <link rel="stylesheet" href="css/posts.css?v=8">
     <title>التوجيهات والتعميمات الإدارية</title>
 </head>
 <body>
@@ -116,7 +118,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
                                 </div>
 
                                 <?php if (has_role('admin')): ?>
-                                    <form action="delete_post.php" method="POST" style="margin:0;" onsubmit="return confirm('هل أنت متأكد من رغبتك في حذف هذا التعميم نهائياً؟');">
+                                    <form action="delete_post.php" method="POST" style="margin:0;" data-confirm="هل أنت متأكد من رغبتك في حذف هذا التعميم نهائياً؟">
                                         <?= csrf_field() ?>
                                         <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
                                         <button type="submit" class="btn-delete-post" title="حذف التعميم">
@@ -144,5 +146,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error']);
             </div>
         </div>
     </div>
+
+    <script src="../js/ui.js?v=8"></script>
 </body>
 </html>

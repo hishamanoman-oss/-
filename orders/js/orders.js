@@ -102,7 +102,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (qty > stock) {
                 qty = stock;
                 qtyInput.value = stock;
-                alert(`أقصى كمية متوفرة لهذا المنتج هي ${stock} قطعة.`);
+                if (typeof window.showToast === 'function') {
+                    window.showToast(`أقصى كمية متوفرة لهذا المنتج هي ${stock} قطعة.`, 'info');
+                }
             }
         }
 
@@ -220,7 +222,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (productId !== '') {
                     if (qty <= 0) {
                         e.preventDefault();
-                        alert('يرجى تحديد كمية صحيحة (1 أو أكثر) لكل منتج محدد.');
+                        if (typeof window.showToast === 'function') {
+                            window.showToast('يرجى تحديد كمية صحيحة (1 أو أكثر) لكل منتج محدد.', 'error');
+                        }
                         return;
                     }
                     hasValidItem = true;
@@ -230,7 +234,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!hasValidItem) {
                 e.preventDefault();
-                alert('يرجى إضافة واختيار منتج واحد على الأقل في الطلب.');
+                if (typeof window.showToast === 'function') {
+                    window.showToast('يرجى إضافة واختيار منتج واحد على الأقل في الطلب.', 'error');
+                }
                 return;
             }
 
@@ -239,18 +245,35 @@ document.addEventListener('DOMContentLoaded', function () {
                 const pObj = productsCatalog.find(p => String(p.id) === String(pId));
                 if (pObj && totalQty > pObj.count) {
                     e.preventDefault();
-                    alert(`إجمالي الكمية المطلوبة للمنتج "${pObj.name}" (${totalQty}) يتجاوز المتوفر في المخزن (${pObj.count}).`);
+                    if (typeof window.showToast === 'function') {
+                        window.showToast(`إجمالي الكمية المطلوبة للمنتج "${pObj.name}" (${totalQty}) يتجاوز المتوفر في المخزن (${pObj.count}).`, 'error');
+                    }
                     return;
                 }
             }
         });
     }
 
-    // تأكيد إلغاء الطلب للمدير
+    // تأكيد إلغاء الطلب للمدير عبر النافذة المخصصة
     document.querySelectorAll('.form-cancel-order').forEach(form => {
         form.addEventListener('submit', function (e) {
-            if (!confirm('هل أنت متأكد من إلغاء هذا الطلب؟ سيتم استرجاع كميات المنتجات المباعة إلى المخزون تلقائياً.')) {
+            if (!form.dataset.confirmed) {
                 e.preventDefault();
+                if (typeof window.showConfirmModal === 'function') {
+                    window.showConfirmModal({
+                        title: 'تأكيد إلغاء الطلب',
+                        message: 'هل أنت متأكد من إلغاء هذا الطلب؟ سيتم استرجاع كميات المنتجات المباعة إلى المخزون تلقائياً.',
+                        confirmText: 'نعم، إلغاء الطلب',
+                        cancelText: 'تراجع',
+                        onConfirm: function () {
+                            form.dataset.confirmed = 'true';
+                            form.submit();
+                        }
+                    });
+                } else {
+                    form.dataset.confirmed = 'true';
+                    form.submit();
+                }
             }
         });
     });

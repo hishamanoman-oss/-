@@ -51,18 +51,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 submitBtn.style.opacity = '1';
 
                 if (data.success) {
-                    alert(data.message || (isEdit ? 'تم تحديث البيانات بنجاح.' : 'تمت الإضافة بنجاح.'));
+                    if (typeof window.showToast === 'function') {
+                        window.showToast(data.message || (isEdit ? 'تم تحديث البيانات بنجاح.' : 'تمت الإضافة بنجاح.'), 'success');
+                    }
                     resetForm();
-                    location.reload();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 600);
                 } else {
-                    alert(data.error || 'تعذر إتمام العملية. يرجى المحاولة لاحقاً.');
+                    if (typeof window.showToast === 'function') {
+                        window.showToast(data.error || 'تعذر إتمام العملية. يرجى المحاولة لاحقاً.', 'error');
+                    }
                 }
             })
             .catch(err => {
                 submitBtn.disabled = false;
                 submitBtn.style.opacity = '1';
                 console.error('Network error:', err);
-                alert('حدث خطأ في الاتصال بالسيرفر.');
+                if (typeof window.showToast === 'function') {
+                    window.showToast('حدث خطأ في الاتصال بالسيرفر.', 'error');
+                }
             });
         });
     }
@@ -102,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const id = deleteBtn.getAttribute('data-id');
                 if (!id) return;
 
-                if (confirm('هل أنت متأكد من رغبتك في حذف هذا العميل؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                const performDelete = function () {
                     deleteBtn.disabled = true;
 
                     const formData = new FormData();
@@ -120,16 +128,34 @@ document.addEventListener('DOMContentLoaded', function () {
                             const row = deleteBtn.closest('tr');
                             if (row) row.remove();
                             if (clientIdInput.value === id) resetForm();
-                            alert(data.message || 'تم حذف العميل بنجاح.');
+                            if (typeof window.showToast === 'function') {
+                                window.showToast(data.message || 'تم حذف العميل بنجاح.', 'success');
+                            }
                         } else {
-                            alert(data.error || 'فشل حذف العميل.');
+                            if (typeof window.showToast === 'function') {
+                                window.showToast(data.error || 'فشل حذف العميل.', 'error');
+                            }
                         }
                     })
                     .catch(err => {
                         deleteBtn.disabled = false;
                         console.error('Delete error:', err);
-                        alert('حدث خطأ في الاتصال أثناء محاولة الحذف.');
+                        if (typeof window.showToast === 'function') {
+                            window.showToast('حدث خطأ في الاتصال أثناء محاولة الحذف.', 'error');
+                        }
                     });
+                };
+
+                if (typeof window.showConfirmModal === 'function') {
+                    window.showConfirmModal({
+                        title: 'تأكيد حذف العميل',
+                        message: 'هل أنت متأكد من رغبتك في حذف هذا العميل؟ لا يمكن التراجع عن هذا الإجراء.',
+                        confirmText: 'نعم، حذف العميل',
+                        cancelText: 'إلغاء',
+                        onConfirm: performDelete
+                    });
+                } else {
+                    performDelete();
                 }
             }
         });

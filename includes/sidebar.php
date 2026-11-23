@@ -17,7 +17,27 @@ $activePage  = $activePage ?? '';
 $basePath    = $basePath ?? '';
 
 $roleBadge = ($currentUser['role'] ?? '') === 'admin' ? 'مدير عام' : 'موظف';
+
+// معالجة رسائل الجلسة التنبيهية وإفراغها
+$sidebarFlashSuccess = $flashSuccess ?? $_SESSION['flash_success'] ?? null;
+$sidebarFlashError   = $flashError ?? $_SESSION['flash_error'] ?? null;
+$sidebarFlashInfo    = $flashInfo ?? $_SESSION['flash_info'] ?? null;
+unset($_SESSION['flash_success'], $_SESSION['flash_error'], $_SESSION['flash_info']);
 ?>
+<!-- زر فتح القائمة في الجوال والطبقة المظللة -->
+<button type="button" id="mobileMenuBtn" class="mobile-menu-btn" aria-label="فتح القائمة">
+    <i class="fas fa-bars"></i>
+</button>
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+<?php if ($sidebarFlashSuccess || $sidebarFlashError || $sidebarFlashInfo): ?>
+<div id="flashMessagesData" style="display:none;"
+    <?php if ($sidebarFlashSuccess): ?> data-flash-success="<?php echo e($sidebarFlashSuccess); ?>"<?php endif; ?>
+    <?php if ($sidebarFlashError): ?> data-flash-error="<?php echo e($sidebarFlashError); ?>"<?php endif; ?>
+    <?php if ($sidebarFlashInfo): ?> data-flash-info="<?php echo e($sidebarFlashInfo); ?>"<?php endif; ?>
+></div>
+<?php endif; ?>
+
 <div class="menu">
     <ul>
         <li class="profile">

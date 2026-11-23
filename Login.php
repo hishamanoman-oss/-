@@ -13,8 +13,10 @@ if (is_logged_in()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="fonts/cairo.css?v=7">
-    <link rel="stylesheet" href="Css/login.css?v=7">
+    <link rel="stylesheet" href="fonts/cairo.css?v=8">
+    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=8">
+    <link rel="stylesheet" href="Css/ui.css?v=8">
+    <link rel="stylesheet" href="Css/login.css?v=8">
     <title>تسجيل الدخول</title>
 </head>
 <body>
@@ -39,6 +41,7 @@ if (is_logged_in()) {
         </div>
     </div>
 <script src="js/jquery-3.7.1.js"></script>
-<script src="js/login.js?v=7"></script>
+<script src="js/ui.js?v=8"></script>
+<script src="js/login.js?v=8"></script>
 </body>
 </html>

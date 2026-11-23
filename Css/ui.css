@@ -1,0 +1,410 @@
+/**
+ * المكون الموحد لواجهات التنبيه والنوافذ التفاعلية والترقيم
+ * Unified UI Component: Toasts, Modals, Filter Bar & Pagination (RTL)
+ */
+
+/* ==========================================================================
+   1. نظام التنبيهات المنبثقة (Toast Notifications)
+   ========================================================================== */
+#toastContainer {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 380px;
+    width: calc(100% - 40px);
+    pointer-events: none;
+    direction: rtl;
+}
+
+.custom-toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    transform: translateX(-120%);
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+}
+
+.custom-toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.custom-toast.hide {
+    transform: translateX(-120%);
+    opacity: 0;
+}
+
+.custom-toast-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.custom-toast-content i {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.custom-toast-close {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+    opacity: 0.75;
+    transition: opacity 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-toast-close:hover {
+    opacity: 1;
+}
+
+/* أنواع التنبيهات */
+.toast-success {
+    background-color: #0d2818;
+    border: 1px solid #2ecc71;
+    color: #e8f8f0 !important;
+}
+.toast-success .custom-toast-content i {
+    color: #2ecc71;
+}
+
+.toast-error {
+    background-color: #2b0b0e;
+    border: 1px solid #e74c3c;
+    color: #fdeeed !important;
+}
+.toast-error .custom-toast-content i {
+    color: #e74c3c;
+}
+
+.toast-info {
+    background-color: #0b2238;
+    border: 1px solid #3498db;
+    color: #ebf5fb !important;
+}
+.toast-info .custom-toast-content i {
+    color: #3498db;
+}
+
+/* ==========================================================================
+   2. نافذة التأكيد المخصصة (Confirm Modal)
+   ========================================================================== */
+#confirmModalBackdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 100000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    direction: rtl;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+#confirmModalBackdrop.open {
+    display: flex;
+}
+
+.confirm-modal-box {
+    background: #1a2a3a;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 440px;
+    padding: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    transform: scale(0.9);
+    opacity: 0;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    text-align: right;
+    box-sizing: border-box;
+}
+
+#confirmModalBackdrop.open .confirm-modal-box {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.confirm-modal-title {
+    margin: 0 0 12px 0;
+    font-size: 18px;
+    color: #ffffff !important;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.confirm-modal-title i {
+    color: #ffaa00;
+}
+
+.confirm-modal-body {
+    font-size: 14px;
+    color: #cbd5e1 !important;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.confirm-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.confirm-btn-cancel {
+    background: #334155 !important;
+    color: #ffffff !important;
+    border: 1px solid #475569 !important;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.confirm-btn-cancel:hover {
+    background: #475569 !important;
+}
+
+.confirm-btn-danger {
+    background: #dc3545 !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 8px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Cairo', sans-serif;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.confirm-btn-danger:hover {
+    background: #c82333 !important;
+}
+
+/* ==========================================================================
+   3. شريط البحث والتصفية الموحد (Filter Bar)
+   ========================================================================== */
+.filter-bar {
+    background: #112233;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    box-sizing: border-box;
+}
+
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.filter-input,
+.filter-select {
+    background: #1a2a3a;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 8px 14px;
+    color: #ffffff !important;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+    border-color: #0481ff;
+    box-shadow: 0 0 0 2px rgba(4, 129, 255, 0.25);
+}
+
+.filter-input {
+    min-width: 200px;
+    flex: 1 1 220px;
+}
+
+.filter-select {
+    min-width: 150px;
+    flex: 0 1 180px;
+}
+
+.btn-filter {
+    background: #0481ff !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s ease;
+}
+
+.btn-filter:hover {
+    background: #0366cc !important;
+}
+
+.btn-filter-reset {
+    background: #2a3b4c !important;
+    color: #cbd5e1 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 13px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.btn-filter-reset:hover {
+    background: #3a4b5c !important;
+    color: #ffffff !important;
+}
+
+.filter-summary {
+    color: #8899aa !important;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.filter-summary strong {
+    color: #00c6ff !important;
+}
+
+/* ==========================================================================
+   4. شريط ترقيم الصفحات الموحد (Pagination)
+   ========================================================================== */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    padding: 12px 18px;
+    background: #112233;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-sizing: border-box;
+}
+
+.pagination-info {
+    color: #94a3b8 !important;
+    font-size: 13px;
+}
+
+.pagination-info strong {
+    color: #ffffff !important;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    background: #1a2a3a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #e2e8f0 !important;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Cairo', sans-serif;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.page-link:hover:not(.disabled):not(.active) {
+    background: #25394e;
+    border-color: #0481ff;
+    color: #ffffff !important;
+}
+
+.page-link.active {
+    background: #0481ff !important;
+    border-color: #0481ff !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    cursor: default;
+}
+
+.page-link.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   5. حاوية الجداول المتجاوبة (Table Responsive)
+   ========================================================================== */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.table-responsive::-webkit-scrollbar {
+    height: 6px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}

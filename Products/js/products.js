@@ -51,18 +51,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 submitBtn.style.opacity = '1';
 
                 if (data.success) {
-                    alert(data.message || (isEdit ? 'تم تحديث بيانات المنتج بنجاح.' : 'تمت إضافة المنتج بنجاح.'));
+                    if (typeof window.showToast === 'function') {
+                        window.showToast(data.message || (isEdit ? 'تم تحديث بيانات المنتج بنجاح.' : 'تمت إضافة المنتج بنجاح.'), 'success');
+                    }
                     resetForm();
-                    location.reload();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 600);
                 } else {
-                    alert(data.error || 'تعذر إتمام العملية. يرجى مراجعة البيانات المدخلة.');
+                    if (typeof window.showToast === 'function') {
+                        window.showToast(data.error || 'تعذر إتمام العملية. يرجى مراجعة البيانات المدخلة.', 'error');
+                    }
                 }
             })
             .catch(err => {
                 submitBtn.disabled = false;
                 submitBtn.style.opacity = '1';
                 console.error('Network error:', err);
-                alert('حدث خطأ في الاتصال بالسيرفر.');
+                if (typeof window.showToast === 'function') {
+                    window.showToast('حدث خطأ في الاتصال بالسيرفر.', 'error');
+                }
             });
         });
     }
@@ -103,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const id = deleteBtn.getAttribute('data-id');
                 if (!id) return;
 
-                if (confirm('هل أنت متأكد من رغبتك في حذف هذا المنتج من المخزون؟')) {
+                const performDelete = function () {
                     deleteBtn.disabled = true;
 
                     const formData = new FormData();
@@ -121,16 +129,34 @@ document.addEventListener('DOMContentLoaded', function () {
                             const row = deleteBtn.closest('tr');
                             if (row) row.remove();
                             if (productIdInput.value === id) resetForm();
-                            alert(data.message || 'تم حذف المنتج بنجاح.');
+                            if (typeof window.showToast === 'function') {
+                                window.showToast(data.message || 'تم حذف المنتج بنجاح.', 'success');
+                            }
                         } else {
-                            alert(data.error || 'فشل حذف المنتج.');
+                            if (typeof window.showToast === 'function') {
+                                window.showToast(data.error || 'فشل حذف المنتج.', 'error');
+                            }
                         }
                     })
                     .catch(err => {
                         deleteBtn.disabled = false;
                         console.error('Delete error:', err);
-                        alert('حدث خطأ في الاتصال أثناء محاولة الحذف.');
+                        if (typeof window.showToast === 'function') {
+                            window.showToast('حدث خطأ في الاتصال أثناء محاولة الحذف.', 'error');
+                        }
                     });
+                };
+
+                if (typeof window.showConfirmModal === 'function') {
+                    window.showConfirmModal({
+                        title: 'تأكيد حذف المنتج',
+                        message: 'هل أنت متأكد من رغبتك في حذف هذا المنتج من المخزون؟',
+                        confirmText: 'نعم، حذف المنتج',
+                        cancelText: 'إلغاء',
+                        onConfirm: performDelete
+                    });
+                } else {
+                    performDelete();
                 }
             }
         });

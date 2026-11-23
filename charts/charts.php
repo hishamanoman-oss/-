@@ -9,10 +9,12 @@ $currentUser = current_user();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=7">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=7">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=7">
-    <link rel="stylesheet" href="css/charts.css?v=7">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=8">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=8">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=8">
+    <link rel="stylesheet" href="../Css/ui.css?v=8">
+    <link rel="stylesheet" href="../Css/responsive.css?v=8">
+    <link rel="stylesheet" href="css/charts.css?v=8">
     <title>الإحصائيات والرسوم البيانية</title>
 </head>
 <body>
@@ -56,6 +58,7 @@ $currentUser = current_user();
     </div>
 
     <script src="../js/chart.min.js"></script>
-    <script src="js/charts.js?v=7"></script>
+    <script src="../js/ui.js?v=8"></script>
+    <script src="js/charts.js?v=8"></script>
 </body>
 </html>
