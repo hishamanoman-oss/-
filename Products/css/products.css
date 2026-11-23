@@ -128,11 +128,18 @@ form {
 }
 
 /* حاويات الحقول (divs داخل الفورم) */
-form>div {
+form>div,
+.form-group {
     flex: 1 1 200px;
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
+
+.form-group-buttons {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    gap: 8px !important;
 }
 
 /* تسميات الحقول */

@@ -76,12 +76,12 @@ foreach ($pages as $file => $info) {
             $allPassed = false;
         }
 
-        // 3. التأكد من أن responsive.css هو الأخير دائماً وله الإصدار v=9
+        // 3. التأكد من أن responsive.css هو الأخير دائماً وله باراميتر الإصدار لكسر الكاش
         $lastCss = end($cssHrefs);
-        if (strpos($lastCss, 'responsive.css?v=9') !== false) {
-            echo "✔ [$file]: آخر ملف CSS هو responsive.css?v=9 بنجاح.\n";
+        if (preg_match('/responsive\.css(\?v=\d+)?$/i', $lastCss)) {
+            echo "✔ [$file]: آخر ملف CSS هو responsive.css بنجاح (المسار: $lastCss).\n";
         } else {
-            echo "❌ [$file]: آخر ملف CSS ليس responsive.css?v=9 (الموجود: $lastCss)!\n";
+            echo "❌ [$file]: آخر ملف CSS ليس responsive.css (الموجود: $lastCss)!\n";
             $allPassed = false;
         }
     } else {

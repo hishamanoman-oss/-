@@ -63,12 +63,12 @@ $clients = $stmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=9">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=9">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=9">
-    <link rel="stylesheet" href="../Css/ui.css?v=9">
-    <link rel="stylesheet" href="css/clients.css?v=9">
-    <link rel="stylesheet" href="../Css/responsive.css?v=9">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=10">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=10">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=10">
+    <link rel="stylesheet" href="../Css/ui.css?v=10">
+    <link rel="stylesheet" href="css/clients.css?v=10">
+    <link rel="stylesheet" href="../Css/responsive.css?v=10">
     <title>إدارة العملاء</title>
 </head>
 <body>
@@ -89,34 +89,34 @@ $clients = $stmt->fetchAll();
                 <?php echo csrf_field(); ?>
                 <input type="hidden" id="client_id" name="id" value="">
 
-                <div>
+                <div class="form-group">
                     <label for="name">اسم العميل <span style="color:#ff4d4f;">*</span></label>
                     <input type="text" id="name" name="name" placeholder="أدخل اسم العميل" required>
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="phone">رقم الهاتف <span style="color:#ff4d4f;">*</span></label>
                     <input type="text" id="phone" name="phone" placeholder="أدخل رقم الهاتف" required>
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="email">البريد الإلكتروني</label>
                     <input type="email" id="email" name="email" placeholder="example@store.com">
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="address">العنوان / المدينة</label>
                     <input type="text" id="address" name="address" placeholder="المدينة، الحي، الشارع">
                 </div>
 
-                <div style="flex: 0 0 auto; display: flex; align-items: center; justify-content: center; padding-bottom: 8px;">
+                <div class="form-group form-group-checkbox">
                     <label for="is_vip" style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; margin: 0;">
                         <input type="checkbox" id="is_vip" name="is_vip" value="1">
                         <span style="color: #ffd700; font-weight: bold;"><i class="fas fa-crown"></i> عميل مميز (VIP)</span>
                     </label>
                 </div>
 
-                <div style="flex: 0 0 auto; display: flex; gap: 8px;">
+                <div class="form-group form-group-buttons">
                     <button type="submit" id="submit_btn">إضافة عميل</button>
                     <button type="button" id="cancel_btn" style="display: none; background: #555;">إلغاء التعديل</button>
                 </div>
@@ -249,7 +249,7 @@ $clients = $stmt->fetchAll();
     </div>
 
     <script src="../js/jquery-3.7.1.js"></script>
-    <script src="../js/ui.js?v=9"></script>
-    <script src="js/clients.js?v=9"></script>
+    <script src="../js/ui.js?v=10"></script>
+    <script src="js/clients.js?v=10"></script>
 </body>
 </html>

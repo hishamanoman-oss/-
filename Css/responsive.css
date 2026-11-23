@@ -147,26 +147,104 @@
         box-sizing: border-box !important;
     }
 
-    /* نماذج الإدخال والتعديل */
+    /* نماذج الإدخال والتعديل في الهواتف المحمولة */
     .body form#form,
+    form#form,
+    .body form,
     .body form#order_form {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        align-items: stretch !important;
+        box-sizing: border-box !important;
+    }
+
+    .body form#form > div,
+    .body form#form .form-group,
+    form#form > div,
+    form#form .form-group {
+        display: flex !important;
         flex-direction: column !important;
         width: 100% !important;
-        box-sizing: border-box !important;
-    }
-
-    .body form#form > div {
-        width: 100% !important;
         max-width: 100% !important;
+        min-width: 0 !important;
         flex: 1 1 100% !important;
         box-sizing: border-box !important;
+        margin: 0 !important;
+        gap: 6px !important;
+        align-items: stretch !important;
     }
 
-    .body form#form input,
+    .body form#form label,
+    form#form label {
+        display: block !important;
+        width: 100% !important;
+        text-align: right !important;
+        margin: 0 0 4px 0 !important;
+        font-size: 14px !important;
+        color: #cbd5e1 !important;
+        font-weight: 700 !important;
+    }
+
+    .body form#form input:not([type="checkbox"]),
     .body form#form select,
-    .body form#form textarea {
+    .body form#form textarea,
+    form#form input:not([type="checkbox"]),
+    form#form select,
+    form#form textarea {
+        display: block !important;
         width: 100% !important;
         max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+        padding: 12px 14px !important;
+        font-size: 14px !important;
+        border-radius: 8px !important;
+    }
+
+    .body form#form .form-group-checkbox,
+    form#form .form-group-checkbox {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        padding: 4px 0 !important;
+    }
+
+    .body form#form .form-group-checkbox label,
+    form#form .form-group-checkbox label {
+        display: inline-flex !important;
+        align-items: center !important;
+        width: auto !important;
+        gap: 8px !important;
+        cursor: pointer !important;
+        margin: 0 !important;
+    }
+
+    .body form#form .form-group-buttons,
+    form#form .form-group-buttons {
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 8px !important;
+        margin-top: 4px !important;
+    }
+
+    .body form#form button#submit_btn,
+    .body form#form button#cancel_btn,
+    form#form button#submit_btn,
+    form#form button#cancel_btn,
+    form#form button {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 44px !important;
+        min-height: 44px !important;
+        font-size: 15px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 !important;
         box-sizing: border-box !important;
     }
 
@@ -232,12 +310,44 @@
         overflow-x: auto !important;
         -webkit-overflow-scrolling: touch !important;
         display: block !important;
-        border-radius: 8px;
+        border-radius: 8px !important;
         box-sizing: border-box !important;
+        margin-bottom: 20px !important;
     }
 
+    .table-responsive table,
+    .table-responsive #table,
     table {
-        min-width: 650px;
+        width: 100% !important;
+        min-width: 620px !important;
+        border-collapse: separate !important;
+        margin: 0 !important;
+    }
+
+    .actions,
+    td.actions {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        white-space: nowrap !important;
+        flex-wrap: nowrap !important;
+        min-width: 110px !important;
+    }
+
+    .actions button,
+    .actions a,
+    .actions form,
+    .actions .btn-action,
+    td.actions button,
+    td.actions a,
+    td.actions form {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        white-space: nowrap !important;
+        flex: 0 0 auto !important;
+        margin: 0 !important;
     }
 
     /* بنود الطلب في صفحة المبيعات */

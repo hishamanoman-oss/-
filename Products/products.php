@@ -70,12 +70,12 @@ $products = $stmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-    <link rel="stylesheet" href="../fonts/cairo.css?v=9">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=9">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=9">
-    <link rel="stylesheet" href="../Css/ui.css?v=9">
-    <link rel="stylesheet" href="css/products.css?v=9">
-    <link rel="stylesheet" href="../Css/responsive.css?v=9">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=10">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=10">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=10">
+    <link rel="stylesheet" href="../Css/ui.css?v=10">
+    <link rel="stylesheet" href="css/products.css?v=10">
+    <link rel="stylesheet" href="../Css/responsive.css?v=10">
     <title>إدارة المنتجات والمخزون</title>
 </head>
 <body>
@@ -96,37 +96,37 @@ $products = $stmt->fetchAll();
                 <?php echo csrf_field(); ?>
                 <input type="hidden" id="product_id" name="id" value="">
 
-                <div>
+                <div class="form-group">
                     <label for="name">اسم المنتج <span style="color:#ff4d4f;">*</span></label>
                     <input type="text" id="name" name="name" placeholder="أدخل اسم المنتج" required>
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="sku">رمز المنتج SKU <span style="color:#ff4d4f;">*</span></label>
                     <input type="text" id="sku" name="sku" placeholder="مثال: PRD-1001" required>
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="category">القسم / التصنيف</label>
                     <input type="text" id="category" name="category" placeholder="مثال: إلكترونيات، عطور">
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="price">السعر (ر.س) <span style="color:#ff4d4f;">*</span></label>
                     <input type="number" id="price" name="price" step="0.01" min="0" placeholder="0.00" required>
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="count">الكمية بالمخزن <span style="color:#ff4d4f;">*</span></label>
                     <input type="number" id="count" name="count" min="0" placeholder="0" required>
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="min_stock_alert">حد تنبيه النقص</label>
                     <input type="number" id="min_stock_alert" name="min_stock_alert" min="0" value="5" placeholder="5" required>
                 </div>
 
-                <div style="flex: 0 0 auto; display: flex; gap: 8px;">
+                <div class="form-group form-group-buttons">
                     <button type="submit" id="submit_btn">إضافة منتج</button>
                     <button type="button" id="cancel_btn" style="display: none; background: #555;">إلغاء التعديل</button>
                 </div>
@@ -273,7 +273,7 @@ $products = $stmt->fetchAll();
     </div>
 
     <script src="../js/jquery-3.7.1.js"></script>
-    <script src="../js/ui.js?v=9"></script>
-    <script src="js/products.js?v=9"></script>
+    <script src="../js/ui.js?v=10"></script>
+    <script src="js/products.js?v=10"></script>
 </body>
 </html>
