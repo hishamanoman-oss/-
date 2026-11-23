@@ -42,7 +42,7 @@ unset($_SESSION['flash_success'], $_SESSION['flash_error'], $_SESSION['flash_inf
     <ul>
         <li class="profile">
             <div class="img-box">
-                <img src="<?php echo e($basePath . 'work.jpg'); ?>" alt="profile">
+                <img src="<?php echo e($basePath . 'assets/images/avatar.png'); ?>" alt="profile">
             </div>
             <div>
                 <h2><?php echo e($currentUser['full_name'] ?: $currentUser['email']); ?></h2>

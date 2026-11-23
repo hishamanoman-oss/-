@@ -27,10 +27,9 @@ $valid = verify_csrf_token($token) ? 'مطابق بنجاح' : 'فاشل';
 $invalid = !verify_csrf_token('fake_csrf_token') ? 'تم رفض التوكن الوهمي بنجاح' : 'فاشل';
 echo "✔ فحص توكن CSRF: {$valid} | {$invalid}" . PHP_EOL;
 
-echo PHP_EOL . "=== 4. فحص اتصال MySQLi المتوافق مع الصفحات القديمة ===" . PHP_EOL;
-require_once __DIR__ . '/../db_connect.php';
-$res = mysqli_query($conn, "SELECT COUNT(*) as cnt FROM clients");
-$row = mysqli_fetch_assoc($res);
-echo "✔ اتصال MySQLi القديم: يعمل بنجاح دون أخطاء (العملاء: {$row['cnt']})" . PHP_EOL;
+echo PHP_EOL . "=== 4. فحص اتصال PDO الحديث والنظيف ===" . PHP_EOL;
+$res = $pdo->query("SELECT COUNT(*) as cnt FROM clients");
+$row = $res->fetch(PDO::FETCH_ASSOC);
+echo "✔ اتصال PDO الحديث: يعمل بنجاح دون أخطاء (العملاء: {$row['cnt']})" . PHP_EOL;
 
 echo PHP_EOL . "🎉 جميع اختبارات المرحلة الأولى اجتازت الفحص بنسبة 100%!" . PHP_EOL;

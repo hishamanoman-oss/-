@@ -13,36 +13,67 @@ if (is_logged_in()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="fonts/cairo.css?v=9">
-    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=9">
-    <link rel="stylesheet" href="Css/ui.css?v=9">
-    <link rel="stylesheet" href="Css/login.css?v=9">
-    <link rel="stylesheet" href="Css/responsive.css?v=11">
-    <title>تسجيل الدخول</title>
+    <link rel="stylesheet" href="fonts/cairo.css?v=12">
+    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=12">
+    <link rel="stylesheet" href="Css/ui.css?v=12">
+    <link rel="stylesheet" href="Css/login.css?v=12">
+    <link rel="stylesheet" href="Css/responsive.css?v=12">
+    <title>تسجيل الدخول | لوحة متابعة المتجر والمبيعات عن بُعد</title>
 </head>
 <body>
-    <div class="login">
-        <div class="box">
-            <h1>تسجيل الدخول</h1>
-            <form action="login_process.php" method="post" id="login-form">
-                <?php echo csrf_field(); ?>
-                <div>
-                    <label for="email">البريد الإلكتروني</label><br>
-                    <input type="email" id="email" name="email" placeholder="أدخل البريد الإلكتروني" required>
-                </div><br>
-                <div>
-                    <label for="password">كلمة المرور</label><br>
-                    <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" required>
+    <div class="login-wrapper">
+        <div class="login-glow"></div>
+        
+        <div class="login-card">
+            <div class="login-header">
+                <div class="brand-logo">
+                    <img src="assets/images/store-logo.png" alt="شعار المتجر">
                 </div>
-                <br>
-                <div>
-                    <button type="submit">تسجيل الدخول</button>
+                <h1 class="login-title">لوحة متابعة المتجر والمبيعات عن بُعد</h1>
+                <p class="login-subtitle">سجّل الدخول لمتابعة المبيعات والمخزون والعملاء</p>
+            </div>
+
+            <form action="login_process.php" method="post" id="login-form" class="login-form" autocomplete="on">
+                <?php echo csrf_field(); ?>
+
+                <div class="input-group">
+                    <label for="email">البريد الإلكتروني</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" id="email" name="email" placeholder="admin@store.com" required autocomplete="email" autofocus>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">كلمة المرور</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+                        <button type="button" id="togglePassword" class="password-toggle" title="إظهار / إخفاء كلمة المرور" aria-label="إظهار / إخفاء كلمة المرور">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="submitBtn" class="btn-login">
+                        <span class="btn-text">تسجيل الدخول</span>
+                        <i class="fas fa-arrow-left btn-icon"></i>
+                    </button>
                 </div>
             </form>
+
+            <div class="login-footer">
+                <p><i class="fas fa-shield-alt"></i> نظام محمي بتشفير الجلسات وحماية CSRF و PDO</p>
+            </div>
         </div>
     </div>
-<script src="js/jquery-3.7.1.js"></script>
-<script src="js/ui.js?v=9"></script>
-<script src="js/login.js?v=9"></script>
+
+    <!-- حاوية التنبيهات المنبثقة Toast Container -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script src="js/ui.js?v=12"></script>
+    <script src="js/login.js?v=12"></script>
 </body>
 </html>

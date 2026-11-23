@@ -36,6 +36,23 @@ if (trim($output) === 'success' && isset($_SESSION['user_id']) && $_SESSION['rol
     exit(1);
 }
 
+echo PHP_EOL . "=== 3. محاكاة طلب الدخول ببيانات موظف المبيعات (staff@store.com) ===" . PHP_EOL;
+$_POST = [
+    'csrf_token' => csrf_token(),
+    'email'      => 'staff@store.com',
+    'password'   => 'Staff@123'
+];
+ob_start();
+include __DIR__ . '/../login_process.php';
+$outputStaff = ob_get_clean();
+echo "  الاستجابة: " . trim($outputStaff) . PHP_EOL;
+if (trim($outputStaff) === 'success' && isset($_SESSION['user_id']) && $_SESSION['role'] === 'staff') {
+    echo "✔ نجاح تسجيل الدخول لموظف المبيعات: تم التحقق وتوليد الجلسة (المعرف: {$_SESSION['user_id']} | الدور: {$_SESSION['role']})" . PHP_EOL;
+} else {
+    echo "❌ فشل تسجيل الدخول لموظف المبيعات!" . PHP_EOL;
+    exit(1);
+}
+
 echo PHP_EOL . "=== 3. محاكاة طلب الدخول بكلمة مرور خاطئة ===" . PHP_EOL;
 $_POST['password'] = 'WrongPassword';
 ob_start();
