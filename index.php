@@ -79,13 +79,13 @@ $lastUpdated = date('H:i:s');
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
-    <link rel="stylesheet" href="fonts/cairo.css?v=14">
-    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=14">
-    <link rel="stylesheet" href="Css/sidebar.css?v=14">
-    <link rel="stylesheet" href="Css/ui.css?v=14">
-    <link rel="stylesheet" href="Css/work3.css?v=14">
-    <link rel="stylesheet" href="Css/theme.css?v=14">
-    <link rel="stylesheet" href="Css/responsive.css?v=14">
+    <link rel="stylesheet" href="fonts/cairo.css?v=15">
+    <link rel="stylesheet" href="fontawesome/css/all.min.css?v=15">
+    <link rel="stylesheet" href="Css/sidebar.css?v=15">
+    <link rel="stylesheet" href="Css/ui.css?v=15">
+    <link rel="stylesheet" href="Css/work3.css?v=15">
+    <link rel="stylesheet" href="Css/theme.css?v=15">
+    <link rel="stylesheet" href="Css/responsive.css?v=15">
     <title>لوحة التحكم والمتابعة - <?= e($storeName) ?></title>
 </head>
 <body>
@@ -201,7 +201,7 @@ $lastUpdated = date('H:i:s');
                                         <td>
                                             <?= e($order['client_name']) ?>
                                             <?php if ((int)$order['is_vip'] === 1): ?>
-                                                <span class="badge-vip" style="background:#ffd700;color:#000;padding:1px 5px;border-radius:10px;font-size:10px;font-weight:bold;">VIP</span>
+                                                <span class="badge-vip"><i class="fas fa-crown"></i> VIP</span>
                                             <?php endif; ?>
                                         </td>
                                         <td><?= e($order['user_name']) ?></td>
@@ -269,7 +269,7 @@ $lastUpdated = date('H:i:s');
         </div>
     </div>
 
-    <script src="js/ui.js?v=14"></script>
-    <script src="js/dashboard.js?v=14"></script>
+    <script src="js/ui.js?v=15"></script>
+    <script src="js/dashboard.js?v=15"></script>
 </body>
 </html>

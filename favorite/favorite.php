@@ -57,13 +57,13 @@ $monitoredProducts = $monitoredStmt->fetchAll(PDO::FETCH_ASSOC);
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
-    <link rel="stylesheet" href="../fonts/cairo.css?v=14">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=14">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=14">
-    <link rel="stylesheet" href="../Css/ui.css?v=14">
-    <link rel="stylesheet" href="css/favorite.css?v=14">
-    <link rel="stylesheet" href="../Css/theme.css?v=14">
-    <link rel="stylesheet" href="../Css/responsive.css?v=14">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=15">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=15">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=15">
+    <link rel="stylesheet" href="../Css/ui.css?v=15">
+    <link rel="stylesheet" href="css/favorite.css?v=15">
+    <link rel="stylesheet" href="../Css/theme.css?v=15">
+    <link rel="stylesheet" href="../Css/responsive.css?v=15">
     <title>المفضلة وقائمة المراقبة</title>
 </head>
 <body>
@@ -83,14 +83,14 @@ $monitoredProducts = $monitoredStmt->fetchAll(PDO::FETCH_ASSOC);
             <!-- قسم عملاء VIP والشركاء المميزين -->
             <div style="display:flex; justify-content:space-between; align-items:center; margin: 25px 0 15px;">
                 <h3 class="section-title" style="margin:0;"><i class="fas fa-crown" style="color:#ffd700;"></i> كبار العملاء (VIP Clients)</h3>
-                <a href="../clients/clients.php" style="color:#00c6ff; text-decoration:none; font-size:13px;">
+                <a href="../clients/clients.php" class="fav-link">
                     إدارة العملاء <i class="fas fa-arrow-left"></i>
                 </a>
             </div>
 
             <div class="cards-grid">
                 <?php if (empty($vipClients)): ?>
-                    <div style="grid-column: 1 / -1; background:rgba(255,255,255,0.05); padding:25px; border-radius:10px; text-align:center; color:#8899aa;">
+                    <div class="fav-empty">
                         <i class="fas fa-user-slash" style="font-size:32px; color:#ffd700; margin-bottom:10px; display:block;"></i>
                         <p>لا يوجد عملاء مصنفين كـ VIP حالياً في النظام.</p>
                         <p style="font-size:12px; margin-top:5px;">يمكنك تعيين شارة VIP لأي عميل مباشرة من صفحة <a href="../clients/clients.php" style="color:#0481ff;">العملاء</a>.</p>
@@ -108,12 +108,12 @@ $monitoredProducts = $monitoredStmt->fetchAll(PDO::FETCH_ASSOC);
                                         <i class="fas fa-gem"></i> شريك VIP
                                     </span>
                                 </div>
-                                <div style="font-size:12px; color:#bbb; margin-top:6px;">
+                                <div class="fav-meta">
                                     <span>إجمالي المشتريات: </span>
-                                    <strong style="color:#00ff88; font-size:14px;"><?= number_format((float)$client['total_spent'], 2) ?></strong>
+                                    <strong class="fav-amount"><?= number_format((float)$client['total_spent'], 2) ?></strong>
                                     <small><?= e($currency) ?></small>
                                 </div>
-                                <div style="font-size:11px; color:#8899aa; margin-top:2px;">
+                                <div class="fav-submeta">
                                     <span>الطلبات المنفذة: <?= (int)$client['orders_count'] ?> طلب</span>
                                 </div>
                             </div>
@@ -140,14 +140,14 @@ $monitoredProducts = $monitoredStmt->fetchAll(PDO::FETCH_ASSOC);
             <!-- قسم المنتجات المراقبة في المخزون -->
             <div style="display:flex; justify-content:space-between; align-items:center; margin: 35px 0 15px;">
                 <h3 class="section-title" style="margin:0;"><i class="fas fa-boxes-stacked" style="color:#00c6ff;"></i> منتجات قيد المراقبة المستمرة</h3>
-                <a href="../Products/products.php" style="color:#00c6ff; text-decoration:none; font-size:13px;">
+                <a href="../Products/products.php" class="fav-link">
                     كافة المنتجات <i class="fas fa-arrow-left"></i>
                 </a>
             </div>
 
             <div class="cards-grid">
                 <?php if (empty($monitoredProducts)): ?>
-                    <div style="grid-column: 1 / -1; background:rgba(255,255,255,0.05); padding:25px; border-radius:10px; text-align:center; color:#8899aa;">
+                    <div class="fav-empty">
                         <i class="fas fa-box-open" style="font-size:32px; color:#00c6ff; margin-bottom:10px; display:block;"></i>
                         <p>لا توجد منتجات مسجلة في قاعدة البيانات حالياً.</p>
                     </div>
@@ -163,15 +163,15 @@ $monitoredProducts = $monitoredStmt->fetchAll(PDO::FETCH_ASSOC);
                             <div class="card-details">
                                 <h4 style="font-size:14px; font-weight:700;"><?= e($prod['name']) ?></h4>
                                 <p class="specs" style="color:#aaa; font-size:12px;">
-                                    <?= e($prod['category'] ?: 'عام') ?> | <code><?= e($prod['sku']) ?></code>
+                                     <?= e($prod['category'] ?: 'عام') ?> | <code><?= e($prod['sku']) ?></code>
                                 </p>
                                 <div style="margin-top:4px;">
                                     <?php if ($isLowStock): ?>
-                                        <span style="color:#ffaa00; font-size:12px; font-weight:700;">
+                                        <span class="fav-stock-low">
                                             <i class="fas fa-exclamation-circle"></i> المخزون حرج: <?= (int)$prod['count'] ?> قطعة
                                         </span>
                                     <?php else: ?>
-                                        <span style="color:#00ff88; font-size:12px;">
+                                        <span class="fav-stock-ok">
                                             <i class="fas fa-check"></i> متوفر: <?= (int)$prod['count'] ?> قطعة
                                         </span>
                                     <?php endif; ?>
@@ -192,6 +192,6 @@ $monitoredProducts = $monitoredStmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    <script src="../js/ui.js?v=14"></script>
+    <script src="../js/ui.js?v=15"></script>
 </body>
 </html>

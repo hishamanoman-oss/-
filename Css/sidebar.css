@@ -198,3 +198,21 @@ body {
     padding: 10px 20px;
     transition: margin-right 0.28s ease, width 0.28s ease;
 }
+
+/* شريط تمرير القائمة الجانبية الأنيق */
+.menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+}

@@ -13,6 +13,24 @@ html[data-theme="light"] body {
     color: #0f172a !important;
 }
 
+/* شريط التمرير للوضع الفاتح */
+html[data-theme="light"] ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+html[data-theme="light"] ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+html[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+html[data-theme="light"] .menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+html[data-theme="light"] .menu::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+}
+
 /* إلغاء تأثير * { color: white; } للنصوص في الوضع الفاتح مع ضمان قراءتها */
 html[data-theme="light"] h1,
 html[data-theme="light"] h2,
@@ -30,7 +48,7 @@ html[data-theme="light"] td,
 html[data-theme="light"] li,
 html[data-theme="light"] a:not(.btn):not(.btn-action):not(.page-link):not(.btn-login):not(.mobile-menu-btn):not(.btn-sm-action),
 html[data-theme="light"] span:not(.badge):not(.status-badge):not(.user-role-badge):not(.badge-status):not(.badge-completed):not(.badge-pending):not(.badge-cancelled):not(.badge-vip):not(.badge-low-stock):not(.badge-in-stock):not(.price):not(.count):not(.pulse-dot),
-html[data-theme="light"] div:not(.title-info):not(.alert-flash):not(.alert-box):not(.btn):not(.toast):not(.live-controls):not(.live-badge):not(.pulse-dot) {
+html[data-theme="light"] div:not(.title-info):not(.alert-flash):not(.alert-box):not(.btn):not(.toast):not(.live-controls):not(.live-badge):not(.pulse-dot):not(.custom-toast):not(.custom-toast-content) {
     color: #0f172a;
 }
 
@@ -76,26 +94,37 @@ html[data-theme="light"] .live-badge .pulse-dot {
 
 /* زر التحديث الحي */
 html[data-theme="light"] .btn-refresh,
-html[data-theme="light"] .btn-refresh span,
-html[data-theme="light"] .btn-refresh i,
-html[data-theme="light"] .btn-refresh-live,
-html[data-theme="light"] .btn-refresh-live span,
-html[data-theme="light"] .btn-refresh-live i {
-    color: #0481ff !important;
+html[data-theme="light"] .btn-refresh-live {
     background: #ffffff !important;
-    border: 1px solid rgba(4, 129, 255, 0.25) !important;
+    color: #0481ff !important;
+    border: 1px solid rgba(4, 129, 255, 0.3) !important;
+    box-shadow: 0 2px 6px rgba(4, 129, 255, 0.15) !important;
     font-weight: 700 !important;
 }
 
 html[data-theme="light"] .btn-refresh:hover,
+html[data-theme="light"] .btn-refresh-live:hover {
+    background: #eff6ff !important;
+    border-color: #0481ff !important;
+    color: #0369a1 !important;
+}
+
+html[data-theme="light"] .btn-refresh span,
+html[data-theme="light"] .btn-refresh i,
+html[data-theme="light"] .btn-refresh-live span,
+html[data-theme="light"] .btn-refresh-live i {
+    background: transparent !important;
+    border: none !important;
+    color: #0481ff !important;
+}
+
 html[data-theme="light"] .btn-refresh:hover span,
 html[data-theme="light"] .btn-refresh:hover i,
-html[data-theme="light"] .btn-refresh-live:hover,
 html[data-theme="light"] .btn-refresh-live:hover span,
 html[data-theme="light"] .btn-refresh-live:hover i {
-    background: #eff6ff !important;
+    background: transparent !important;
+    border: none !important;
     color: #0369a1 !important;
-    border-color: #0481ff !important;
 }
 
 /* أزرار الإجراءات في لوحة التحكم (الفاتورة وتفقد المخزن) */
@@ -294,7 +323,7 @@ html[data-theme="light"] .monitored-card {
     border: 1px solid #e2e8f0 !important;
     border-radius: 12px !important;
     padding: 16px !important;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05) !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06) !important;
     color: #0f172a !important;
 }
 
@@ -313,6 +342,41 @@ html[data-theme="light"] .card-details h4 {
 
 html[data-theme="light"] .card-details .specs {
     color: #64748b !important;
+}
+
+html[data-theme="light"] .fav-amount,
+html[data-theme="light"] .fav-stock-ok,
+html[data-theme="light"] .favorites-container .price {
+    color: #047857 !important;
+    font-weight: 700 !important;
+}
+
+html[data-theme="light"] .fav-stock-low {
+    color: #b45309 !important;
+    font-weight: 700 !important;
+}
+
+html[data-theme="light"] .fav-meta {
+    color: #334155 !important;
+}
+
+html[data-theme="light"] .fav-submeta {
+    color: #475569 !important;
+}
+
+html[data-theme="light"] .fav-link {
+    color: #0284c7 !important;
+    font-weight: 600 !important;
+}
+
+html[data-theme="light"] .fav-link:hover {
+    color: #0369a1 !important;
+}
+
+html[data-theme="light"] .fav-empty {
+    background: #f8fafc !important;
+    border: 1px dashed #cbd5e1 !important;
+    color: #475569 !important;
 }
 
 html[data-theme="light"] .card-actions .btn-icon {
@@ -387,16 +451,6 @@ html[data-theme="light"] .live-indicator-badge {
     background: #f1f5f9 !important;
     border-color: #cbd5e1 !important;
     color: #0f172a !important;
-}
-
-html[data-theme="light"] .btn-refresh-live {
-    background: #f8fafc !important;
-    border-color: #cbd5e1 !important;
-    color: #0481ff !important;
-}
-
-html[data-theme="light"] .btn-refresh-live:hover {
-    background: #e0f2fe !important;
 }
 
 html[data-theme="light"] .stock-alert-item {
@@ -481,23 +535,46 @@ html[data-theme="light"] table {
 }
 
 html[data-theme="light"] table th,
-html[data-theme="light"] .table-responsive th {
-    background: linear-gradient(135deg, #1e293b, #334155) !important;
+html[data-theme="light"] .table-responsive th,
+html[data-theme="light"] .table-responsive thead th {
+    background: linear-gradient(180deg, #1e293b, #0f172a) !important;
     color: #ffffff !important;
+    padding: 13px 16px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
     border-bottom: 2px solid #0481ff !important;
 }
 
 html[data-theme="light"] table td,
-html[data-theme="light"] .table-responsive td {
+html[data-theme="light"] .table-responsive td,
+html[data-theme="light"] .table-responsive tbody td {
+    padding: 12px 14px !important;
+    border-radius: 8px !important;
     background: #ffffff !important;
     color: #1e293b !important;
-    border-bottom: 1px solid #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
 }
 
 html[data-theme="light"] table tr:hover td,
 html[data-theme="light"] .table-responsive tr:hover td,
+html[data-theme="light"] .table-responsive tbody tr:hover td,
 html[data-theme="light"] td:hover {
     background-color: #f8fafc !important;
+}
+
+/* أزرار الإجراءات الموحدة في الوضع الفاتح */
+html[data-theme="light"] .actions button,
+html[data-theme="light"] .actions .btn-action,
+html[data-theme="light"] td.actions button,
+html[data-theme="light"] td.actions a.btn-action,
+html[data-theme="light"] td.actions form button {
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 14px !important;
+    border-radius: 8px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
 }
 
 /* خلايا ونصوص الجداول لضمان التباين العالي بنسبة 100% */
@@ -587,13 +664,23 @@ html[data-theme="light"] .menu ul li a:hover p {
     color: #0481ff !important;
 }
 
-html[data-theme="light"] .menu ul li.active a,
-html[data-theme="light"] .menu ul li a.active {
+html[data-theme="light"] .menu ul li a.active,
+html[data-theme="light"] .menu ul li.active > a,
+html[data-theme="light"] .menu ul li a.active:hover,
+html[data-theme="light"] .menu ul li.active > a:hover {
     background: #0481ff !important;
     color: #ffffff !important;
     border-right: 4px solid #0056b3 !important;
 }
 
+html[data-theme="light"] .menu ul li a.active i,
+html[data-theme="light"] .menu ul li a.active p,
+html[data-theme="light"] .menu ul li.active > a i,
+html[data-theme="light"] .menu ul li.active > a p,
+html[data-theme="light"] .menu ul li a.active:hover i,
+html[data-theme="light"] .menu ul li a.active:hover p,
+html[data-theme="light"] .menu ul li.active > a:hover i,
+html[data-theme="light"] .menu ul li.active > a:hover p,
 html[data-theme="light"] .menu ul li.active a *,
 html[data-theme="light"] .menu ul li a.active * {
     color: #ffffff !important;
@@ -735,4 +822,57 @@ html[data-theme="light"] .alert-box.alert-danger {
     background: #fef2f2 !important;
     border-color: #fecaca !important;
     color: #991b1b !important;
+}
+
+/* تنبيهات التوست المنبثقة في الوضع الفاتح (Toast Notifications) */
+html[data-theme="light"] .custom-toast {
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14) !important;
+}
+
+html[data-theme="light"] .custom-toast.toast-success {
+    background: #ecfdf5 !important;
+    border: 1px solid #10b981 !important;
+    color: #065f46 !important;
+}
+
+html[data-theme="light"] .custom-toast.toast-success .custom-toast-content,
+html[data-theme="light"] .custom-toast.toast-success .custom-toast-content span,
+html[data-theme="light"] .custom-toast.toast-success .custom-toast-content i {
+    color: #065f46 !important;
+}
+
+html[data-theme="light"] .custom-toast.toast-success .custom-toast-close {
+    color: #047857 !important;
+}
+
+html[data-theme="light"] .custom-toast.toast-error {
+    background: #fef2f2 !important;
+    border: 1px solid #ef4444 !important;
+    color: #991b1b !important;
+}
+
+html[data-theme="light"] .custom-toast.toast-error .custom-toast-content,
+html[data-theme="light"] .custom-toast.toast-error .custom-toast-content span,
+html[data-theme="light"] .custom-toast.toast-error .custom-toast-content i {
+    color: #991b1b !important;
+}
+
+html[data-theme="light"] .custom-toast.toast-error .custom-toast-close {
+    color: #b91c1c !important;
+}
+
+html[data-theme="light"] .custom-toast.toast-info {
+    background: #eff6ff !important;
+    border: 1px solid #3b82f6 !important;
+    color: #1e40af !important;
+}
+
+html[data-theme="light"] .custom-toast.toast-info .custom-toast-content,
+html[data-theme="light"] .custom-toast.toast-info .custom-toast-content span,
+html[data-theme="light"] .custom-toast.toast-info .custom-toast-content i {
+    color: #1e40af !important;
+}
+
+html[data-theme="light"] .custom-toast.toast-info .custom-toast-close {
+    color: #1d4ed8 !important;
 }
