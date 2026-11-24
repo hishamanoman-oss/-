@@ -103,13 +103,13 @@ $orders = $ordersStmt->fetchAll();
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
-    <link rel="stylesheet" href="../fonts/cairo.css?v=13">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=13">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=13">
-    <link rel="stylesheet" href="../Css/ui.css?v=13">
-    <link rel="stylesheet" href="css/orders.css?v=13">
-    <link rel="stylesheet" href="../Css/theme.css?v=13">
-    <link rel="stylesheet" href="../Css/responsive.css?v=13">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=14">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=14">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=14">
+    <link rel="stylesheet" href="../Css/ui.css?v=14">
+    <link rel="stylesheet" href="css/orders.css?v=14">
+    <link rel="stylesheet" href="../Css/theme.css?v=14">
+    <link rel="stylesheet" href="../Css/responsive.css?v=14">
     <title>المبيعات والطلبات</title>
 </head>
 <body>
@@ -387,7 +387,7 @@ $orders = $ordersStmt->fetchAll();
         <?php echo json_encode($productsCatalog, JSON_UNESCAPED_UNICODE); ?>
     </script>
     <script src="../js/jquery-3.7.1.js"></script>
-    <script src="../js/ui.js?v=13"></script>
-    <script src="js/orders.js?v=13"></script>
+    <script src="../js/ui.js?v=14"></script>
+    <script src="js/orders.js?v=14"></script>
 </body>
 </html>

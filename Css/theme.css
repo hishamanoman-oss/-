@@ -21,27 +21,102 @@ html[data-theme="light"] h4,
 html[data-theme="light"] h5,
 html[data-theme="light"] h6,
 html[data-theme="light"] p,
-html[data-theme="light"] span:not(.badge):not(.status-badge):not(.user-role-badge),
 html[data-theme="light"] label,
+html[data-theme="light"] strong,
+html[data-theme="light"] b,
+html[data-theme="light"] em,
+html[data-theme="light"] small,
 html[data-theme="light"] td,
-html[data-theme="light"] div:not(.title-info):not(.alert-flash):not(.alert-box):not(.btn):not(.toast) {
+html[data-theme="light"] li,
+html[data-theme="light"] a:not(.btn):not(.btn-action):not(.page-link):not(.btn-login):not(.mobile-menu-btn):not(.btn-sm-action),
+html[data-theme="light"] span:not(.badge):not(.status-badge):not(.user-role-badge):not(.badge-status):not(.badge-completed):not(.badge-pending):not(.badge-cancelled):not(.badge-vip):not(.badge-low-stock):not(.badge-in-stock):not(.price):not(.count):not(.pulse-dot),
+html[data-theme="light"] div:not(.title-info):not(.alert-flash):not(.alert-box):not(.btn):not(.toast):not(.live-controls):not(.live-badge):not(.pulse-dot) {
     color: #0f172a;
+}
+
+html[data-theme="light"] form label,
+html[data-theme="light"] .form-group label {
+    color: #1e293b !important;
+    font-weight: 700 !important;
 }
 
 html[data-theme="light"] small,
 html[data-theme="light"] .text-muted,
 html[data-theme="light"] .filter-summary,
 html[data-theme="light"] .empty-chart-notice {
-    color: #64748b !important;
+    color: #475569 !important;
 }
 
 /* ==========================================================================
    2. الحفاظ الصارم على النص والأيقونات البيضاء على العناصر الملونة
    ========================================================================== */
 html[data-theme="light"] .title-info,
-html[data-theme="light"] .title-info p,
-html[data-theme="light"] .title-info i,
-html[data-theme="light"] .title-info * {
+html[data-theme="light"] .title-info > div > p,
+html[data-theme="light"] .title-info > div > p *,
+html[data-theme="light"] .title-info > p,
+html[data-theme="light"] .title-info > p *,
+html[data-theme="light"] .title-info > i {
+    color: #ffffff !important;
+}
+
+/* شريط المراقبة وزر التحديث داخل الترويسة */
+html[data-theme="light"] .live-badge {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+html[data-theme="light"] .live-badge * {
+    color: #ffffff !important;
+}
+
+html[data-theme="light"] .live-badge .pulse-dot {
+    background: #00ff88 !important;
+}
+
+/* زر التحديث الحي */
+html[data-theme="light"] .btn-refresh,
+html[data-theme="light"] .btn-refresh span,
+html[data-theme="light"] .btn-refresh i,
+html[data-theme="light"] .btn-refresh-live,
+html[data-theme="light"] .btn-refresh-live span,
+html[data-theme="light"] .btn-refresh-live i {
+    color: #0481ff !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(4, 129, 255, 0.25) !important;
+    font-weight: 700 !important;
+}
+
+html[data-theme="light"] .btn-refresh:hover,
+html[data-theme="light"] .btn-refresh:hover span,
+html[data-theme="light"] .btn-refresh:hover i,
+html[data-theme="light"] .btn-refresh-live:hover,
+html[data-theme="light"] .btn-refresh-live:hover span,
+html[data-theme="light"] .btn-refresh-live:hover i {
+    background: #eff6ff !important;
+    color: #0369a1 !important;
+    border-color: #0481ff !important;
+}
+
+/* أزرار الإجراءات في لوحة التحكم (الفاتورة وتفقد المخزن) */
+html[data-theme="light"] .btn-sm-action {
+    background: #e0f2fe !important;
+    color: #0369a1 !important;
+    border: 1px solid #7dd3fc !important;
+    font-weight: 600 !important;
+}
+
+html[data-theme="light"] .btn-sm-action i {
+    color: #0369a1 !important;
+}
+
+html[data-theme="light"] .btn-sm-action:hover {
+    background: #0481ff !important;
+    color: #ffffff !important;
+    border-color: #0481ff !important;
+}
+
+html[data-theme="light"] .btn-sm-action:hover i {
     color: #ffffff !important;
 }
 
@@ -54,6 +129,11 @@ html[data-theme="light"] .mobile-menu-btn * {
 
 html[data-theme="light"] table th,
 html[data-theme="light"] th {
+    color: #ffffff !important;
+}
+
+html[data-theme="light"] table th *,
+html[data-theme="light"] th * {
     color: #ffffff !important;
 }
 
@@ -96,23 +176,61 @@ html[data-theme="light"] .confirm-modal-btn.confirm * {
     color: #ffffff !important;
 }
 
-/* شارات الحالة الملونة */
+/* شارات الحالة الملونة وأيقوناتها */
+html[data-theme="light"] [class*="badge"] i,
+html[data-theme="light"] .status-badge i,
+html[data-theme="light"] .badge-status i {
+    color: inherit !important;
+}
+
+html[data-theme="light"] .badge-low-stock {
+    background: #fee2e2 !important;
+    color: #b91c1c !important;
+    border: 1px solid #fca5a5 !important;
+    font-weight: 600 !important;
+}
+
+html[data-theme="light"] .badge-in-stock {
+    background: #dcfce7 !important;
+    color: #15803d !important;
+    border: 1px solid #86efac !important;
+    font-weight: 600 !important;
+}
+
+html[data-theme="light"] .badge-completed,
 html[data-theme="light"] .status-completed {
-    background: rgba(16, 185, 129, 0.2) !important;
-    color: #065f46 !important;
-    border: 1px solid #10b981 !important;
+    background: #dcfce7 !important;
+    color: #15803d !important;
+    border: 1px solid #86efac !important;
+    font-weight: 600 !important;
 }
 
+html[data-theme="light"] .badge-pending,
 html[data-theme="light"] .status-pending {
-    background: rgba(245, 158, 11, 0.2) !important;
-    color: #92400e !important;
-    border: 1px solid #f59e0b !important;
+    background: #fef3c7 !important;
+    color: #b45309 !important;
+    border: 1px solid #fcd34d !important;
+    font-weight: 600 !important;
 }
 
+html[data-theme="light"] .badge-cancelled,
 html[data-theme="light"] .status-cancelled {
-    background: rgba(239, 68, 68, 0.2) !important;
-    color: #991b1b !important;
-    border: 1px solid #ef4444 !important;
+    background: #fee2e2 !important;
+    color: #b91c1c !important;
+    border: 1px solid #fca5a5 !important;
+    font-weight: 600 !important;
+}
+
+html[data-theme="light"] .text-success {
+    color: #059669 !important;
+}
+
+html[data-theme="light"] .text-warning {
+    color: #d97706 !important;
+}
+
+html[data-theme="light"] .text-danger {
+    color: #dc2626 !important;
 }
 
 /* ==========================================================================
@@ -132,6 +250,7 @@ html[data-theme="light"] .vip-card,
 html[data-theme="light"] .favorites-container,
 html[data-theme="light"] .order-summary-box,
 html[data-theme="light"] .order-item-row,
+html[data-theme="light"] .items-card,
 html[data-theme="light"] .items-controls,
 html[data-theme="light"] .order-header-fields,
 html[data-theme="light"] .stat-card {
@@ -139,6 +258,117 @@ html[data-theme="light"] .stat-card {
     border: 1px solid #e2e8f0 !important;
     box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06) !important;
     color: #0f172a !important;
+}
+
+html[data-theme="light"] .items-card {
+    background: #f8fafc !important;
+}
+
+html[data-theme="light"] .order-item-row {
+    background: #ffffff !important;
+}
+
+html[data-theme="light"] .section-subtitle {
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] .section-subtitle i {
+    color: #0481ff !important;
+}
+
+html[data-theme="light"] .price-display,
+html[data-theme="light"] .subtotal-display {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #15803d !important;
+    font-weight: 700 !important;
+}
+
+/* بطاقات المفضلة وقائمة المراقبة */
+html[data-theme="light"] .favorites-container .card,
+html[data-theme="light"] .client-card,
+html[data-theme="light"] .product-card,
+html[data-theme="light"] .vip-card,
+html[data-theme="light"] .monitored-card {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05) !important;
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] .favorites-container .card:hover,
+html[data-theme="light"] .client-card:hover,
+html[data-theme="light"] .product-card:hover {
+    background: #ffffff !important;
+    border-color: #0481ff !important;
+    box-shadow: 0 6px 16px rgba(4, 129, 255, 0.1) !important;
+}
+
+html[data-theme="light"] .favorites-container .card h4,
+html[data-theme="light"] .card-details h4 {
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] .card-details .specs {
+    color: #64748b !important;
+}
+
+html[data-theme="light"] .card-actions .btn-icon {
+    background: #f1f5f9 !important;
+    color: #0481ff !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+html[data-theme="light"] .card-actions .btn-icon:hover {
+    background: #0481ff !important;
+    color: #ffffff !important;
+    border-color: #0481ff !important;
+}
+
+/* شارات وتفاصيل VIP في كافة الصفحات */
+html[data-theme="light"] .badge-vip,
+html[data-theme="light"] .vip-tag,
+html[data-theme="light"] .card-details .badge {
+    background: #fef3c7 !important;
+    color: #92400e !important;
+    border: 1px solid #fcd34d !important;
+    font-weight: 700 !important;
+}
+
+html[data-theme="light"] .badge-vip i,
+html[data-theme="light"] .vip-tag i,
+html[data-theme="light"] .card-details .badge i {
+    color: #b45309 !important;
+}
+
+html[data-theme="light"] label[for="is_vip"] span,
+html[data-theme="light"] .form-group-checkbox span {
+    color: #b45309 !important;
+    font-weight: 700 !important;
+}
+
+html[data-theme="light"] label[for="is_vip"] span i,
+html[data-theme="light"] .form-group-checkbox span i {
+    color: #b45309 !important;
+}
+
+html[data-theme="light"] td span[style*="color:#ffd700"],
+html[data-theme="light"] td span[style*="color: #ffd700"],
+html[data-theme="light"] .badge-vip[style*="background:#ffd700"] {
+    background: #fef3c7 !important;
+    color: #92400e !important;
+    border: 1px solid #fcd34d !important;
+}
+
+html[data-theme="light"] .section-title {
+    color: #0f172a !important;
+    border-bottom: 2px solid #0481ff !important;
+}
+
+html[data-theme="light"] .section-title i {
+    color: #0481ff !important;
 }
 
 html[data-theme="light"] .data-info .box .data p {
@@ -268,6 +498,54 @@ html[data-theme="light"] table tr:hover td,
 html[data-theme="light"] .table-responsive tr:hover td,
 html[data-theme="light"] td:hover {
     background-color: #f8fafc !important;
+}
+
+/* خلايا ونصوص الجداول لضمان التباين العالي بنسبة 100% */
+html[data-theme="light"] td strong,
+html[data-theme="light"] td b {
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] td span:not([class*="badge"]):not(.price):not(.count):not(.pulse-dot) {
+    color: #0f172a !important;
+}
+
+/* رموز الـ SKU والأكواد */
+html[data-theme="light"] td code,
+html[data-theme="light"] code {
+    background: #f1f5f9 !important;
+    color: #0369a1 !important;
+    border: 1px solid #cbd5e1 !important;
+    font-weight: 600 !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+}
+
+/* بطاقات الأسعار والكميات */
+html[data-theme="light"] .price {
+    background: #dcfce7 !important;
+    color: #15803d !important;
+    border: 1px solid #86efac !important;
+    font-weight: 700 !important;
+    padding: 2px 8px !important;
+    border-radius: 6px !important;
+    display: inline-block !important;
+}
+
+html[data-theme="light"] .count {
+    background: #fef3c7 !important;
+    color: #92400e !important;
+    border: 1px solid #fcd34d !important;
+    font-weight: 700 !important;
+    padding: 2px 8px !important;
+    border-radius: 6px !important;
+    display: inline-block !important;
+}
+
+/* مبالغ الإجمالي في جدول الطلبات */
+html[data-theme="light"] td strong[style*="color: #51cf66"],
+html[data-theme="light"] td strong[style*="color:#51cf66"] {
+    color: #059669 !important;
 }
 
 /* ==========================================================================

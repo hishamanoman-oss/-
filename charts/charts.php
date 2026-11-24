@@ -15,13 +15,13 @@ $currentUser = current_user();
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
-    <link rel="stylesheet" href="../fonts/cairo.css?v=13">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=13">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=13">
-    <link rel="stylesheet" href="../Css/ui.css?v=13">
-    <link rel="stylesheet" href="css/charts.css?v=13">
-    <link rel="stylesheet" href="../Css/theme.css?v=13">
-    <link rel="stylesheet" href="../Css/responsive.css?v=13">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=14">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=14">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=14">
+    <link rel="stylesheet" href="../Css/ui.css?v=14">
+    <link rel="stylesheet" href="css/charts.css?v=14">
+    <link rel="stylesheet" href="../Css/theme.css?v=14">
+    <link rel="stylesheet" href="../Css/responsive.css?v=14">
     <title>الإحصائيات والرسوم البيانية</title>
 </head>
 <body>
@@ -65,7 +65,7 @@ $currentUser = current_user();
     </div>
 
     <script src="../js/chart.min.js"></script>
-    <script src="../js/ui.js?v=13"></script>
-    <script src="js/charts.js?v=13"></script>
+    <script src="../js/ui.js?v=14"></script>
+    <script src="js/charts.js?v=14"></script>
 </body>
 </html>

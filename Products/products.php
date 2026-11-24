@@ -76,13 +76,13 @@ $products = $stmt->fetchAll();
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
-    <link rel="stylesheet" href="../fonts/cairo.css?v=13">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=13">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=13">
-    <link rel="stylesheet" href="../Css/ui.css?v=13">
-    <link rel="stylesheet" href="css/products.css?v=13">
-    <link rel="stylesheet" href="../Css/theme.css?v=13">
-    <link rel="stylesheet" href="../Css/responsive.css?v=13">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=14">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=14">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=14">
+    <link rel="stylesheet" href="../Css/ui.css?v=14">
+    <link rel="stylesheet" href="css/products.css?v=14">
+    <link rel="stylesheet" href="../Css/theme.css?v=14">
+    <link rel="stylesheet" href="../Css/responsive.css?v=14">
     <title>إدارة المنتجات والمخزون</title>
 </head>
 <body>
@@ -280,7 +280,7 @@ $products = $stmt->fetchAll();
     </div>
 
     <script src="../js/jquery-3.7.1.js"></script>
-    <script src="../js/ui.js?v=13"></script>
-    <script src="js/products.js?v=13"></script>
+    <script src="../js/ui.js?v=14"></script>
+    <script src="js/products.js?v=14"></script>
 </body>
 </html>

@@ -57,13 +57,13 @@ $monitoredProducts = $monitoredStmt->fetchAll(PDO::FETCH_ASSOC);
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
-    <link rel="stylesheet" href="../fonts/cairo.css?v=13">
-    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=13">
-    <link rel="stylesheet" href="../Css/sidebar.css?v=13">
-    <link rel="stylesheet" href="../Css/ui.css?v=13">
-    <link rel="stylesheet" href="css/favorite.css?v=13">
-    <link rel="stylesheet" href="../Css/theme.css?v=13">
-    <link rel="stylesheet" href="../Css/responsive.css?v=13">
+    <link rel="stylesheet" href="../fonts/cairo.css?v=14">
+    <link rel="stylesheet" href="../fontawesome/css/all.min.css?v=14">
+    <link rel="stylesheet" href="../Css/sidebar.css?v=14">
+    <link rel="stylesheet" href="../Css/ui.css?v=14">
+    <link rel="stylesheet" href="css/favorite.css?v=14">
+    <link rel="stylesheet" href="../Css/theme.css?v=14">
+    <link rel="stylesheet" href="../Css/responsive.css?v=14">
     <title>المفضلة وقائمة المراقبة</title>
 </head>
 <body>
@@ -192,6 +192,6 @@ $monitoredProducts = $monitoredStmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    <script src="../js/ui.js?v=13"></script>
+    <script src="../js/ui.js?v=14"></script>
 </body>
 </html>
