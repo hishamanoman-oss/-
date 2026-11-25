@@ -469,3 +469,18 @@
   - اجتياز اختبار `tests/test_responsive_order.php` بنسبة 100%.
   - اجتياز فحص `php -l` بنسبة 100%.
   - اجتياز اختبار المرحلة الخامسة `tests/verify_step5.php` (25/25) بنسبة 100%.
+
+### 24. المرحلة الأولى — تصميم البنية المعمارية ومتطلبات المنتج (Phase 01: Product Architecture & Requirements):
+- **التاريخ**: 2026-11-26
+- **إنشاء حزمة وثائق المنتج (`docs/product/`)**:
+  - `docs/product/PRODUCT_VISION.md`: تحديد تموضع المنصة (ذكاء أعمال + تكامل + عمليات تحكم عن بُعد، وليس بديل ERP)، والفئات المستهدفة، والقيمة المضافة لنموذجي SaaS و Self-Hosted.
+  - `docs/product/PRD.md`: وثيقة المتطلبات الشاملة للوحدات الوظيفية الـ 12 مع الحدود غير المستهدفة (Non-Goals) ومعايير القبول.
+  - `docs/product/USER_ROLES_AND_JOURNEYS.md`: مصفوفة الصلاحيات الدقيقة ورحلات المستخدمين العملية للأدوار السبعة (`Platform Super Admin`، `Tenant Owner`، `General Manager`، `Branch Manager`، `Accountant`، `Inventory Manager`، `Observer`).
+  - `docs/product/ROADMAP.md`: خارطة الطريق المحدثة من 11 مرحلة (`Phase 01` إلى `Phase 10` متضمنة `Phase 05A` و `Phase 05B`) مع التبعيات ومعايير الإنجاز (DoD).
+- **إنشاء حزمة وثائق البنية التقنية (`docs/architecture/`)**:
+  - `docs/architecture/SYSTEM_ARCHITECTURE.md`: حدود المعمارية الأحادية المعيارية في Laravel 13، وملفات النشر لـ SaaS و Self-Hosted، واستراتيجية عزل المستأجرين متعددة الطبقات، وسياسة التشغيل المحلي المستقل بدون XAMPP.
+  - `docs/architecture/DATA_FLOW_AND_INTEGRATION.md`: تدفق البيانات من قاعدة POS المحلية إلى المتصفح، وعقد قدرات الموصلات، وتطبيع البيانات عبر `field_mappings`، وأمن وكيل المزامنة `.NET 10 LTS`، ودورة حياة أوامر مركز التحكم عن بُعد (`Pending` إلى `Succeeded/Failed/Expired/Rejected/Awaiting Reconciliation`).
+  - `docs/architecture/ERD_AND_DATA_OWNERSHIP.md`: نموذج البيانات الكامل (ERD) المتضمن `tenant_memberships` و `field_mappings` و `webhook_events` و `idempotency_keys` ودفتر المخزون غير القابل للتعديل واللقطات المالية الصارمة، ومصفوفة ملكية البيانات.
+  - `docs/architecture/ADR.md`: توثيق 10 سجلات قرارات معمارية (`ADR-001` إلى `ADR-010`) شاملة المبررات والمقايضات والمخاطر.
+- **حماية النظام القديم والتحقق**:
+  - الحفاظ التام على جميع ملفات النظام القديم (`PHP` و `CSS` و `JS` و `SQL` و `.env`) كنسخة احتياطية للقراءة فقط دون أي تعديل أو حذف أو نقل.
