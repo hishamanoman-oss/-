@@ -33,16 +33,16 @@
 - **Trade-offs & Risks:** Adds a second runtime ecosystem (C#/.NET 10 LTS alongside PHP/Laravel) requiring `.NET 10 SDK` on build/dev machines and Windows packaging in Phase 10.
 
 ## ADR-005: Connector Capability Contract, Canonical `field_mappings` & Mock POS DB First
-- **Status:** Accepted
+- **Status:** Accepted (Locked in Phase 02)
 - **Context:** Real third-party POS/accounting databases use wildly inconsistent table and column names, and undocumented external APIs must not be fabricated.
-- **Decision:** Define a declarative Connector Capability Contract + `field_mappings` engine in Laravel, and build a realistic **Mock Local POS MySQL Database** (`mock_pos_db`) in Phase 02 with intentionally non-matching table/column names for E2E testing before integrating real third-party ERPs.
-- **Rationale:** Proves schema normalization, idempotency, CDC/polling, and command reconciliation end-to-end without blocking on third-party vendor access.
+- **Decision:** Define a declarative Connector Capability Contract + `field_mappings` engine in Laravel, lock `incremental_polling` as the default capture strategy in Phase 05B with `cdc_binlog` supported as an opt-in advanced capability, and build a realistic **Mock Local POS MySQL Database** (`mock_pos_db`) in Phase 02 with intentionally non-matching table/column names for E2E testing before integrating real third-party ERPs.
+- **Rationale:** Proves schema normalization, idempotency, polling/CDC, and command reconciliation end-to-end without requiring customer MySQL binary-log admin privileges on Day 1.
 - **Trade-offs & Risks:** Complex multi-table transforms in future real ERPs may require extending `transform_rule` expressions in `field_mappings`.
 
 ## ADR-006: Command Outbox Architecture for Controlled Remote Writes (Zero Arbitrary SQL)
-- **Status:** Accepted
+- **Status:** Accepted (Locked in Phase 02)
 - **Context:** Owners need remote operational control (price updates, stock adjustments, threshold changes), but exposing arbitrary remote SQL creates unacceptable security and data-corruption risk.
-- **Decision:** Implement a `remote_commands` Command Outbox (`Pending -> Approved -> Dispatched -> Executing -> Succeeded / Failed / Expired / Rejected / Awaiting Reconciliation`) with risk-tiered approvals, cryptographic signatures, TTL expiry, idempotency keys, separate write credentials on the agent, allowlisted typed C# handlers, and post-execution sync reconciliation.
+- **Decision:** Implement a `remote_commands` Command Outbox (`Pending -> Approved -> Dispatched -> Executing -> Succeeded / Failed / Expired / Rejected / Awaiting Reconciliation`) with risk-tiered approvals, **`Ed25519` asymmetric cryptographic signing** (locked default for both `remote_commands` and Self-Hosted licenses), TTL expiry, idempotency keys, separate write credentials on the agent, allowlisted typed C# handlers, and post-execution sync reconciliation.
 - **Rationale:** Provides enterprise-grade governance, four-eyes safety, and auditability for remote writes.
 - **Trade-offs & Risks:** Asynchronous round-trip latency and potential `Awaiting Reconciliation` states require clear operator UI workflows.
 

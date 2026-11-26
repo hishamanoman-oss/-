@@ -484,3 +484,23 @@
   - `docs/architecture/ADR.md`: توثيق 10 سجلات قرارات معمارية (`ADR-001` إلى `ADR-010`) شاملة المبررات والمقايضات والمخاطر.
 - **حماية النظام القديم والتحقق**:
   - الحفاظ التام على جميع ملفات النظام القديم (`PHP` و `CSS` و `JS` و `SQL` و `.env`) كنسخة احتياطية للقراءة فقط دون أي تعديل أو حذف أو نقل.
+
+### 25. المرحلة الثانية — حفظ النظام القديم، بيئة التشغيل المستقلة بدون XAMPP، هيكل Laravel 13، وقاعدة POS المحاكاة (Phase 02):
+- **التاريخ**: 2026-11-26
+- **الخطوة A — حفظ النظام القديم ونقطة الاسترجاع**:
+  - إنشاء وسم Git المشروح `legacy-v1-baseline` على التزام `40e0d1b`.
+  - أخذ نسخة احتياطية كاملة للملفات القديمة في المجلد المحلي الخارجي `C:\rbd-backups\legacy-v1-baseline\files` (خارج مسار الويب ومستبعد من Git)، مع تأكيد توقف خدمة MySQL القديمة على المنفذ `3306`.
+- **الخطوة B — بيئة التشغيل المستقلة خارج XAMPP (`C:\rbd-runtime\`)**:
+  - تثبيت وتشغيل `PHP 8.4.28` (`ZTS Visual C++ 2022 x64`) و `Composer 2.11.3` و `Node.js v26.13.1` / `npm 11.20.0` و `MariaDB 11.4.14-MariaDB` مقيدة على `127.0.0.1:3307` و `Playwright 1.65.1` (Chromium).
+  - رصد حالة `.NET 10.0.404 SDK`: فشل التثبيت الصامت عبر `winget` برمز خروج `50` لاحتياجه صلاحيات المسؤول (UAC)، وبقي `.NET Core SDK 3.1.101` فقط مثبتاً حتى المرحلة `Phase 05B`.
+- **الخطوة C — هيكل المعمارية الأحادية المعيارية Laravel 13 (`platform/`)**:
+  - إنشاء `laravel/framework v13.44.1` مع `livewire/livewire v4.4.10` و `laravel/reverb v1.14.0` و `phpunit/phpunit 12.5.45`.
+  - بناء طبقات المعمارية داخل `platform/app/`: `Domain/` (14 نطاقاً)، `Application/` (`Services`, `Actions`, `DTOs`)، `Infrastructure/` (`Connectors`, `Persistence`, `Messaging`)، و `Presentation/` (`Http`, `Livewire`).
+  - تهيئة واجهة `/api/v1/health`، ومعالجة الاستثناءات المركزية وقنوات السجلات المهيكلة (`security`, `sync`)، والترجمة العربية `RTL` والإنجليزية `LTR` (`lang/ar/system.php`, `lang/en/system.php`)، وحجز مجلد [`agent/README.md`](file:///c:/xampp/htdocs/myproject/agent/README.md).
+  - تحديث [`docs/architecture/ADR.md`](file:///c:/xampp/htdocs/myproject/docs/architecture/ADR.md) لتثبيت `Ed25519` و `incremental_polling` بشكل نهائي.
+- **الخطوة D — قواعد البيانات (`rbd_platform` و `rbd_platform_test` و `mock_pos_db`)**:
+  - إنشاء وبذر `mock_pos_db` بـ 7 جداول غير قياسية (`tbl_branches`: 3، `tbl_warehouses`: 3، `tbl_clients`: 16، `tbl_items`: 22، `tbl_stock_qty`: 44، `tbl_invoices`: 28، `tbl_invoice_lines`: 41).
+  - إنشاء مستخدم قراءة فقط `mock_pos_reader@127.0.0.1` بصلاحية `SELECT` على `mock_pos_db` فقط والتحقق من رفض الكتابة.
+- **الخطوة E — التحقق الآلي والتشغيل الحي بدون XAMPP**:
+  - بناء صفحة الحالة الحية `/system-status` (Blade + Livewire) وسكربت التشغيل الموحد `platform/scripts/dev-start.ps1`.
+  - اجتياز فحص `php -l` (19/19 ملفاً)، واجتياز `php artisan test` (6/6 اختبارات، 25 تأكيداً)، واجتياز `npx playwright test` (2/2 اختبارات متصفح حقيقية).
