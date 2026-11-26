@@ -120,17 +120,33 @@
                                     </a>
                                 </li>
                             @endif
+
+                            @if ($ctx->hasPermission('inventory.view'))
+                                <li>
+                                    <a href="{{ route('inventory.index') }}" data-testid="nav-inventory" class="flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition {{ request()->routeIs('inventory.index') ? 'bg-sky-600 text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">
+                                        <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                                        <span x-show="!collapsed" class="truncate">{{ __('ui.nav_inventory') }}</span>
+                                    </a>
+                                </li>
+                            @endif
+
+                            @if ($ctx->hasPermission('sales.view'))
+                                <li>
+                                    <a href="{{ route('orders.index') }}" data-testid="nav-orders" class="flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition {{ request()->routeIs('orders.index') ? 'bg-sky-600 text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">
+                                        <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                        <span x-show="!collapsed" class="truncate">{{ __('ui.nav_sales') }}</span>
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
 
                     {{-- Upcoming Role-Permitted Operational Modules (explicitly marked as upcoming phase status) --}}
                     @php
                         $upcomingLinks = array_filter([
-                            $ctx->hasPermission('sales.view') ? ['label' => __('ui.nav_sales'), 'phase' => 'P04/06'] : null,
-                            $ctx->hasPermission('inventory.view') ? ['label' => __('ui.nav_inventory'), 'phase' => 'P04/06'] : null,
                             $ctx->hasPermission('integrations.view') ? ['label' => __('ui.nav_integrations'), 'phase' => 'P05A'] : null,
                             ($ctx->hasPermission('commands.request') || $ctx->hasPermission('commands.approve')) ? ['label' => __('ui.nav_commands'), 'phase' => 'P07'] : null,
-                            $ctx->hasPermission('reports.view') ? ['label' => __('ui.nav_reports'), 'phase' => 'P04/06'] : null,
+                            $ctx->hasPermission('reports.view') ? ['label' => __('ui.nav_reports'), 'phase' => 'P06'] : null,
                         ]);
                     @endphp
                     @if (count($upcomingLinks) > 0)

@@ -7,6 +7,8 @@ use App\Presentation\Http\Controllers\Web\ContextController;
 use App\Presentation\Http\Controllers\Web\SystemStatusController;
 use App\Presentation\Livewire\BranchesManager;
 use App\Presentation\Livewire\DashboardOverview;
+use App\Presentation\Livewire\InventoryWorkspace;
+use App\Presentation\Livewire\OrdersWorkspace;
 use App\Presentation\Livewire\PlatformTenantsManager;
 use App\Presentation\Livewire\TeamManager;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +41,14 @@ Route::middleware(['auth', 'active.user', 'tenant.context'])->group(function ():
     Route::get('/team', TeamManager::class)
         ->middleware('permission:team.view')
         ->name('team.index');
+
+    Route::get('/inventory', InventoryWorkspace::class)
+        ->middleware('permission:inventory.view')
+        ->name('inventory.index');
+
+    Route::get('/orders', OrdersWorkspace::class)
+        ->middleware('permission:sales.view')
+        ->name('orders.index');
 
     Route::get('/platform/tenants', PlatformTenantsManager::class)
         ->middleware('platform.admin')

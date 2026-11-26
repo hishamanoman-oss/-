@@ -523,3 +523,18 @@
   - اجتياز بناء Vite (`748ms`).
   - اجتياز `php artisan test --no-ansi` (`15/15` اختبارات، `60` تأكيداً) بما فيها اختبارات العزل وإبطال جلسة المستخدم المعطل وتوقيع Ed25519 ووضعي SaaS/Self-Hosted.
   - اجتياز `npx.cmd playwright test` (`3/3` اختبارات في `28.2s`) عبر المتصفح الحي لسطح المكتب والجوال (`390x844`) بدون أي أخطاء Console أو انزياح أفقي.
+
+### 27. المرحلة الرابعة — النطاق التجاري المعياري، دفتر المخزون متعدد المستودعات، والمحرك المالي الدقيق (Phase 04):
+- **التاريخ**: 2026-11-27
+- **قاعدة البيانات والنماذج (`platform/database/migrations/`)**:
+  - إنشاء ترحيلات الكتالوج والعملاء (`categories`, `products`, `product_variants`, `customers`)، ودفتر المخزون متعدد المستودعات (`inventory_balances`, `stock_movements`, `stock_transfers`, `stock_transfer_items`)، والطلبات واللقطات المالية (`taxes`, `discounts`, `order_sequences`, `orders`, `order_items`, `stock_reservations`, `payments`, `refunds`, `financial_snapshots`) بأعمدة `DECIMAL(18,4)`.
+  - فرض عدم قابلية تعديل أو حذف `StockMovement` برمجياً عبر أحداث النموذج (`LogicException`) وعزل كل الجداول عبر `BelongsToTenant`.
+- **الخدمات المالية والمخزنية (`bcmath` بدون `float`)**:
+  - بناء [`DecimalMath`](file:///c:/xampp/htdocs/myproject/platform/app/Domain/Finance/Support/DecimalMath.php) المعتمدة على `bcmath` بمقياس `4` منازل عشرية.
+  - بناء [`InventoryLedgerService`](file:///c:/xampp/htdocs/myproject/platform/app/Domain/Inventory/Services/InventoryLedgerService.php) مع `lockForUpdate()` وتحديث `version` وفحص عدم التكرار `idempotency_key` وحماية ثوابت `on_hand` / `reserved` / `available`.
+  - بناء [`OrderNumberGenerator`](file:///c:/xampp/htdocs/myproject/platform/app/Domain/Orders/Services/OrderNumberGenerator.php) و [`OrderFinancialService`](file:///c:/xampp/htdocs/myproject/platform/app/Domain/Orders/Services/OrderFinancialService.php) لتوليد أرقام الطلبات وحفظ لقطات البنود التاريخية ومعالجة المدفوعات والمرتجعات وإعادة التخزين.
+  - بناء [`FinancialMetricsService`](file:///c:/xampp/htdocs/myproject/platform/app/Domain/Finance/Services/FinancialMetricsService.php) مع حارس اكتمال صافي الربح (`complete`, `missing_cost`, `missing_expenses`, `incomplete`).
+- **الشاشات الحية والتحقق الآلي**:
+  - تفعيل شاشتي `/inventory` ([`InventoryWorkspace`](file:///c:/xampp/htdocs/myproject/platform/app/Presentation/Livewire/InventoryWorkspace.php)) و `/orders` ([`OrdersWorkspace`](file:///c:/xampp/htdocs/myproject/platform/app/Presentation/Livewire/OrdersWorkspace.php)) في القائمة الجانبية مع سياسات `InventoryPolicy` و `OrderPolicy` و `WarehousePolicy::adjust`.
+  - تحديث [`DevelopmentDemoSeeder`](file:///c:/xampp/htdocs/myproject/platform/database/seeders/DevelopmentDemoSeeder.php) ببيانات واقعية للمنشأتين (تشمل منتجاً بدون تكلفة لإظهار حارس صافي الربح).
+  - اجتياز `php -l` لـ `104/104` ملف PHP، واجتياز `php artisan test --no-ansi` (`23/23` اختبارات، `124` تأكيداً)، واجتياز `npx.cmd playwright test` (`4/4` اختبارات في `42.4s`).

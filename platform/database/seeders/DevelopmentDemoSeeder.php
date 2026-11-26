@@ -4,12 +4,19 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Domain\Customers\Models\Customer;
+use App\Domain\Finance\Services\FinancialMetricsService;
 use App\Domain\Identity\Models\Role;
 use App\Domain\Identity\Models\TenantMembership;
 use App\Domain\Identity\Services\RbacCatalog;
+use App\Domain\Inventory\Services\InventoryLedgerService;
+use App\Domain\Orders\Models\Order;
+use App\Domain\Orders\Services\OrderFinancialService;
 use App\Domain\Organizations\Models\Branch;
 use App\Domain\Organizations\Models\UserBranchAccess;
 use App\Domain\Organizations\Models\Warehouse;
+use App\Domain\Sales\Models\Category;
+use App\Domain\Sales\Models\Product;
 use App\Domain\Tenants\Models\License;
 use App\Domain\Tenants\Models\Tenant;
 use App\Domain\Tenants\Services\Ed25519LicenseService;
@@ -23,8 +30,13 @@ final class DevelopmentDemoSeeder extends Seeder
 {
     private const DEV_PASSWORD = 'Demo@Phase03!';
 
-    public function run(TenantContext $tenantContext, Ed25519LicenseService $licenseService): void
-    {
+    public function run(
+        TenantContext $tenantContext,
+        Ed25519LicenseService $licenseService,
+        InventoryLedgerService $inventoryLedger,
+        OrderFinancialService $orderService,
+        FinancialMetricsService $metricsService,
+    ): void {
         if (! app()->environment(['local', 'testing'])) {
             throw new RuntimeException('DevelopmentDemoSeeder may only run in local or testing environments.');
         }
@@ -271,5 +283,153 @@ final class DevelopmentDemoSeeder extends Seeder
                 ]);
             }
         });
+
+        // 11. Phase 04 Canonical Commerce, Inventory Ledger & Orders Seed (strictly tenant-scoped)
+        $tenantA = $tenantContext->runWithoutTenantScope(fn () => Tenant::query()->where('slug', 'al-noor-trading')->firstOrFail());
+        $tenantB = $tenantContext->runWithoutTenantScope(fn () => Tenant::query()->where('slug', 'horizon-retail')->firstOrFail());
+
+        $this->seedTenantACommerce($tenantContext, $tenantA, $inventoryLedger, $orderService, $metricsService);
+        $this->seedTenantBCommerce($tenantContext, $tenantB, $inventoryLedger, $orderService, $metricsService);
+
+        $tenantContext->clear();
+    }
+
+    private function seedTenantACommerce(
+        TenantContext $tenantContext,
+        Tenant $tenantA,
+        InventoryLedgerService $inventoryLedger,
+        OrderFinancialService $orderService,
+        FinancialMetricsService $metricsService,
+    ): void {
+        $tenantContext->bind($tenantA);
+
+        $branchA1 = Branch::query()->where('code', 'RYD-MAIN')->firstOrFail();
+        $branchA2 = Branch::query()->where('code', 'RYD-NORTH')->firstOrFail();
+        $wh1 = Warehouse::query()->where('code', 'WH-RYD-01')->firstOrFail();
+        $wh2 = Warehouse::query()->where('code', 'WH-RYD-02')->firstOrFail();
+
+        $catHw = Category::query()->updateOrCreate(['code' => 'CAT-HW'], ['name' => 'أجهزة نقاط البيع', 'status' => 'active']);
+        $catSvc = Category::query()->updateOrCreate(['code' => 'CAT-SVC'], ['name' => 'الخدمات والتركيب', 'status' => 'active']);
+
+        $p1 = Product::query()->updateOrCreate(
+            ['sku' => 'AN-PRN-80'],
+            ['category_id' => $catHw->id, 'name' => 'طابعة فواتير حرارية 80مم', 'status' => 'active', 'base_price' => '480.0000', 'cost_price' => '310.0000', 'currency_code' => 'SAR', 'reorder_point' => '10.0000']
+        );
+        $p2 = Product::query()->updateOrCreate(
+            ['sku' => 'AN-SCN-2D'],
+            ['category_id' => $catHw->id, 'name' => 'قارئ باركود لاسلكي 2D', 'status' => 'active', 'base_price' => '320.0000', 'cost_price' => '195.0000', 'currency_code' => 'SAR', 'reorder_point' => '8.0000']
+        );
+        $p3 = Product::query()->updateOrCreate(
+            ['sku' => 'AN-TOUCH-15'],
+            ['category_id' => $catHw->id, 'name' => 'شاشة كاشير لمس 15.6 بوصة', 'status' => 'active', 'base_price' => '1650.0000', 'cost_price' => '1180.0000', 'currency_code' => 'SAR', 'reorder_point' => '5.0000']
+        );
+        // Product intentionally missing cost_price to visibly trigger Net Profit Completeness Guard
+        $p4 = Product::query()->updateOrCreate(
+            ['sku' => 'AN-SVC-INST'],
+            ['category_id' => $catSvc->id, 'name' => 'خدمة تركيب وتهيئة ميدانية', 'status' => 'active', 'base_price' => '450.0000', 'cost_price' => null, 'currency_code' => 'SAR', 'reorder_point' => '0.0000']
+        );
+
+        $inventoryLedger->recordOpeningOrReceipt($wh1->id, $p1->id, 40, 'seed:alnoor:wh1:p1', 'opening', notes: 'رصيد افتتاحي الرياض');
+        $inventoryLedger->recordOpeningOrReceipt($wh1->id, $p2->id, 25, 'seed:alnoor:wh1:p2', 'opening', notes: 'رصيد افتتاحي الرياض');
+        $inventoryLedger->recordOpeningOrReceipt($wh1->id, $p3->id, 12, 'seed:alnoor:wh1:p3', 'opening', notes: 'رصيد افتتاحي الرياض');
+        $inventoryLedger->recordOpeningOrReceipt($wh2->id, $p1->id, 15, 'seed:alnoor:wh2:p1', 'opening', notes: 'رصيد افتتاحي شمال الرياض');
+        $inventoryLedger->recordOpeningOrReceipt($wh2->id, $p2->id, 6, 'seed:alnoor:wh2:p2', 'opening', notes: 'رصيد افتتاحي شمال الرياض');
+
+        $cust1 = Customer::query()->updateOrCreate(
+            ['code' => 'CUST-AN-001'],
+            ['branch_id' => $branchA1->id, 'name' => 'شركة التقدم التجارية', 'phone' => '+966501000101', 'email' => 'orders@taqaddum.sa', 'status' => 'active']
+        );
+        $cust2 = Customer::query()->updateOrCreate(
+            ['code' => 'CUST-AN-002'],
+            ['branch_id' => $branchA2->id, 'name' => 'سالم محمد العتيبي', 'phone' => '+966501000102', 'email' => 'salem@example.sa', 'status' => 'active']
+        );
+
+        if (Order::query()->count() === 0) {
+            // Order 1: Pending order reserving stock on WH-RYD-01 (Reserved = 3, On Hand unchanged)
+            $order1 = $orderService->createOrder(
+                branchId: $branchA1->id,
+                warehouseId: $wh1->id,
+                customerId: $cust1->id,
+                orderStatus: 'pending',
+                lines: [
+                    ['product_id' => $p1->id, 'quantity' => 3, 'discount_amount' => '40.0000', 'tax_amount' => '210.0000'],
+                    ['product_id' => $p2->id, 'quantity' => 2, 'discount_amount' => '0.0000', 'tax_amount' => '96.0000'],
+                ],
+                reserveStock: true,
+            );
+            $orderService->recordPayment($order1, '1000.0000', 'bank_transfer', 'PAY-AN-001', 'seed:pay:an1');
+
+            // Order 2: Branch 2 order (hidden from Branch 1 manager!) with missing cost service product
+            $order2 = $orderService->createOrder(
+                branchId: $branchA2->id,
+                warehouseId: $wh2->id,
+                customerId: $cust2->id,
+                orderStatus: 'confirmed',
+                lines: [
+                    ['product_id' => $p1->id, 'quantity' => 2, 'discount_amount' => '0.0000', 'tax_amount' => '144.0000'],
+                    ['product_id' => $p4->id, 'quantity' => 1, 'discount_amount' => '0.0000', 'tax_amount' => '67.5000'],
+                ],
+                reserveStock: false,
+            );
+            $orderService->recordPayment($order2, '1621.5000', 'mada', 'PAY-AN-002', 'seed:pay:an2');
+
+            // Order 3: Completed & partially refunded with inventory restock
+            $order3 = $orderService->createOrder(
+                branchId: $branchA1->id,
+                warehouseId: $wh1->id,
+                customerId: $cust1->id,
+                orderStatus: 'completed',
+                lines: [
+                    ['product_id' => $p3->id, 'quantity' => 1, 'discount_amount' => '50.0000', 'tax_amount' => '240.0000'],
+                ],
+                reserveStock: false,
+            );
+            $pay3 = $orderService->recordPayment($order3, '1840.0000', 'card', 'PAY-AN-003', 'seed:pay:an3');
+            $orderService->recordRefund($order3, '200.0000', 'تسوية خصم بعد الفاتورة', 'seed:ref:an3', restockInventory: false, paymentId: $pay3->id);
+
+            $metricsService->computeAndStoreSnapshot(now(), null, null, 'SAR');
+        }
+    }
+
+    private function seedTenantBCommerce(
+        TenantContext $tenantContext,
+        Tenant $tenantB,
+        InventoryLedgerService $inventoryLedger,
+        OrderFinancialService $orderService,
+        FinancialMetricsService $metricsService,
+    ): void {
+        $tenantContext->bind($tenantB);
+
+        $branchB1 = Branch::query()->where('code', 'JED-MAIN')->firstOrFail();
+        $whB1 = Warehouse::query()->where('code', 'WH-JED-01')->firstOrFail();
+
+        $catRetail = Category::query()->updateOrCreate(['code' => 'CAT-JED'], ['name' => 'Horizon Hardware', 'status' => 'active']);
+        $pB1 = Product::query()->updateOrCreate(
+            ['sku' => 'HZ-POS-PRO'],
+            ['category_id' => $catRetail->id, 'name' => 'Horizon Smart Terminal Pro', 'status' => 'active', 'base_price' => '950.0000', 'cost_price' => '550.0000', 'currency_code' => 'SAR', 'reorder_point' => '5.0000']
+        );
+
+        $inventoryLedger->recordOpeningOrReceipt($whB1->id, $pB1->id, 18, 'seed:horizon:whb1:p1', 'opening', notes: 'Jeddah initial stock');
+
+        $custB = Customer::query()->updateOrCreate(
+            ['code' => 'CUST-HZ-001'],
+            ['branch_id' => $branchB1->id, 'name' => 'Red Sea Hypermarket', 'phone' => '+966502000201', 'email' => 'ap@redsea.sa', 'status' => 'active']
+        );
+
+        if (Order::query()->count() === 0) {
+            $orderB1 = $orderService->createOrder(
+                branchId: $branchB1->id,
+                warehouseId: $whB1->id,
+                customerId: $custB->id,
+                orderStatus: 'completed',
+                lines: [
+                    ['product_id' => $pB1->id, 'quantity' => 2, 'discount_amount' => '100.0000', 'tax_amount' => '270.0000'],
+                ],
+                reserveStock: false,
+            );
+            $orderService->recordPayment($orderB1, '2070.0000', 'card', 'PAY-HZ-001', 'seed:pay:hz1');
+
+            $metricsService->computeAndStoreSnapshot(now(), null, '150.0000', 'SAR');
+        }
     }
 }

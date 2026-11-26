@@ -34,4 +34,14 @@ final class WarehousePolicy
         return $this->tenantContext->hasPermission('warehouses.manage')
             && $this->tenantContext->canAccessBranch((int) $warehouse->branch_id, requireManage: true);
     }
+
+    public function adjust(User $user, Warehouse $warehouse): bool
+    {
+        if ((int) $warehouse->tenant_id !== $this->tenantContext->id()) {
+            return false;
+        }
+
+        return $this->tenantContext->hasPermission('inventory.adjust')
+            && $this->tenantContext->canAccessBranch((int) $warehouse->branch_id, requireManage: true);
+    }
 }
