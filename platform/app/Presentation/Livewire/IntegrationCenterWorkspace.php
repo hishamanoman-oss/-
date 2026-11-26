@@ -18,6 +18,7 @@ use App\Infrastructure\Connectors\LocalMysqlReadOnlyConnector;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Throwable;
 
@@ -70,6 +71,13 @@ final class IntegrationCenterWorkspace extends Component
 
         $first = DataSource::query()->orderBy('id')->first();
         $this->selectedSourceId = $first?->id;
+    }
+
+    #[On('sync-realtime-refresh')]
+    #[On('sync-freshness-refresh')]
+    public function refreshFromRealtime(): void
+    {
+        // Refresh sources, freshness badges, and runs table automatically via Reverb
     }
 
     public function setTab(string $tab): void

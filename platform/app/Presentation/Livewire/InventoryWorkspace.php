@@ -15,6 +15,7 @@ use DomainException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -62,6 +63,12 @@ final class InventoryWorkspace extends Component
     public function mount(): void
     {
         Gate::authorize('viewAny', InventoryBalance::class);
+    }
+
+    #[On('sync-realtime-refresh')]
+    public function refreshFromRealtime(): void
+    {
+        // Trigger Livewire re-render cleanly when Reverb pushes SyncBatchCompleted
     }
 
     public function updatingSearch(): void

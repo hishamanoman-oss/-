@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-RemoteSyncAgent-38b78ea3-c100-47ef-bc22-2e8c72ce1c7f</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.*" />
+    <PackageReference Include="MySqlConnector" Version="2.*" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.*" />
+  </ItemGroup>
+</Project>

@@ -217,4 +217,5 @@ return [
     'sync_completed_summary' => 'اكتملت المزامنة: تم تحديث/إدراج :upserted سجل، وتخطي :skipped سجل مكرر.',
     'enrollment_generated' => 'تم إنشاء رمز التفعيل بنجاح.',
     'instance_revoked' => 'تم إلغاء صلاحية توكن الوكيل فوراً.',
+    'realtime_sync_toast' => 'تحديث مباشر: وصلت دفعة مزامنة جديدة (:count سجل).',
 ];

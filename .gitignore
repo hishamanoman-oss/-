@@ -4,3 +4,14 @@
 Thumbs.db
 .vscode/
 .idea/
+
+# .NET Sync Agent build artifacts & local runtime secrets/state
+agent/**/bin/
+agent/**/obj/
+agent/**/.vs/
+*.dpapi
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.db
+agent/runtime-data/

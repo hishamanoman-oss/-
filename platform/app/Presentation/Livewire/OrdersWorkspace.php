@@ -10,6 +10,7 @@ use App\Domain\Orders\Models\Order;
 use App\Domain\Tenants\Services\TenantContext;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -28,6 +29,12 @@ final class OrdersWorkspace extends Component
     public function mount(): void
     {
         Gate::authorize('viewAny', Order::class);
+    }
+
+    #[On('sync-realtime-refresh')]
+    public function refreshFromRealtime(): void
+    {
+        // Trigger Livewire re-render cleanly when Reverb pushes SyncBatchCompleted
     }
 
     public function updatingSearch(): void

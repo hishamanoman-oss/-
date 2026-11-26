@@ -217,4 +217,5 @@ return [
     'sync_completed_summary' => 'Sync completed: :upserted upserted, :skipped duplicate skipped.',
     'enrollment_generated' => 'One-time enrollment code generated.',
     'instance_revoked' => 'Connector instance token revoked immediately.',
+    'realtime_sync_toast' => 'Live sync update: :count new record(s) received.',
 ];
