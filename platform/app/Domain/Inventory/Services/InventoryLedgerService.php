@@ -442,6 +442,70 @@ final class InventoryLedgerService
         });
     }
 
+    public function reconcileSyncedBalance(
+        int $warehouseId,
+        int $productId,
+        string|int $targetOnHand,
+        string|int $targetReserved,
+        string $idempotencyKey,
+        ?int $variantId = null,
+        ?string $notes = null,
+    ): InventoryBalance {
+        $onHand = DecimalMath::normalize($targetOnHand);
+        $reserved = DecimalMath::normalize($targetReserved);
+
+        return DB::transaction(function () use (
+            $warehouseId,
+            $productId,
+            $variantId,
+            $onHand,
+            $reserved,
+            $idempotencyKey,
+            $notes
+        ): InventoryBalance {
+            $balance = $this->lockOrCreateBalance($warehouseId, $productId, $variantId);
+            $existing = $this->findExistingMovement($idempotencyKey);
+            if ($existing !== null) {
+                return $balance;
+            }
+
+            $deltaOnHand = DecimalMath::sub($onHand, (string) $balance->on_hand);
+            if (! DecimalMath::eq($deltaOnHand, '0')) {
+                $movementType = DecimalMath::eq((string) $balance->on_hand, '0') && DecimalMath::gt($deltaOnHand, '0')
+                    ? 'receipt'
+                    : 'adjustment';
+
+                $this->commitBalanceAndMovement(
+                    balance: $balance,
+                    newOnHand: $onHand,
+                    newReserved: $reserved,
+                    movementType: $movementType,
+                    quantityDelta: $deltaOnHand,
+                    idempotencyKey: $idempotencyKey,
+                    referenceType: 'external_sync',
+                    referenceId: $warehouseId,
+                    notes: $notes ?? 'External source inventory sync',
+                );
+
+                return $balance->fresh();
+            }
+
+            $newAvailable = DecimalMath::sub((string) $balance->on_hand, $reserved);
+            if (DecimalMath::lt($newAvailable, '0')) {
+                throw new DomainException('Available inventory cannot become negative during sync reconciliation.');
+            }
+
+            $balance->forceFill([
+                'reserved' => $reserved,
+                'available' => $newAvailable,
+                'version' => $balance->version + 1,
+                'updated_at' => now(),
+            ])->save();
+
+            return $balance;
+        });
+    }
+
     private function findExistingMovement(string $idempotencyKey): ?StockMovement
     {
         return StockMovement::query()

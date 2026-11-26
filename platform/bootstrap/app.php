@@ -1,5 +1,6 @@
 <?php
 
+use App\Presentation\Http\Middleware\AuthenticateConnectorInstance;
 use App\Presentation\Http\Middleware\CheckPermission;
 use App\Presentation\Http\Middleware\EnsurePlatformAdmin;
 use App\Presentation\Http\Middleware\EnsureUserIsActive;
@@ -31,6 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'tenant.context' => ResolveTenantContext::class,
             'platform.admin' => EnsurePlatformAdmin::class,
             'permission' => CheckPermission::class,
+            'auth.connector' => AuthenticateConnectorInstance::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

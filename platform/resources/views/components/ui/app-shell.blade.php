@@ -19,12 +19,35 @@
 
     $accessibleBranchIds = $ctx->accessibleBranchIds();
     $headerBranches = collect();
+    $syncHeaderStatus = 'disconnected';
+    $syncHeaderLabel = __('ui.sync_disconnected');
     if ($ctx->id() !== null) {
         $branchQuery = \App\Domain\Organizations\Models\Branch::query()->orderBy('id');
         if (is_array($accessibleBranchIds)) {
             $branchQuery->whereIn('id', $accessibleBranchIds === [] ? [-1] : $accessibleBranchIds);
         }
         $headerBranches = $branchQuery->get();
+
+        $evaluator = app(\App\Domain\Synchronization\Services\FreshnessEvaluator::class);
+        $activeSources = \App\Domain\Integrations\Models\DataSource::query()
+            ->whereIn('status', ['active', 'error'])
+            ->get();
+
+        if ($activeSources->isNotEmpty()) {
+            $evaluatedStatuses = $activeSources->map(fn ($s): string => $evaluator->evaluate($s))->all();
+            if (in_array('syncing', $evaluatedStatuses, true)) {
+                $syncHeaderStatus = 'syncing';
+            } elseif (in_array('error', $evaluatedStatuses, true)) {
+                $syncHeaderStatus = 'error';
+            } elseif (in_array('live', $evaluatedStatuses, true)) {
+                $syncHeaderStatus = 'live';
+            } elseif (in_array('delayed', $evaluatedStatuses, true)) {
+                $syncHeaderStatus = 'delayed';
+            } else {
+                $syncHeaderStatus = 'disconnected';
+            }
+            $syncHeaderLabel = __('ui.sync_'.$syncHeaderStatus);
+        }
     }
 @endphp
 
@@ -138,13 +161,20 @@
                                     </a>
                                 </li>
                             @endif
+                            @if ($ctx->hasPermission('integrations.view'))
+                                <li>
+                                    <a href="{{ route('integrations.index') }}" data-testid="nav-integrations" class="flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition {{ request()->routeIs('integrations.index') ? 'bg-sky-600 text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">
+                                        <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                        <span x-show="!collapsed" class="truncate">{{ __('ui.nav_integrations') }}</span>
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
 
                     {{-- Upcoming Role-Permitted Operational Modules (explicitly marked as upcoming phase status) --}}
                     @php
                         $upcomingLinks = array_filter([
-                            $ctx->hasPermission('integrations.view') ? ['label' => __('ui.nav_integrations'), 'phase' => 'P05A'] : null,
                             ($ctx->hasPermission('commands.request') || $ctx->hasPermission('commands.approve')) ? ['label' => __('ui.nav_commands'), 'phase' => 'P07'] : null,
                             $ctx->hasPermission('reports.view') ? ['label' => __('ui.nav_reports'), 'phase' => 'P06'] : null,
                         ]);
@@ -253,8 +283,8 @@
                     @endif
 
                     {{-- Honest Sync Status Pill --}}
-                    <x-ui.status-badge variant="disconnected" data-testid="sync-status-pill" class="hidden sm:inline-flex">
-                        {{ __('ui.sync_disconnected') }}
+                    <x-ui.status-badge :variant="$syncHeaderStatus" data-testid="sync-status-pill" class="hidden sm:inline-flex">
+                        {{ $syncHeaderLabel }}
                     </x-ui.status-badge>
                 </div>
 

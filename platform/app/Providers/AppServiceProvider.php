@@ -6,6 +6,8 @@ namespace App\Providers;
 
 use App\Domain\Identity\Models\TenantMembership;
 use App\Domain\Identity\Policies\TenantMembershipPolicy;
+use App\Domain\Integrations\Models\DataSource;
+use App\Domain\Integrations\Policies\DataSourcePolicy;
 use App\Domain\Inventory\Models\InventoryBalance;
 use App\Domain\Inventory\Policies\InventoryPolicy;
 use App\Domain\Orders\Models\Order;
@@ -17,6 +19,7 @@ use App\Domain\Organizations\Policies\WarehousePolicy;
 use App\Domain\Tenants\Services\TenantContext;
 use App\Presentation\Livewire\BranchesManager;
 use App\Presentation\Livewire\DashboardOverview;
+use App\Presentation\Livewire\IntegrationCenterWorkspace;
 use App\Presentation\Livewire\InventoryWorkspace;
 use App\Presentation\Livewire\OrdersWorkspace;
 use App\Presentation\Livewire\PlatformTenantsManager;
@@ -40,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(TenantMembership::class, TenantMembershipPolicy::class);
         Gate::policy(InventoryBalance::class, InventoryPolicy::class);
         Gate::policy(Order::class, OrderPolicy::class);
+        Gate::policy(DataSource::class, DataSourcePolicy::class);
 
         Livewire::component('system-status', SystemStatus::class);
         Livewire::component('dashboard-overview', DashboardOverview::class);
@@ -48,5 +52,6 @@ class AppServiceProvider extends ServiceProvider
         Livewire::component('platform-tenants-manager', PlatformTenantsManager::class);
         Livewire::component('inventory-workspace', InventoryWorkspace::class);
         Livewire::component('orders-workspace', OrdersWorkspace::class);
+        Livewire::component('integration-center-workspace', IntegrationCenterWorkspace::class);
     }
 }

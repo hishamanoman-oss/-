@@ -24,6 +24,7 @@ test.describe('Phase 04 Inventory Ledger, Orders & Financial Guard E2E', () => {
         // 2. Navigate to /inventory and verify On Hand / Reserved / Available
         await page.getByTestId('nav-inventory').click();
         await expect(page).toHaveURL(/\/inventory/);
+        await page.waitForLoadState('networkidle');
 
         await expect(page.getByTestId('on-hand-AN-PRN-80-WH-RYD-01')).toHaveText('40.00');
         await expect(page.getByTestId('reserved-AN-PRN-80-WH-RYD-01')).toHaveText('3.00');

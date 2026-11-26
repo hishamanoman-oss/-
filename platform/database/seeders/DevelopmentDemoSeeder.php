@@ -9,6 +9,8 @@ use App\Domain\Finance\Services\FinancialMetricsService;
 use App\Domain\Identity\Models\Role;
 use App\Domain\Identity\Models\TenantMembership;
 use App\Domain\Identity\Services\RbacCatalog;
+use App\Domain\Integrations\Models\DataSource;
+use App\Domain\Integrations\Models\FieldMapping;
 use App\Domain\Inventory\Services\InventoryLedgerService;
 use App\Domain\Orders\Models\Order;
 use App\Domain\Orders\Services\OrderFinancialService;
@@ -388,6 +390,100 @@ final class DevelopmentDemoSeeder extends Seeder
             $orderService->recordRefund($order3, '200.0000', 'تسوية خصم بعد الفاتورة', 'seed:ref:an3', restockInventory: false, paymentId: $pay3->id);
 
             $metricsService->computeAndStoreSnapshot(now(), null, null, 'SAR');
+        }
+
+        // Phase 05A: Pre-seed Mock Local POS DataSource + Canonical Field Mappings for Tenant A
+        $posSource = DataSource::query()->firstOrCreate(
+            ['name' => 'Mock Local POS (MySQL)'],
+            [
+                'connector_type' => 'local_mysql_agent',
+                'status' => 'active',
+                'freshness_status' => 'disconnected',
+                'capture_mode' => 'incremental_polling',
+                'sync_interval_seconds' => 30,
+                'capabilities_json' => [
+                    'supports_read' => true,
+                    'supports_write' => false,
+                    'supports_polling' => true,
+                    'supports_cdc' => true,
+                    'supports_webhooks' => true,
+                    'allowed_write_commands' => [],
+                ],
+                'config_encrypted' => [
+                    'connection_profile' => 'mock_pos',
+                    'webhook_secret' => 'demo-pos-webhook-secret-alnoor',
+                ],
+            ]
+        );
+
+        $this->seedDefaultPosMappings($posSource);
+    }
+
+    private function seedDefaultPosMappings(DataSource $source): void
+    {
+        $rows = [
+            ['branch', 'tbl_branches', 'br_id', 'external_id', null, true],
+            ['branch', 'tbl_branches', 'br_name', 'name', 'trim', true],
+            ['branch', 'tbl_branches', 'br_city', 'city', 'trim', false],
+
+            ['warehouse', 'tbl_warehouses', 'wh_id', 'external_id', null, true],
+            ['warehouse', 'tbl_warehouses', 'br_id', 'branch_external_id', null, true],
+            ['warehouse', 'tbl_warehouses', 'wh_name', 'name', 'trim', true],
+
+            ['customer', 'tbl_clients', 'client_no', 'external_id', null, true],
+            ['customer', 'tbl_clients', 'full_name', 'name', 'trim', true],
+            ['customer', 'tbl_clients', 'mobile_no', 'phone', 'trim', false],
+            ['customer', 'tbl_clients', 'email_addr', 'email', 'trim', false],
+            ['customer', 'tbl_clients', 'updated_at', 'source_updated_at', 'iso_date', false],
+
+            ['product', 'tbl_items', 'item_code', 'external_id', null, true],
+            ['product', 'tbl_items', 'item_sku', 'sku', 'uppercase', true],
+            ['product', 'tbl_items', 'item_title', 'name', 'trim', true],
+            ['product', 'tbl_items', 'cat_name', 'category_name', 'trim', false],
+            ['product', 'tbl_items', 'unit_price', 'base_price', 'decimal', true],
+            ['product', 'tbl_items', 'cost_price', 'cost_price', 'decimal', false],
+            ['product', 'tbl_items', 'is_active', 'status', 'map_status', false],
+            ['product', 'tbl_items', 'updated_at', 'source_updated_at', 'iso_date', false],
+
+            ['inventory_balance', 'tbl_stock_qty', 'wh_id', 'warehouse_external_id', null, true],
+            ['inventory_balance', 'tbl_stock_qty', 'item_code', 'product_external_id', null, true],
+            ['inventory_balance', 'tbl_stock_qty', 'qty_on_hand', 'on_hand', 'decimal', true],
+            ['inventory_balance', 'tbl_stock_qty', 'qty_reserved', 'reserved', 'decimal', false],
+
+            ['order', 'tbl_invoices', 'inv_id', 'external_id', null, true],
+            ['order', 'tbl_invoices', 'inv_number', 'order_number', 'trim', true],
+            ['order', 'tbl_invoices', 'br_id', 'branch_external_id', null, true],
+            ['order', 'tbl_invoices', 'client_no', 'customer_external_id', null, false],
+            ['order', 'tbl_invoices', 'inv_status', 'status', 'map_status', false],
+            ['order', 'tbl_invoices', 'gross_amt', 'gross_sales', 'decimal', true],
+            ['order', 'tbl_invoices', 'disc_amt', 'discount_total', 'decimal', false],
+            ['order', 'tbl_invoices', 'tax_amt', 'tax_total', 'decimal', false],
+            ['order', 'tbl_invoices', 'paid_amt', 'paid_total', 'decimal', false],
+            ['order', 'tbl_invoices', 'currency_code', 'currency_code', 'uppercase', false],
+            ['order', 'tbl_invoices', 'created_at', 'placed_at', 'iso_date', true],
+            ['order', 'tbl_invoices', 'updated_at', 'source_updated_at', 'iso_date', false],
+
+            ['order_item', 'tbl_invoice_lines', 'line_id', 'external_id', null, false],
+            ['order_item', 'tbl_invoice_lines', 'item_code', 'product_external_id', null, true],
+            ['order_item', 'tbl_invoice_lines', 'qty', 'quantity', 'decimal', true],
+            ['order_item', 'tbl_invoice_lines', 'unit_price', 'unit_price', 'decimal', true],
+            ['order_item', 'tbl_invoice_lines', 'line_total', 'line_total', 'decimal', false],
+        ];
+
+        foreach ($rows as [$entity, $table, $col, $field, $rule, $required]) {
+            FieldMapping::query()->updateOrCreate(
+                [
+                    'data_source_id' => $source->id,
+                    'canonical_entity' => $entity,
+                    'canonical_field' => $field,
+                ],
+                [
+                    'source_table' => $table,
+                    'source_column' => $col,
+                    'transform_rule' => $rule,
+                    'is_required' => $required,
+                ]
+            );
         }
     }
 

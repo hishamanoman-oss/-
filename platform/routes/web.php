@@ -7,6 +7,7 @@ use App\Presentation\Http\Controllers\Web\ContextController;
 use App\Presentation\Http\Controllers\Web\SystemStatusController;
 use App\Presentation\Livewire\BranchesManager;
 use App\Presentation\Livewire\DashboardOverview;
+use App\Presentation\Livewire\IntegrationCenterWorkspace;
 use App\Presentation\Livewire\InventoryWorkspace;
 use App\Presentation\Livewire\OrdersWorkspace;
 use App\Presentation\Livewire\PlatformTenantsManager;
@@ -49,6 +50,10 @@ Route::middleware(['auth', 'active.user', 'tenant.context'])->group(function ():
     Route::get('/orders', OrdersWorkspace::class)
         ->middleware('permission:sales.view')
         ->name('orders.index');
+
+    Route::get('/integrations', IntegrationCenterWorkspace::class)
+        ->middleware('permission:integrations.view')
+        ->name('integrations.index');
 
     Route::get('/platform/tenants', PlatformTenantsManager::class)
         ->middleware('platform.admin')
