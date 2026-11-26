@@ -504,3 +504,22 @@
 - **الخطوة E — التحقق الآلي والتشغيل الحي بدون XAMPP**:
   - بناء صفحة الحالة الحية `/system-status` (Blade + Livewire) وسكربت التشغيل الموحد `platform/scripts/dev-start.ps1`.
   - اجتياز فحص `php -l` (19/19 ملفاً)، واجتياز `php artisan test` (6/6 اختبارات، 25 تأكيداً)، واجتياز `npx playwright test` (2/2 اختبارات متصفح حقيقية).
+
+### 26. المرحلة الثالثة — تعدد المستأجرين، المصادقة، الصلاحيات RBAC، أوضاع النشر، تراخيص Ed25519، وقشرة الواجهة المؤسسية (Phase 03):
+- **التاريخ**: 2026-11-26
+- **قاعدة البيانات والكيانات (`platform/database/migrations/`)**:
+  - إنشاء ترحيلات `tenants` و `tenant_settings` و `licenses`، وتوسيع `users` (بدون أي عمود `tenant_id` مباشر) مع جداول `tenant_memberships` و `roles` و `permissions` و `role_permissions` و `membership_roles`.
+  - إنشاء جداول الهيكل التنظيمي والحوكمة: `branches` و `warehouses` و `user_branch_access` و `audit_logs` (سجل تدقيق للإلحاق فقط غير قابل للتعديل أو الحذف).
+  - إضافة ملف إعدادات وضع النشر [`platform/config/platform.php`](file:///c:/xampp/htdocs/myproject/platform/config/platform.php) لدعم `saas` و `self_hosted` من نفس الشيفرة، وخدمة [`Ed25519LicenseService`](file:///c:/xampp/htdocs/myproject/platform/app/Domain/Tenants/Services/Ed25519LicenseService.php) عبر ملحق `sodium`.
+- **العزل الدفاعي متعددة الطبقات والسياسات**:
+  - بناء [`TenantContext`](file:///c:/xampp/htdocs/myproject/platform/app/Domain/Tenants/Services/TenantContext.php) وسمة [`BelongsToTenant`](file:///c:/xampp/htdocs/myproject/platform/app/Domain/Tenants/Traits/BelongsToTenant.php) ذات الفشل المغلق (`MissingTenantContextException`).
+  - بناء البرمجيات الوسيطة `EnsureUserIsActive` و `ResolveTenantContext` و `EnsurePlatformAdmin` و `CheckPermission` وسياسات `BranchPolicy` و `WarehousePolicy` و `TenantMembershipPolicy`.
+  - بذر القوالب السبعة للأدوار والصلاحيات الـ 16 عبر `RbacSeeder` وبيانات التطوير التجريبية عبر `DevelopmentDemoSeeder` وتوثيقها في [`platform/docs/DEV_DEMO_ACCOUNTS.md`](file:///c:/xampp/htdocs/myproject/platform/docs/DEV_DEMO_ACCOUNTS.md).
+- **نظام التصميم والواجهات الحية الحقيقية**:
+  - بناء رموز التصميم في `platform/resources/css/app.css` (Light/Dark + RTL/LTR) ومكتبة المكونات القابلة لإعادة الاستخدام تحت `platform/resources/views/components/ui/` (`app-shell`, `kpi-card`, `status-badge`, `data-table`, `drawer`, `confirm-dialog`, `toast`).
+  - بناء الصفحات التفاعلية المرتبطة بقاعدة البيانات: `/login` و `/logout`، `/dashboard`، `/organization/branches`، `/team`، و `/platform/tenants`.
+- **التحقق الآلي والحي**:
+  - اجتياز فحص `php -l` لـ `74/74` ملف PHP بنسبة 100%.
+  - اجتياز بناء Vite (`748ms`).
+  - اجتياز `php artisan test --no-ansi` (`15/15` اختبارات، `60` تأكيداً) بما فيها اختبارات العزل وإبطال جلسة المستخدم المعطل وتوقيع Ed25519 ووضعي SaaS/Self-Hosted.
+  - اجتياز `npx.cmd playwright test` (`3/3` اختبارات في `28.2s`) عبر المتصفح الحي لسطح المكتب والجوال (`390x844`) بدون أي أخطاء Console أو انزياح أفقي.

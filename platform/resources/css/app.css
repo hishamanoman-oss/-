@@ -1,9 +1,50 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'IBM Plex Sans Arabic', 'Cairo', 'Segoe UI', Tahoma, ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+    --rbd-bg-app: #f8fafc;
+    --rbd-bg-card: #ffffff;
+    --rbd-bg-sidebar: #0f172a;
+    --rbd-bg-elevated: #f1f5f9;
+    --rbd-border: #e2e8f0;
+    --rbd-text-primary: #0f172a;
+    --rbd-text-secondary: #334155;
+    --rbd-text-muted: #64748b;
+    --rbd-brand: #0f4c81;
+    --rbd-brand-hover: #0a365c;
+    --rbd-accent-emerald: #059669;
+    --rbd-accent-amber: #d97706;
+    --rbd-accent-rose: #e11d48;
+}
+
+html.dark {
+    --rbd-bg-app: #090e1a;
+    --rbd-bg-card: #111827;
+    --rbd-bg-sidebar: #060a14;
+    --rbd-bg-elevated: #1e293b;
+    --rbd-border: #1f2937;
+    --rbd-text-primary: #f8fafc;
+    --rbd-text-secondary: #cbd5e1;
+    --rbd-text-muted: #94a3b8;
+    --rbd-brand: #0284c7;
+    --rbd-brand-hover: #0369a1;
+}
+
+body {
+    background-color: var(--rbd-bg-app);
+    color: var(--rbd-text-primary);
+    font-family: var(--font-sans);
+}
+
+[x-cloak] {
+    display: none !important;
 }

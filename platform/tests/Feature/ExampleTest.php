@@ -6,10 +6,10 @@ use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
-    public function test_the_application_redirects_root_to_system_status(): void
+    public function test_root_redirects_guests_to_login(): void
     {
         $response = $this->get('/');
 
-        $response->assertRedirect('/system-status');
+        $response->assertRedirect('/login');
     }
 }

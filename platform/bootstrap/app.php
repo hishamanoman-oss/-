@@ -1,5 +1,9 @@
 <?php
 
+use App\Presentation\Http\Middleware\CheckPermission;
+use App\Presentation\Http\Middleware\EnsurePlatformAdmin;
+use App\Presentation\Http\Middleware\EnsureUserIsActive;
+use App\Presentation\Http\Middleware\ResolveTenantContext;
 use App\Presentation\Http\Middleware\SetLocaleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -18,6 +22,15 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
             SetLocaleMiddleware::class,
+            EnsureUserIsActive::class,
+            ResolveTenantContext::class,
+        ]);
+
+        $middleware->alias([
+            'active.user' => EnsureUserIsActive::class,
+            'tenant.context' => ResolveTenantContext::class,
+            'platform.admin' => EnsurePlatformAdmin::class,
+            'permission' => CheckPermission::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
@@ -31,7 +44,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     'exception' => $e::class,
                     'path' => request()->path(),
                     'method' => request()->method(),
-                    'deployment_mode' => config('app.deployment_mode'),
+                    'deployment_mode' => config('platform.deployment_mode'),
                 ]);
             }
         });

@@ -33,9 +33,15 @@ final class SetLocaleMiddleware
             $locale = 'ar';
         }
 
+        $theme = 'light';
+        if ($request->hasSession() && in_array($request->session()->get('theme'), ['light', 'dark'], true)) {
+            $theme = (string) $request->session()->get('theme');
+        }
+
         App::setLocale($locale);
         View::share('currentLocale', $locale);
         View::share('textDirection', $locale === 'ar' ? 'rtl' : 'ltr');
+        View::share('currentTheme', $theme);
 
         return $next($request);
     }
