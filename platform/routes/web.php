@@ -5,7 +5,9 @@ declare(strict_types=1);
 use App\Presentation\Http\Controllers\Web\AuthController;
 use App\Presentation\Http\Controllers\Web\ContextController;
 use App\Presentation\Http\Controllers\Web\OrderInvoiceController;
+use App\Presentation\Http\Controllers\Web\ReportDownloadController;
 use App\Presentation\Http\Controllers\Web\SystemStatusController;
+use App\Presentation\Livewire\AlertsCenterWorkspace;
 use App\Presentation\Livewire\BranchesManager;
 use App\Presentation\Livewire\BusinessDashboardWorkspace;
 use App\Presentation\Livewire\CommandCenterWorkspace;
@@ -16,6 +18,7 @@ use App\Presentation\Livewire\InventoryWorkspace;
 use App\Presentation\Livewire\OrdersWorkspace;
 use App\Presentation\Livewire\PlatformTenantsManager;
 use App\Presentation\Livewire\ProductsCatalogWorkspace;
+use App\Presentation\Livewire\ReportsCenterWorkspace;
 use App\Presentation\Livewire\TeamManager;
 use Illuminate\Support\Facades\Route;
 
@@ -90,6 +93,17 @@ Route::middleware(['auth', 'active.user', 'tenant.context'])->group(function ():
     Route::get('/commands', CommandCenterWorkspace::class)
         ->middleware('permission:commands.request|commands.approve|audit.view')
         ->name('commands.index');
+
+    Route::get('/reports', ReportsCenterWorkspace::class)
+        ->middleware('permission:reports.view')
+        ->name('reports.index');
+
+    Route::get('/reports/export', ReportDownloadController::class)
+        ->middleware('permission:reports.view')
+        ->name('reports.export');
+
+    Route::get('/alerts', AlertsCenterWorkspace::class)
+        ->name('alerts.index');
 
     Route::get('/platform/tenants', PlatformTenantsManager::class)
         ->middleware('platform.admin')

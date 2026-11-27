@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Domain\Alerts\Models\NotificationRule;
+use App\Domain\Analytics\Models\PerformanceTarget;
 use App\Domain\Customers\Models\Customer;
 use App\Domain\Finance\Services\FinancialMetricsService;
 use App\Domain\Identity\Models\Role;
@@ -17,6 +19,7 @@ use App\Domain\Orders\Services\OrderFinancialService;
 use App\Domain\Organizations\Models\Branch;
 use App\Domain\Organizations\Models\UserBranchAccess;
 use App\Domain\Organizations\Models\Warehouse;
+use App\Domain\Reports\Models\ScheduledReport;
 use App\Domain\Sales\Models\Category;
 use App\Domain\Sales\Models\Product;
 use App\Domain\Tenants\Models\License;
@@ -421,6 +424,73 @@ final class DevelopmentDemoSeeder extends Seeder
         );
 
         $this->seedDefaultPosMappings($posSource);
+
+        // Phase 08: Default Alert Rules, Performance Targets & Sample Scheduled Report for Tenant A
+        NotificationRule::query()->firstOrCreate(
+            ['name' => 'تنبيه انخفاض المخزون الحرج'],
+            [
+                'rule_type' => 'low_stock',
+                'threshold_json' => ['min_items' => 1],
+                'channel_in_app' => true,
+                'channel_email' => false,
+                'recipient_roles_json' => ['tenant_owner', 'general_manager', 'inventory_manager'],
+                'is_active' => true,
+            ]
+        );
+
+        NotificationRule::query()->firstOrCreate(
+            ['name' => 'مراقبة تعثر مزامنة نقاط البيع'],
+            [
+                'rule_type' => 'sync_failure',
+                'threshold_json' => ['min_items' => 1],
+                'channel_in_app' => true,
+                'channel_email' => false,
+                'recipient_roles_json' => ['tenant_owner', 'general_manager'],
+                'is_active' => true,
+            ]
+        );
+
+        NotificationRule::query()->firstOrCreate(
+            ['name' => 'أوامر عن بُعد بانتظار الاعتماد'],
+            [
+                'rule_type' => 'command_approval_needed',
+                'threshold_json' => ['min_items' => 1],
+                'channel_in_app' => true,
+                'channel_email' => false,
+                'recipient_roles_json' => ['tenant_owner', 'general_manager'],
+                'is_active' => true,
+            ]
+        );
+
+        $owner = User::query()->where('email', 'owner@demo.local')->first();
+        PerformanceTarget::query()->firstOrCreate(
+            [
+                'metric_type' => 'net_sales',
+                'period_type' => 'monthly',
+                'branch_id' => null,
+            ],
+            [
+                'period_start' => now()->startOfMonth()->toDateString(),
+                'period_end' => now()->endOfMonth()->toDateString(),
+                'target_value' => '50000.0000',
+                'currency_code' => 'SAR',
+                'created_by_user_id' => $owner?->id,
+            ]
+        );
+
+        ScheduledReport::query()->firstOrCreate(
+            ['name' => 'ملخص المبيعات الأسبوعي (آلي)'],
+            [
+                'report_type' => 'sales_summary',
+                'frequency' => 'weekly',
+                'format' => 'xlsx',
+                'recipients_json' => ['owner@demo.local'],
+                'filters_json' => ['period' => '7d'],
+                'is_active' => true,
+                'created_by_user_id' => $owner?->id,
+                'next_run_at' => now()->addDays(7),
+            ]
+        );
     }
 
     private function seedDefaultPosMappings(DataSource $source): void

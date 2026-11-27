@@ -154,6 +154,89 @@
         @endif
     </div>
 
+    {{-- Interactive Chart.js Analytics & Performance Targets (Local Vite Bundle) --}}
+    <section data-testid="dashboard-charts-section" class="space-y-4">
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            @if ($canViewSales)
+                <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-slate-900 lg:col-span-2">
+                    <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+                        <h2 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('ui.chart_sales_trend_title') }}</h2>
+                        <span class="font-mono text-[11px] text-slate-500">{{ $currency }}</span>
+                    </div>
+                    <div class="relative h-64 w-full" wire:ignore.self>
+                        <canvas
+                            data-rbd-chart="sales-trend"
+                            data-testid="chart-sales-trend"
+                            data-chart-config='@json($salesTrendChart)'
+                        ></canvas>
+                    </div>
+                </div>
+            @endif
+
+            @if ($canViewInventory)
+                <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-slate-900 {{ $canViewSales ? '' : 'lg:col-span-3' }}">
+                    <div class="mb-3 flex items-center justify-between gap-2">
+                        <h2 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('ui.chart_inventory_health_title') }}</h2>
+                        <span class="font-mono text-[11px] text-slate-500">{{ $inventory['total_skus'] }} SKUs</span>
+                    </div>
+                    <div class="relative h-64 w-full" wire:ignore.self>
+                        <canvas
+                            data-rbd-chart="inventory-health"
+                            data-testid="chart-inventory-health"
+                            data-chart-config='@json($inventoryHealthChart)'
+                        ></canvas>
+                    </div>
+                </div>
+            @endif
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            @if ($canViewSales)
+                <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-slate-900 lg:col-span-2">
+                    <div class="mb-3 flex items-center justify-between gap-2">
+                        <h2 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('ui.chart_branch_comparison_title') }}</h2>
+                        <span class="font-mono text-[11px] text-slate-500">{{ $branchesCount }}</span>
+                    </div>
+                    <div class="relative h-60 w-full" wire:ignore.self>
+                        <canvas
+                            data-rbd-chart="branch-comparison"
+                            data-testid="chart-branch-comparison"
+                            data-chart-config='@json($branchComparisonChart)'
+                        ></canvas>
+                    </div>
+                </div>
+            @endif
+
+            {{-- Performance Targets Card --}}
+            <div data-testid="dashboard-targets-card" class="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-slate-900 {{ $canViewSales ? '' : 'lg:col-span-3' }}">
+                <div class="mb-3 flex items-center justify-between gap-2">
+                    <h2 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('ui.performance_targets_title') }}</h2>
+                    @if ($canViewReports)
+                        <a href="{{ route('reports.index') }}" class="text-xs font-semibold text-sky-600 hover:underline dark:text-sky-400">{{ __('ui.manage') }}</a>
+                    @endif
+                </div>
+                <div class="space-y-3">
+                    @forelse (array_slice($performanceTargets, 0, 3) as $pt)
+                        <div class="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+                            <div class="flex items-center justify-between gap-2 text-xs">
+                                <span class="font-semibold">{{ $pt['metric_type'] }} <span class="text-slate-400">({{ $pt['branch_name'] }})</span></span>
+                                <span class="font-mono font-bold text-sky-700 dark:text-sky-300">{{ number_format((float) $pt['attainment_percent'], 1) }}%</span>
+                            </div>
+                            <div class="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                                <div class="h-full rounded-full {{ $pt['status'] === 'exceeded' ? 'bg-emerald-500' : ($pt['status'] === 'on_track' ? 'bg-sky-600' : 'bg-amber-500') }}" style="width: {{ number_format((float) $pt['bar_width_percent'], 2, '.', '') }}%"></div>
+                            </div>
+                            <p class="mt-1.5 font-mono text-[11px] text-slate-500">
+                                {{ $decimalHelper::formatDisplay($pt['actual_value'], 2) }} / {{ $decimalHelper::formatDisplay($pt['target_value'], 2) }} {{ $pt['metric_type'] !== 'orders_count' ? $pt['currency_code'] : '' }}
+                            </p>
+                        </div>
+                    @empty
+                        <p class="py-6 text-center text-xs text-slate-500">{{ __('ui.no_targets_found') }}</p>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </section>
+
     {{-- Attention Needed Panel --}}
     <section data-testid="attention-needed-panel" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
         <div class="mb-3 flex items-center justify-between">

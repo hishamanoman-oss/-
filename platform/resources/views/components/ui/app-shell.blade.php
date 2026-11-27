@@ -218,28 +218,24 @@
                                     </a>
                                 </li>
                             @endif
+
+                            @if ($ctx->hasPermission('reports.view'))
+                                <li>
+                                    <a href="{{ route('reports.index') }}" data-testid="nav-reports" class="flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition {{ request()->routeIs('reports.index') ? 'bg-sky-600 text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">
+                                        <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                        <span x-show="!collapsed" class="truncate">{{ __('ui.nav_reports') }}</span>
+                                    </a>
+                                </li>
+                            @endif
+
+                            <li>
+                                <a href="{{ route('alerts.index') }}" data-testid="nav-alerts" class="flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition {{ request()->routeIs('alerts.index') ? 'bg-sky-600 text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">
+                                    <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                                    <span x-show="!collapsed" class="truncate">{{ __('ui.nav_alerts') }}</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
-
-                    {{-- Upcoming Role-Permitted Operational Modules (explicitly marked as upcoming phase status) --}}
-                    @php
-                        $upcomingLinks = array_filter([
-                            $ctx->hasPermission('reports.view') ? ['label' => __('ui.nav_reports'), 'phase' => 'P08'] : null,
-                        ]);
-                    @endphp
-                    @if (count($upcomingLinks) > 0)
-                        <div x-show="!collapsed">
-                            <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500">{{ __('ui.nav_operations') }}</p>
-                            <ul class="space-y-1">
-                                @foreach ($upcomingLinks as $item)
-                                    <li class="flex items-center justify-between rounded-lg px-3 py-1.5 text-xs text-slate-500">
-                                        <span class="truncate">{{ $item['label'] }}</span>
-                                        <span class="rounded bg-slate-900 px-1.5 py-0.5 font-mono text-[10px] text-slate-400">{{ $item['phase'] }}</span>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
                 @endif
 
                 @if ($user?->is_platform_admin)
@@ -337,7 +333,11 @@
                 </div>
 
                 {{-- Right Controls --}}
-                <div class="flex items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2">
+                    @if ($user && $ctx->id() !== null)
+                        @livewire('header-notification-bell')
+                    @endif
+
                     {{-- Theme Toggle --}}
                     <form action="{{ route('preferences.theme') }}" method="POST">
                         @csrf

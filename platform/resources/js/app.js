@@ -1,4 +1,5 @@
 import './echo';
+import './charts';
 
 const SYNC_PILL_STYLES = {
     live: {
@@ -52,6 +53,7 @@ function initTenantRealtimeSubscription() {
 
             if (window.Livewire && typeof window.Livewire.dispatch === 'function') {
                 window.Livewire.dispatch('sync-realtime-refresh', { payload });
+                window.Livewire.dispatch('notifications-refresh', { payload });
             }
 
             if ((payload?.recordsUpserted ?? 0) > 0) {

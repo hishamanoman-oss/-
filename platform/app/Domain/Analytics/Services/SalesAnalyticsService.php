@@ -216,4 +216,110 @@ final class SalesAnalyticsService
             'delayed_orders' => array_slice($delayedOrders, 0, $topLimit),
         ];
     }
+
+    /**
+     * Build day-by-day Net Sales and Paid Revenue time series comparing current period vs previous period.
+     *
+     * @param  list<int>|null  $allowedBranchIds
+     * @return array{
+     *     labels: list<string>,
+     *     current_net_sales: list<float>,
+     *     previous_net_sales: list<float>,
+     *     current_paid_revenue: list<float>
+     * }
+     */
+    public function dailyTrend(
+        ?int $tenantId = null,
+        ?array $allowedBranchIds = null,
+        ?int $branchId = null,
+        ?AnalyticsPeriod $period = null,
+    ): array {
+        $resolvedTenantId = $tenantId ?? $this->tenantContext->id();
+        $window = $period ?? AnalyticsPeriod::resolve('30d');
+
+        $daysCount = max(1, min(90, (int) $window->start->startOfDay()->diffInDays($window->end->startOfDay()) + 1));
+        $startDay = $window->start->startOfDay();
+        $prevStartDay = $window->previousStart->startOfDay();
+
+        $labels = [];
+        $currentBuckets = [];
+        $paidBuckets = [];
+        $prevBuckets = [];
+
+        for ($i = 0; $i < $daysCount; $i++) {
+            $dayKey = $startDay->addDays($i)->toDateString();
+            $labels[] = $dayKey;
+            $currentBuckets[$dayKey] = DecimalMath::zero();
+            $paidBuckets[$dayKey] = DecimalMath::zero();
+            $prevBuckets[$prevStartDay->addDays($i)->toDateString()] = DecimalMath::zero();
+        }
+
+        $baseScope = Order::query()
+            ->where('order_status', '!=', 'cancelled')
+            ->when($resolvedTenantId !== null, fn ($q) => $q->where('tenant_id', $resolvedTenantId))
+            ->when(
+                $branchId !== null,
+                fn ($q) => $q->where('branch_id', $branchId),
+                fn ($q) => is_array($allowedBranchIds)
+                    ? $q->whereIn('branch_id', $allowedBranchIds === [] ? [-1] : $allowedBranchIds)
+                    : $q
+            );
+
+        $currentOrders = (clone $baseScope)
+            ->whereBetween('placed_at', [$window->start, $window->end])
+            ->get(['placed_at', 'gross_sales', 'discount_total', 'refunded_total', 'paid_total']);
+
+        foreach ($currentOrders as $order) {
+            if ($order->placed_at === null) {
+                continue;
+            }
+            $dayKey = $order->placed_at->toDateString();
+            if (! isset($currentBuckets[$dayKey])) {
+                continue;
+            }
+            $orderNet = DecimalMath::sub(
+                DecimalMath::sub((string) $order->gross_sales, (string) $order->discount_total),
+                (string) $order->refunded_total
+            );
+            $currentBuckets[$dayKey] = DecimalMath::add($currentBuckets[$dayKey], $orderNet);
+            $paidBuckets[$dayKey] = DecimalMath::add($paidBuckets[$dayKey], (string) $order->paid_total);
+        }
+
+        $previousOrders = (clone $baseScope)
+            ->whereBetween('placed_at', [$window->previousStart, $window->previousEnd])
+            ->get(['placed_at', 'gross_sales', 'discount_total', 'refunded_total']);
+
+        foreach ($previousOrders as $pOrder) {
+            if ($pOrder->placed_at === null) {
+                continue;
+            }
+            $dayKey = $pOrder->placed_at->toDateString();
+            if (! isset($prevBuckets[$dayKey])) {
+                continue;
+            }
+            $orderNet = DecimalMath::sub(
+                DecimalMath::sub((string) $pOrder->gross_sales, (string) $pOrder->discount_total),
+                (string) $pOrder->refunded_total
+            );
+            $prevBuckets[$dayKey] = DecimalMath::add($prevBuckets[$dayKey], $orderNet);
+        }
+
+        $currentSeries = [];
+        $previousSeries = [];
+        $paidSeries = [];
+        for ($i = 0; $i < $daysCount; $i++) {
+            $curKey = $startDay->addDays($i)->toDateString();
+            $prevKey = $prevStartDay->addDays($i)->toDateString();
+            $currentSeries[] = round((float) $currentBuckets[$curKey], 2);
+            $paidSeries[] = round((float) $paidBuckets[$curKey], 2);
+            $previousSeries[] = round((float) ($prevBuckets[$prevKey] ?? '0'), 2);
+        }
+
+        return [
+            'labels' => $labels,
+            'current_net_sales' => $currentSeries,
+            'previous_net_sales' => $previousSeries,
+            'current_paid_revenue' => $paidSeries,
+        ];
+    }
 }

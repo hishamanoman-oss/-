@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Domain\Alerts\Models\NotificationRule;
+use App\Domain\Alerts\Models\PlatformNotification;
+use App\Domain\Alerts\Policies\NotificationRulePolicy;
+use App\Domain\Alerts\Policies\PlatformNotificationPolicy;
+use App\Domain\Analytics\Models\PerformanceTarget;
+use App\Domain\Analytics\Policies\PerformanceTargetPolicy;
 use App\Domain\Commands\Models\RemoteCommand;
 use App\Domain\Commands\Policies\RemoteCommandPolicy;
 use App\Domain\Identity\Models\TenantMembership;
@@ -18,18 +24,23 @@ use App\Domain\Organizations\Models\Branch;
 use App\Domain\Organizations\Models\Warehouse;
 use App\Domain\Organizations\Policies\BranchPolicy;
 use App\Domain\Organizations\Policies\WarehousePolicy;
+use App\Domain\Reports\Models\ScheduledReport;
+use App\Domain\Reports\Policies\ScheduledReportPolicy;
 use App\Domain\Tenants\Services\TenantContext;
+use App\Presentation\Livewire\AlertsCenterWorkspace;
 use App\Presentation\Livewire\BranchesManager;
 use App\Presentation\Livewire\BusinessDashboardWorkspace;
 use App\Presentation\Livewire\CommandCenterWorkspace;
 use App\Presentation\Livewire\CustomersCrmWorkspace;
 use App\Presentation\Livewire\DashboardOverview;
 use App\Presentation\Livewire\FinancialsWorkspace;
+use App\Presentation\Livewire\HeaderNotificationBell;
 use App\Presentation\Livewire\IntegrationCenterWorkspace;
 use App\Presentation\Livewire\InventoryWorkspace;
 use App\Presentation\Livewire\OrdersWorkspace;
 use App\Presentation\Livewire\PlatformTenantsManager;
 use App\Presentation\Livewire\ProductsCatalogWorkspace;
+use App\Presentation\Livewire\ReportsCenterWorkspace;
 use App\Presentation\Livewire\SystemStatus;
 use App\Presentation\Livewire\TeamManager;
 use Illuminate\Support\Facades\Gate;
@@ -52,6 +63,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Order::class, OrderPolicy::class);
         Gate::policy(DataSource::class, DataSourcePolicy::class);
         Gate::policy(RemoteCommand::class, RemoteCommandPolicy::class);
+        Gate::policy(PerformanceTarget::class, PerformanceTargetPolicy::class);
+        Gate::policy(NotificationRule::class, NotificationRulePolicy::class);
+        Gate::policy(PlatformNotification::class, PlatformNotificationPolicy::class);
+        Gate::policy(ScheduledReport::class, ScheduledReportPolicy::class);
 
         Livewire::component('system-status', SystemStatus::class);
         Livewire::component('dashboard-overview', DashboardOverview::class);
@@ -66,5 +81,8 @@ class AppServiceProvider extends ServiceProvider
         Livewire::component('customers-crm-workspace', CustomersCrmWorkspace::class);
         Livewire::component('financials-workspace', FinancialsWorkspace::class);
         Livewire::component('command-center-workspace', CommandCenterWorkspace::class);
+        Livewire::component('header-notification-bell', HeaderNotificationBell::class);
+        Livewire::component('alerts-center-workspace', AlertsCenterWorkspace::class);
+        Livewire::component('reports-center-workspace', ReportsCenterWorkspace::class);
     }
 }

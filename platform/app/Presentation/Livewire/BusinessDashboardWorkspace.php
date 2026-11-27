@@ -7,6 +7,7 @@ namespace App\Presentation\Livewire;
 use App\Domain\Analytics\Services\AnalyticsPeriod;
 use App\Domain\Analytics\Services\CustomerIntelligenceService;
 use App\Domain\Analytics\Services\InventoryIntelligenceService;
+use App\Domain\Analytics\Services\PerformanceTargetService;
 use App\Domain\Analytics\Services\SalesAnalyticsService;
 use App\Domain\Finance\Services\FinancialMetricsService;
 use App\Domain\Finance\Support\DecimalMath;
@@ -47,6 +48,7 @@ final class BusinessDashboardWorkspace extends Component
         CustomerIntelligenceService $customerIntelligence,
         FinancialMetricsService $financialMetrics,
         FreshnessEvaluator $freshnessEvaluator,
+        PerformanceTargetService $targetService,
     ): View {
         $tenant = $tenantContext->tenant();
         $membership = $tenantContext->membership();
@@ -144,6 +146,75 @@ final class BusinessDashboardWorkspace extends Component
             default => 'observer',
         };
 
+        $salesTrend = $salesAnalytics->dailyTrend(
+            tenantId: $tenant?->id,
+            allowedBranchIds: $accessibleBranchIds,
+            branchId: $activeBranchId,
+            period: $window,
+        );
+
+        $salesTrendChart = [
+            'type' => 'line',
+            'labels' => $salesTrend['labels'],
+            'datasets' => [
+                [
+                    'label' => __('ui.chart_current_period'),
+                    'data' => $salesTrend['current_net_sales'],
+                    'color' => '#0284c7',
+                    'fill' => true,
+                ],
+                [
+                    'label' => __('ui.chart_previous_period'),
+                    'data' => $salesTrend['previous_net_sales'],
+                    'color' => '#94a3b8',
+                    'dashed' => true,
+                ],
+            ],
+        ];
+
+        $branchComparisonChart = [
+            'type' => 'bar',
+            'labels' => $branchPerformance->map(fn (array $b): string => $b['name'])->values()->all(),
+            'datasets' => [
+                [
+                    'label' => __('ui.net_sales'),
+                    'data' => $branchPerformance->map(fn (array $b): float => round((float) $b['net_sales'], 2))->values()->all(),
+                    'color' => '#0284c7',
+                ],
+                [
+                    'label' => __('ui.paid_revenue'),
+                    'data' => $branchPerformance->map(fn (array $b): float => round((float) $b['paid_total'], 2))->values()->all(),
+                    'color' => '#10b981',
+                ],
+            ],
+        ];
+
+        $healthySkus = max(0, $inventory['total_skus'] - $inventory['low_stock_count'] - $inventory['out_of_stock_count']);
+        $inventoryHealthChart = [
+            'type' => 'doughnut',
+            'labels' => [
+                __('ui.chart_healthy_skus'),
+                __('ui.chart_low_stock'),
+                __('ui.chart_out_of_stock'),
+                __('ui.chart_slow_moving'),
+            ],
+            'datasets' => [[
+                'data' => [
+                    $healthySkus,
+                    $inventory['low_stock_count'],
+                    $inventory['out_of_stock_count'],
+                    $inventory['slow_moving_count'],
+                ],
+                'colors' => ['#10b981', '#f59e0b', '#e11d48', '#6366f1'],
+            ]],
+        ];
+
+        $performanceTargets = $targetService->evaluateTargets(
+            tenantId: $tenant?->id,
+            allowedBranchIds: $accessibleBranchIds,
+            branchId: $activeBranchId,
+        );
+
         return view('livewire.business-dashboard-workspace', [
             'user' => Auth::user(),
             'tenant' => $tenant,
@@ -158,12 +229,17 @@ final class BusinessDashboardWorkspace extends Component
             'customers' => $customers,
             'financials' => $financials,
             'syncAlerts' => $syncAlerts,
+            'salesTrendChart' => $salesTrendChart,
+            'branchComparisonChart' => $branchComparisonChart,
+            'inventoryHealthChart' => $inventoryHealthChart,
+            'performanceTargets' => $performanceTargets,
             'currency' => $tenant?->default_currency ?? 'SAR',
             'decimalHelper' => DecimalMath::class,
             'canViewSales' => $tenantContext->hasPermission('sales.view'),
             'canViewInventory' => $tenantContext->hasPermission('inventory.view'),
             'canViewFinancials' => $tenantContext->hasAnyPermission(['reports.view', 'sales.view']),
             'canViewIntegrations' => $tenantContext->hasPermission('integrations.view'),
+            'canViewReports' => $tenantContext->hasPermission('reports.view'),
             'deploymentMode' => (string) config('platform.deployment_mode', 'saas'),
         ]);
     }

@@ -160,6 +160,7 @@ test.describe('Phase 07 Remote Command Center Live E2E (.NET 10 Agent + Ed25519 
             // 12. Navigate to /products and confirm reconciled canonical catalog shows 600.00
             await page.getByTestId('nav-products').click();
             await expect(page).toHaveURL(/\/products/);
+            await page.waitForLoadState('networkidle');
             await page.getByTestId('products-search').fill('POS-PRN-001');
             await expect(page.locator('table')).toContainText('POS-PRN-001', { timeout: 15000 });
             await expect(page.locator('table')).toContainText('600.00');
