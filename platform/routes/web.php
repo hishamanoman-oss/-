@@ -14,7 +14,17 @@ use App\Presentation\Livewire\PlatformTenantsManager;
 use App\Presentation\Livewire\TeamManager;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => auth()->check() ? redirect()->route('dashboard') : redirect()->route('login'));
+Route::get('/', function () {
+    if (! auth()->check()) {
+        return redirect()->route('login');
+    }
+
+    $user = auth()->user();
+
+    return ($user->is_platform_admin && $user->activeMemberships()->doesntExist())
+        ? redirect()->route('platform.tenants')
+        : redirect()->route('dashboard');
+});
 Route::get('/system-status', SystemStatusController::class)->name('system.status');
 
 Route::get('/preferences/locale/{locale}', [ContextController::class, 'switchLocale'])->name('preferences.locale');

@@ -574,3 +574,6 @@
   - اجتياز `dotnet test` (**7 / 7** اختبارات xUnit خلال `1 s`).
   - اجتياز `php -l` (**120 / 120** ملف PHP، `0` أخطاء) و `php artisan test --no-ansi` (**30 / 30** اختباراً، `226` تأكيداً) بما فيها [`Phase05BRealtimeAndAgentContractTest.php`](file:///c:/xampp/htdocs/myproject/platform/tests/Feature/Phase05BRealtimeAndAgentContractTest.php).
   - اجتياز `npx.cmd playwright test --reporter=list` (**6 / 6** اختبارات E2E في `2.0m`)، حيث تم التحقق حياً في [`phase05b-realtime-sync.spec.js`](file:///c:/xampp/htdocs/myproject/platform/tests/e2e/phase05b-realtime-sync.spec.js) من ظهور الفاتورة `POS-LIVE-E2E-9001` تلقائياً على صفحة `/orders` المفتوحة عبر Reverb بدون reload، وإثبات التعافي بعد انقطاع الشبكة وإعادة تشغيل الوكيل مع الفاتورة `POS-LIVE-OFFLINE-9002` بصفر تكرار وصفر أخطاء Console/Page.
+- **إصلاح الأداء المحلي وتوجيه الصفحة الرئيسية**:
+  - تفعيل `Zend OPcache` في `C:\rbd-runtime\php\php.ini` (`opcache.enable=1`, `opcache.enable_cli=1`) ورفع `max_execution_time = 120` لحل خطأ مهلة 30 ثانية وتخفيض زمن استجابة `/` و `/dashboard` من `10s` إلى `< 250ms`.
+  - تحديث المسار `/` في [`platform/routes/web.php`](file:///c:/xampp/htdocs/myproject/platform/routes/web.php) ليوجه `is_platform_admin` بدون عضوية مستأجر إلى `/platform/tenants` بدلاً من `/dashboard`.
