@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using RemoteSyncAgent.Commands;
 using RemoteSyncAgent.Storage;
 
 namespace RemoteSyncAgent.Transport;
@@ -41,7 +42,15 @@ public sealed record RemoteSyncCursor(
 public sealed record AgentConfigResponse(
     [property: JsonPropertyName("data_source")] RemoteDataSourceConfig DataSource,
     [property: JsonPropertyName("field_mappings")] List<RemoteFieldMapping> FieldMappings,
-    [property: JsonPropertyName("sync_cursors")] List<RemoteSyncCursor> SyncCursors
+    [property: JsonPropertyName("sync_cursors")] List<RemoteSyncCursor> SyncCursors,
+    [property: JsonPropertyName("command_signing_public_key_ed25519")] string? CommandSigningPublicKeyEd25519 = null,
+    [property: JsonPropertyName("signing_key_id")] string? SigningKeyId = null,
+    [property: JsonPropertyName("allowed_write_commands")] List<string>? AllowedWriteCommands = null
+);
+
+public sealed record PendingCommandsResponse(
+    [property: JsonPropertyName("data_source_id")] long DataSourceId,
+    [property: JsonPropertyName("commands")] List<PendingCommandEnvelope> Commands
 );
 
 public sealed record SyncBatchResponse(
@@ -81,6 +90,21 @@ public interface IPlatformApiClient
         string agentVersion,
         int outboxQueueDepth,
         string lastSyncStatus,
+        CancellationToken ct);
+
+    Task<List<PendingCommandEnvelope>> FetchPendingCommandsAsync(
+        string apiBaseUrl,
+        string bearerToken,
+        CancellationToken ct);
+
+    Task<bool> AcknowledgeCommandAsync(
+        string apiBaseUrl,
+        string bearerToken,
+        long commandId,
+        string status,
+        Dictionary<string, object?>? result,
+        string? errorCode,
+        string? errorMessage,
         CancellationToken ct);
 }
 
@@ -203,6 +227,66 @@ public sealed class PlatformApiClient : IPlatformApiClient
             agent_version = agentVersion,
             outbox_queue_depth = outboxQueueDepth,
             last_sync_status = lastSyncStatus,
+        });
+
+        try
+        {
+            using var response = await _http.SendAsync(req, ct);
+            return response.IsSuccessStatusCode;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public async Task<List<PendingCommandEnvelope>> FetchPendingCommandsAsync(
+        string apiBaseUrl,
+        string bearerToken,
+        CancellationToken ct)
+    {
+        var url = $"{apiBaseUrl.TrimEnd('/')}/api/v1/agent/commands/pending";
+        using var req = new HttpRequestMessage(HttpMethod.Get, url);
+        req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+        req.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        try
+        {
+            using var response = await _http.SendAsync(req, ct);
+            if (!response.IsSuccessStatusCode)
+            {
+                return [];
+            }
+
+            var payload = await response.Content.ReadFromJsonAsync<PendingCommandsResponse>(cancellationToken: ct);
+            return payload?.Commands ?? [];
+        }
+        catch
+        {
+            return [];
+        }
+    }
+
+    public async Task<bool> AcknowledgeCommandAsync(
+        string apiBaseUrl,
+        string bearerToken,
+        long commandId,
+        string status,
+        Dictionary<string, object?>? result,
+        string? errorCode,
+        string? errorMessage,
+        CancellationToken ct)
+    {
+        var url = $"{apiBaseUrl.TrimEnd('/')}/api/v1/agent/commands/{commandId}/ack";
+        using var req = new HttpRequestMessage(HttpMethod.Post, url);
+        req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+        req.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        req.Content = JsonContent.Create(new
+        {
+            status,
+            result,
+            error_code = errorCode,
+            error_message = errorMessage,
         });
 
         try

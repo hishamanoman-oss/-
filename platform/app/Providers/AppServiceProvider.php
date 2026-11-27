@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Domain\Commands\Models\RemoteCommand;
+use App\Domain\Commands\Policies\RemoteCommandPolicy;
 use App\Domain\Identity\Models\TenantMembership;
 use App\Domain\Identity\Policies\TenantMembershipPolicy;
 use App\Domain\Integrations\Models\DataSource;
@@ -19,6 +21,7 @@ use App\Domain\Organizations\Policies\WarehousePolicy;
 use App\Domain\Tenants\Services\TenantContext;
 use App\Presentation\Livewire\BranchesManager;
 use App\Presentation\Livewire\BusinessDashboardWorkspace;
+use App\Presentation\Livewire\CommandCenterWorkspace;
 use App\Presentation\Livewire\CustomersCrmWorkspace;
 use App\Presentation\Livewire\DashboardOverview;
 use App\Presentation\Livewire\FinancialsWorkspace;
@@ -48,6 +51,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(InventoryBalance::class, InventoryPolicy::class);
         Gate::policy(Order::class, OrderPolicy::class);
         Gate::policy(DataSource::class, DataSourcePolicy::class);
+        Gate::policy(RemoteCommand::class, RemoteCommandPolicy::class);
 
         Livewire::component('system-status', SystemStatus::class);
         Livewire::component('dashboard-overview', DashboardOverview::class);
@@ -61,5 +65,6 @@ class AppServiceProvider extends ServiceProvider
         Livewire::component('products-catalog-workspace', ProductsCatalogWorkspace::class);
         Livewire::component('customers-crm-workspace', CustomersCrmWorkspace::class);
         Livewire::component('financials-workspace', FinancialsWorkspace::class);
+        Livewire::component('command-center-workspace', CommandCenterWorkspace::class);
     }
 }

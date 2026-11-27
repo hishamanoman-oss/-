@@ -14,7 +14,9 @@ public sealed record AgentSecretsPayload(
     long ConnectorInstanceId,
     string DeviceId,
     string DeviceName,
-    string ScopeName
+    string ScopeName,
+    string? MysqlWriteConnectionString = null,
+    string? CommandSigningPublicKeyEd25519 = null
 );
 
 public interface ISecretStore

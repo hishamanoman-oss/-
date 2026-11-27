@@ -8,6 +8,7 @@ use App\Presentation\Http\Controllers\Web\OrderInvoiceController;
 use App\Presentation\Http\Controllers\Web\SystemStatusController;
 use App\Presentation\Livewire\BranchesManager;
 use App\Presentation\Livewire\BusinessDashboardWorkspace;
+use App\Presentation\Livewire\CommandCenterWorkspace;
 use App\Presentation\Livewire\CustomersCrmWorkspace;
 use App\Presentation\Livewire\FinancialsWorkspace;
 use App\Presentation\Livewire\IntegrationCenterWorkspace;
@@ -85,6 +86,10 @@ Route::middleware(['auth', 'active.user', 'tenant.context'])->group(function ():
     Route::get('/integrations', IntegrationCenterWorkspace::class)
         ->middleware('permission:integrations.view')
         ->name('integrations.index');
+
+    Route::get('/commands', CommandCenterWorkspace::class)
+        ->middleware('permission:commands.request|commands.approve|audit.view')
+        ->name('commands.index');
 
     Route::get('/platform/tenants', PlatformTenantsManager::class)
         ->middleware('platform.admin')

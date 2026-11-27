@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using RemoteSyncAgent.Capture;
+using RemoteSyncAgent.Commands;
 using RemoteSyncAgent.Configuration;
 using RemoteSyncAgent.Security;
 using RemoteSyncAgent.Storage;
@@ -187,6 +188,12 @@ public sealed class SqliteOutboxAndRetryTests : IDisposable
         }
 
         public Task<bool> SendHeartbeatAsync(string apiBaseUrl, string bearerToken, string agentVersion, int outboxQueueDepth, string lastSyncStatus, CancellationToken ct)
+            => Task.FromResult(IsOnline);
+
+        public Task<List<PendingCommandEnvelope>> FetchPendingCommandsAsync(string apiBaseUrl, string bearerToken, CancellationToken ct)
+            => Task.FromResult(new List<PendingCommandEnvelope>());
+
+        public Task<bool> AcknowledgeCommandAsync(string apiBaseUrl, string bearerToken, long commandId, string status, Dictionary<string, object?>? result, string? errorCode, string? errorMessage, CancellationToken ct)
             => Task.FromResult(IsOnline);
     }
 }

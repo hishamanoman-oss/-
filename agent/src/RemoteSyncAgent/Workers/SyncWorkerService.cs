@@ -2,6 +2,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RemoteSyncAgent.Capture;
+using RemoteSyncAgent.Commands;
 using RemoteSyncAgent.Configuration;
 using RemoteSyncAgent.Security;
 using RemoteSyncAgent.Storage;
@@ -16,19 +17,22 @@ public sealed class SyncWorkerService : BackgroundService
     private readonly ISecretStore _secretStore;
     private readonly IChangeCaptureProvider _captureProvider;
     private readonly IPlatformApiClient _apiClient;
+    private readonly CommandExecutionService? _commandExecutor;
 
     public SyncWorkerService(
         ILogger<SyncWorkerService> logger,
         IOptions<AgentOptions> options,
         ISecretStore secretStore,
         IChangeCaptureProvider captureProvider,
-        IPlatformApiClient apiClient)
+        IPlatformApiClient apiClient,
+        CommandExecutionService? commandExecutor = null)
     {
         _logger = logger;
         _options = options.Value;
         _secretStore = secretStore;
         _captureProvider = captureProvider;
         _apiClient = apiClient;
+        _commandExecutor = commandExecutor;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -86,11 +90,14 @@ public sealed class SyncWorkerService : BackgroundService
     {
         // 1. Attempt to fetch active config & field mappings (non-fatal if API is temporarily offline)
         IReadOnlySet<string> allowedTables = IncrementalPollingCaptureProvider.DefaultAllowedTables;
+        string? remotePublicKey = null;
         try
         {
             var cfg = await _apiClient.FetchConfigAsync(secrets.ApiBaseUrl, secrets.BearerToken, ct);
             if (cfg is not null)
             {
+                remotePublicKey = cfg.CommandSigningPublicKeyEd25519;
+
                 var mappedTables = cfg.FieldMappings
                     .Select(m => m.SourceTable)
                     .Where(IncrementalPollingCaptureProvider.IsAllowedTable)
@@ -185,7 +192,20 @@ public sealed class SyncWorkerService : BackgroundService
             }
         }
 
-        // 4. Outbound heartbeat
+        // 4. Poll and execute signed remote commands if command executor is registered
+        if (_commandExecutor is not null)
+        {
+            try
+            {
+                await _commandExecutor.PollAndExecuteAsync(secrets, store, remotePublicKey, ct);
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                _logger.LogError("Remote command polling error: {Err}", SecretRedactor.Redact(ex.Message));
+            }
+        }
+
+        // 5. Outbound heartbeat
         var queueDepth = store.GetPendingCount();
         await _apiClient.SendHeartbeatAsync(
             secrets.ApiBaseUrl,

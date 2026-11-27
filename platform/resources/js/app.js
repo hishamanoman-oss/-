@@ -68,6 +68,12 @@ function initTenantRealtimeSubscription() {
             if (window.Livewire && typeof window.Livewire.dispatch === 'function') {
                 window.Livewire.dispatch('sync-freshness-refresh', { payload });
             }
+        })
+        .listen('.command.updated', (payload) => {
+            if (window.Livewire && typeof window.Livewire.dispatch === 'function') {
+                window.Livewire.dispatch('command-realtime-refresh', { payload });
+                window.Livewire.dispatch('sync-realtime-refresh', { payload });
+            }
         });
 }
 

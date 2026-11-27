@@ -99,7 +99,47 @@ public sealed class SqliteOutboxStore
                 value TEXT NOT NULL,
                 updated_at TEXT NOT NULL
             );
+
+            CREATE TABLE IF NOT EXISTS executed_commands (
+                command_id INTEGER PRIMARY KEY,
+                idempotency_key TEXT NOT NULL UNIQUE,
+                command_type TEXT NOT NULL,
+                status TEXT NOT NULL,
+                executed_at TEXT NOT NULL
+            );
             """;
+        cmd.ExecuteNonQuery();
+    }
+
+    public bool HasExecutedCommand(long commandId, string idempotencyKey)
+    {
+        using var conn = OpenConnection();
+        using var cmd = conn.CreateCommand();
+        cmd.CommandText = """
+            SELECT COUNT(*)
+            FROM executed_commands
+            WHERE command_id = $cmdId OR idempotency_key = $idemKey;
+            """;
+        cmd.Parameters.AddWithValue("$cmdId", commandId);
+        cmd.Parameters.AddWithValue("$idemKey", idempotencyKey);
+        var cnt = Convert.ToInt64(cmd.ExecuteScalar() ?? 0, CultureInfo.InvariantCulture);
+        return cnt > 0;
+    }
+
+    public void RecordExecutedCommand(long commandId, string idempotencyKey, string commandType, string status, DateTimeOffset? now = null)
+    {
+        var clock = (now ?? DateTimeOffset.UtcNow).ToString("O", CultureInfo.InvariantCulture);
+        using var conn = OpenConnection();
+        using var cmd = conn.CreateCommand();
+        cmd.CommandText = """
+            INSERT OR IGNORE INTO executed_commands (command_id, idempotency_key, command_type, status, executed_at)
+            VALUES ($cmdId, $idemKey, $cmdType, $status, $executedAt);
+            """;
+        cmd.Parameters.AddWithValue("$cmdId", commandId);
+        cmd.Parameters.AddWithValue("$idemKey", idempotencyKey);
+        cmd.Parameters.AddWithValue("$cmdType", commandType);
+        cmd.Parameters.AddWithValue("$status", status);
+        cmd.Parameters.AddWithValue("$executedAt", clock);
         cmd.ExecuteNonQuery();
     }
 

@@ -18,4 +18,13 @@ return [
     |--------------------------------------------------------------------------
     */
     'license_public_key' => env('PLATFORM_LICENSE_PUBLIC_KEY', ''),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Ed25519 Remote Command Outbox Signing Keys (Base64)
+    |--------------------------------------------------------------------------
+    */
+    'command_signing_key_id' => env('PLATFORM_COMMAND_SIGNING_KEY_ID', 'cmd-key-v1'),
+    'command_signing_public_key' => env('PLATFORM_COMMAND_SIGNING_PUBLIC_KEY', ''),
+    'command_signing_private_key' => env('PLATFORM_COMMAND_SIGNING_PRIVATE_KEY', ''),
 ];

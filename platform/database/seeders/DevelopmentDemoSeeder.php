@@ -403,11 +403,15 @@ final class DevelopmentDemoSeeder extends Seeder
                 'sync_interval_seconds' => 30,
                 'capabilities_json' => [
                     'supports_read' => true,
-                    'supports_write' => false,
+                    'supports_write' => true,
                     'supports_polling' => true,
                     'supports_cdc' => true,
                     'supports_webhooks' => true,
-                    'allowed_write_commands' => [],
+                    'allowed_write_commands' => [
+                        'product.price.update',
+                        'order.status.update',
+                        'inventory.stock.adjust',
+                    ],
                 ],
                 'config_encrypted' => [
                     'connection_profile' => 'mock_pos',

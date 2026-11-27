@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RemoteSyncAgent.Capture;
+using RemoteSyncAgent.Commands;
 using RemoteSyncAgent.Configuration;
 using RemoteSyncAgent.Security;
 using RemoteSyncAgent.Storage;
@@ -18,6 +19,11 @@ if (OperatingSystem.IsWindows() is false)
 if (args.Length > 0 && string.Equals(args[0], "enroll", StringComparison.OrdinalIgnoreCase))
 {
     return await RunEnrollCommandAsync(args[1..]);
+}
+
+if (args.Length > 0 && string.Equals(args[0], "configure-write", StringComparison.OrdinalIgnoreCase))
+{
+    return RunConfigureWriteCommand(args[1..]);
 }
 
 var cliOverrides = ParseRunCliArgs(args);
@@ -36,10 +42,12 @@ builder.Services.AddWindowsService(options =>
 builder.Services.Configure<AgentOptions>(builder.Configuration.GetSection(AgentOptions.SectionName));
 builder.Services.AddSingleton<ISecretStore, DpapiSecretStore>();
 builder.Services.AddSingleton<IChangeCaptureProvider, IncrementalPollingCaptureProvider>();
+builder.Services.AddSingleton<ICommandTargetWriter, MySqlPosCommandTargetWriter>();
 builder.Services.AddHttpClient<IPlatformApiClient, PlatformApiClient>(client =>
 {
     client.Timeout = TimeSpan.FromSeconds(15);
 });
+builder.Services.AddSingleton<CommandExecutionService>();
 builder.Services.AddHostedService<SyncWorkerService>();
 
 var host = builder.Build();
@@ -55,6 +63,8 @@ static async Task<int> RunEnrollCommandAsync(string[] args)
     var deviceId = RequireFlag(parsed, "--device-id");
     var deviceName = RequireFlag(parsed, "--device-name");
     var mysqlConn = RequireFlag(parsed, "--mysql-conn");
+    var mysqlWriteConn = parsed.TryGetValue("--mysql-write-conn", out var wc) ? wc : null;
+    var signingPubKey = parsed.TryGetValue("--signing-public-key", out var pk) ? pk : null;
     var scopeArg = parsed.TryGetValue("--dpapi-scope", out var s) ? s : "CurrentUser";
     var dataDir = parsed.TryGetValue("--data-dir", out var d) ? d : string.Empty;
 
@@ -86,7 +96,9 @@ static async Task<int> RunEnrollCommandAsync(string[] args)
             ConnectorInstanceId: res.ConnectorInstanceId,
             DeviceId: deviceId,
             DeviceName: deviceName,
-            ScopeName: scope.ToString()
+            ScopeName: scope.ToString(),
+            MysqlWriteConnectionString: mysqlWriteConn,
+            CommandSigningPublicKeyEd25519: signingPubKey
         ),
         scope
     );
@@ -98,6 +110,37 @@ static async Task<int> RunEnrollCommandAsync(string[] args)
     Console.WriteLine($"Enrolled successfully! tenant_id={res.TenantId}, data_source_id={res.DataSourceId}, instance_id={res.ConnectorInstanceId}");
     Console.WriteLine($"Secrets encrypted via Windows DPAPI ({scope}) at: {secretsPath}");
     Console.WriteLine($"SQLite Outbox initialized at: {sqlitePath}");
+    return 0;
+}
+
+static int RunConfigureWriteCommand(string[] args)
+{
+    var parsed = ParseKeyValueFlags(args);
+    var mysqlWriteConn = RequireFlag(parsed, "--mysql-write-conn");
+    var signingPubKey = parsed.TryGetValue("--signing-public-key", out var pk) ? pk : null;
+    var scopeArg = parsed.TryGetValue("--dpapi-scope", out var s) ? s : "CurrentUser";
+    var dataDir = parsed.TryGetValue("--data-dir", out var d) ? d : string.Empty;
+
+    var options = new AgentOptions { DataDirectory = dataDir, ProtectionScope = scopeArg };
+    var resolvedDir = options.ResolveDataDirectory();
+    var secretsPath = Path.Combine(resolvedDir, "agent.secrets.dpapi");
+    var scope = options.ResolveProtectionScope();
+
+    var store = new DpapiSecretStore();
+    var existing = store.Load(secretsPath, scope)
+        ?? throw new InvalidOperationException($"No enrolled DPAPI secret file found at {secretsPath}. Run enroll first.");
+
+    store.Save(
+        secretsPath,
+        existing with
+        {
+            MysqlWriteConnectionString = mysqlWriteConn,
+            CommandSigningPublicKeyEd25519 = signingPubKey ?? existing.CommandSigningPublicKeyEd25519,
+        },
+        scope
+    );
+
+    Console.WriteLine($"Write credentials encrypted via Windows DPAPI ({scope}) at: {secretsPath}");
     return 0;
 }
 

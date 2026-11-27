@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Presentation\Http\Controllers\Api\V1;
 
 use App\Application\Services\AuditLogger;
+use App\Domain\Commands\Models\RemoteCommand;
+use App\Domain\Commands\Services\Ed25519CommandSigner;
+use App\Domain\Commands\Services\RemoteCommandService;
 use App\Domain\Integrations\Models\ConnectorInstance;
 use App\Domain\Integrations\Models\FieldMapping;
 use App\Domain\Synchronization\Jobs\ProcessSyncBatchJob;
@@ -125,7 +128,7 @@ final class AgentController
         ]);
     }
 
-    public function config(Request $request): JsonResponse
+    public function config(Request $request, Ed25519CommandSigner $signer): JsonResponse
     {
         /** @var ConnectorInstance $instance */
         $instance = $request->attributes->get('connector_instance');
@@ -149,6 +152,11 @@ final class AgentController
             ->where('data_source_id', $source->id)
             ->get(['source_table', 'cursor_column', 'last_cursor_value', 'updated_at']);
 
+        $caps = is_array($source->capabilities_json) ? $source->capabilities_json : [];
+        $allowedWriteCommands = (! empty($caps['supports_write']) && is_array($caps['allowed_write_commands'] ?? null))
+            ? array_values($caps['allowed_write_commands'])
+            : [];
+
         return response()->json([
             'data_source' => [
                 'id' => $source->id,
@@ -160,6 +168,46 @@ final class AgentController
             ],
             'field_mappings' => $mappings,
             'sync_cursors' => $cursors,
+            'command_signing_public_key_ed25519' => $signer->publicKeyBase64(),
+            'signing_key_id' => $signer->signingKeyId(),
+            'allowed_write_commands' => $allowedWriteCommands,
+        ]);
+    }
+
+    public function pendingCommands(Request $request, RemoteCommandService $commandService): JsonResponse
+    {
+        /** @var ConnectorInstance $instance */
+        $instance = $request->attributes->get('connector_instance');
+        $source = $instance->dataSource;
+
+        $commands = $commandService->pullPendingForAgent($source, $instance);
+
+        return response()->json([
+            'data_source_id' => $source->id,
+            'commands' => $commands,
+        ]);
+    }
+
+    public function ackCommand(Request $request, int $command, RemoteCommandService $commandService): JsonResponse
+    {
+        $validated = $request->validate([
+            'status' => ['required', 'in:executing,succeeded,failed'],
+            'result' => ['nullable', 'array'],
+            'error_code' => ['nullable', 'string', 'max:80'],
+            'error_message' => ['nullable', 'string', 'max:2000'],
+        ]);
+
+        /** @var ConnectorInstance $instance */
+        $instance = $request->attributes->get('connector_instance');
+        $source = $instance->dataSource;
+
+        $commandModel = RemoteCommand::query()->findOrFail($command);
+        $updated = $commandService->acknowledgeFromAgent($source, $instance, $commandModel, $validated);
+
+        return response()->json([
+            'command_id' => $updated->id,
+            'status' => $updated->status,
+            'reconciled_at' => $updated->reconciled_at?->utc()->toIso8601String(),
         ]);
     }
 
