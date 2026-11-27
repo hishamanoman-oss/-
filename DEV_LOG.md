@@ -637,3 +637,23 @@
   - اجتياز `dotnet test` (**13 / 13** اختبارات xUnit خلال `2 s`).
   - اجتياز `php artisan test --no-ansi` (**45 / 45** اختباراً، **359 تأكيداً**) متضمنةً [`AlertEvaluationServiceTest.php`](file:///c:/xampp/htdocs/myproject/platform/tests/Feature/AlertEvaluationServiceTest.php) و [`ReportsExportTest.php`](file:///c:/xampp/htdocs/myproject/platform/tests/Feature/ReportsExportTest.php) و [`PerformanceTargetsTest.php`](file:///c:/xampp/htdocs/myproject/platform/tests/Feature/PerformanceTargetsTest.php).
   - اجتياز `npx.cmd playwright test --reporter=list` (**9 / 9** اختبارات E2E في `1.8m`) متضمنةً [`phase08-bi-polish.spec.js`](file:///c:/xampp/htdocs/myproject/platform/tests/e2e/phase08-bi-polish.spec.js) بصفر أخطاء Console/Page و `scrollWidth <= innerWidth` على الجوال `390x844`، وبقاء جميع ملفات النظام القديم غير معدّلة.
+
+### 33. المرحلة التاسعة — التحصين الأمني، التدقيق العدائي، النسخ الاحتياطي، خط CI، والانحدار الشامل (Phase 09):
+- **التاريخ**: 2026-11-28
+- **التحصين الأمني ومحددات المعدل**:
+  - إنشاء وتسجيل [`SecurityHeadersMiddleware.php`](file:///c:/xampp/htdocs/myproject/platform/app/Presentation/Http/Middleware/SecurityHeadersMiddleware.php) في [`bootstrap/app.php`](file:///c:/xampp/htdocs/myproject/platform/bootstrap/app.php) لفرض `X-Frame-Options: DENY`، `X-Content-Type-Options: nosniff`، `Referrer-Policy: strict-origin-when-cross-origin`، `Permissions-Policy`، و `Content-Security-Policy` المتوافقة مع Vite وLivewire وChart.js وReverb.
+  - تعريف وتطبيق 5 محددات معدل (`RateLimiter::for`) في [`AppServiceProvider.php`](file:///c:/xampp/htdocs/myproject/platform/app/Providers/AppServiceProvider.php) على مسارات `/login`، `/api/v1/agent/enroll`، `/api/v1/agent/sync/batches`، `/api/v1/webhooks/{dataSource}`، و `/reports/export` و `/reports/download` (مع إرجاع `429 Too Many Requests`).
+  - تحديث [`AuthController.php`](file:///c:/xampp/htdocs/myproject/platform/app/Presentation/Http/Controllers/Web/AuthController.php) لتجديد رمز `CSRF` (`regenerateToken()`) بجانب معرف الجلسة عند نجاح تسجيل الدخول.
+- **ثغرة صلاحيات مكتشفة ومُغلقة أثناء التدقيق العدائي**:
+  - كشف اختبار [`Phase09SecurityAuditTest.php`](file:///c:/xampp/htdocs/myproject/platform/tests/Feature/Phase09SecurityAuditTest.php) أن دور القراءة فقط `observer` (بسبب امتلاكه `reports.view`) كان يمر في إدارة `NotificationRulePolicy` و `PerformanceTargetPolicy` و `ScheduledReportPolicy`. تم إغلاق الثغرة فوراً في السياسات الثلاث وواجهتي [`AlertsCenterWorkspace.php`](file:///c:/xampp/htdocs/myproject/platform/app/Presentation/Livewire/AlertsCenterWorkspace.php) و [`ReportsCenterWorkspace.php`](file:///c:/xampp/htdocs/myproject/platform/app/Presentation/Livewire/ReportsCenterWorkspace.php).
+- **تجربة النسخ الاحتياطي والاسترجاع الحقيقية (`MariaDB 11.4` على `127.0.0.1:3307`)**:
+  - بناء [`backup-db.ps1`](file:///c:/xampp/htdocs/myproject/platform/scripts/backup-db.ps1) و [`restore-db.ps1`](file:///c:/xampp/htdocs/myproject/platform/scripts/restore-db.ps1) مع التحقق من بصمة `SHA-256` واستبعاد `storage/backups` في [`.gitignore`](file:///c:/xampp/htdocs/myproject/platform/.gitignore).
+  - تصدير قاعدة `rbd_platform` واستعادتها في `rbd_platform_restore_test` ومطابقة **55 / 55 جدولاً** و **935 / 935 صفاً** بـ **0 اختلافات** ثم حذف القاعدة المؤقتة.
+- **فحص التبعيات وخط أنابيب CI**:
+  - اجتياز `composer audit --no-interaction` بنتيجة `No security vulnerability advisories found.`.
+  - إنشاء خط أنابيب GitHub Actions في [`.github/workflows/ci.yml`](file:///c:/xampp/htdocs/myproject/.github/workflows/ci.yml) بالوظائف الثلاث (`laravel-tests`, `frontend-build`, `dotnet-agent-tests`).
+- **التحقق والانحدار الشامل النهائي**:
+  - اجتياز `php -l` لـ `169 / 169` ملف PHP بدون أخطاء، وبناء Vite (`777ms`).
+  - اجتياز `dotnet test` (**13 / 13** اختبارات xUnit خلال `1 s`).
+  - اجتياز `php artisan test --no-ansi` (**51 / 51** اختباراً، **474 تأكيداً**) متضمنةً [`Phase09SecurityAuditTest.php`](file:///c:/xampp/htdocs/myproject/platform/tests/Feature/Phase09SecurityAuditTest.php).
+  - اجتياز `npx.cmd playwright test --reporter=list` (**10 / 10** اختبارات E2E في `1.8m`) متضمنةً [`phase09-security-regression.spec.js`](file:///c:/xampp/htdocs/myproject/platform/tests/e2e/phase09-security-regression.spec.js) بصفر مخالفات CSP وصفر أخطاء Console/Page، وبقاء جميع ملفات النظام القديم غير معدّلة.

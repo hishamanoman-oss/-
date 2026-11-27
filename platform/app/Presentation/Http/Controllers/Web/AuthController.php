@@ -90,6 +90,7 @@ final class AuthController
 
         RateLimiter::clear($throttleKey);
         $request->session()->regenerate();
+        $request->session()->regenerateToken();
 
         $user->forceFill(['last_login_at' => now()])->save();
 

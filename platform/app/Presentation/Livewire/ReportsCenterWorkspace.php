@@ -272,6 +272,8 @@ final class ReportsCenterWorkspace extends Component
             'reportChartSpec' => $reportChartSpec,
             'exportQueryBase' => $exportQueryBase,
             'currency' => $tenantContext->tenant()?->default_currency ?? 'SAR',
+            'canManageTargets' => Gate::allows('manage', PerformanceTarget::class),
+            'canManageScheduled' => Gate::allows('create', ScheduledReport::class),
         ]);
     }
 }

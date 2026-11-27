@@ -146,7 +146,7 @@ final class AlertsCenterWorkspace extends Component
             $query->where('severity', $this->severityFilter);
         }
 
-        $canManageRules = $tenantContext->hasAnyPermission(['settings.manage', 'reports.view']);
+        $canManageRules = Gate::allows('manage', NotificationRule::class);
         $rules = $canManageRules
             ? NotificationRule::query()->with('branch:id,name,code')->orderBy('id')->get()
             : collect();

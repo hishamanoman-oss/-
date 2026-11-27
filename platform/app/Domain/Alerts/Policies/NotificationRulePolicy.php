@@ -23,7 +23,8 @@ final class NotificationRulePolicy
     public function manage(User $user): bool
     {
         return $this->tenantContext->id() !== null
-            && $this->tenantContext->hasAnyPermission(['settings.manage', 'reports.view']);
+            && ! $this->tenantContext->hasRole('observer')
+            && $this->tenantContext->hasAnyPermission(['settings.manage', 'branches.manage']);
     }
 
     public function update(User $user, NotificationRule $rule): bool

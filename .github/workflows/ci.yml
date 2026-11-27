@@ -1,0 +1,99 @@
+name: Platform & Agent CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  laravel-tests:
+    name: Laravel 13 PHP Lint & PHPUnit Suite
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:11.4
+        env:
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
+          MARIADB_DATABASE: rbd_platform_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: bcmath, mbstring, pdo_mysql, sodium, zip, gd, intl, xml
+          coverage: none
+
+      - name: Install Composer dependencies
+        working-directory: platform
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Lint all PHP files
+        working-directory: platform
+        run: find app database routes tests -name "*.php" -print0 | xargs -0 -n1 php -l
+
+      - name: Prepare test environment & run PHPUnit suite
+        working-directory: platform
+        env:
+          APP_ENV: testing
+          APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: rbd_platform_test
+          DB_USERNAME: root
+          DB_PASSWORD: ''
+        run: |
+          cp .env.example .env
+          php artisan key:generate --force
+          php artisan test --no-ansi
+
+  frontend-build:
+    name: Vite Asset Build (Tailwind CSS v4 + Chart.js)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: platform/package-lock.json
+
+      - name: Install dependencies & build Vite bundle
+        working-directory: platform
+        run: |
+          npm ci
+          npm run build
+
+  dotnet-agent-tests:
+    name: .NET 10 Local Sync Agent Build & xUnit Tests
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore, build & test RemoteSyncAgent
+        working-directory: agent
+        run: |
+          dotnet restore RemoteSyncAgent.sln
+          dotnet build RemoteSyncAgent.sln --no-restore --configuration Release
+          dotnet test RemoteSyncAgent.sln --no-build --configuration Release --verbosity minimal

@@ -22,7 +22,9 @@ final class ScheduledReportPolicy
 
     public function create(User $user): bool
     {
-        return $this->viewAny($user);
+        return $this->viewAny($user)
+            && ! $this->tenantContext->hasRole('observer')
+            && $this->tenantContext->hasAnyPermission(['settings.manage', 'branches.manage', 'audit.view']);
     }
 
     public function view(User $user, ScheduledReport $report): bool
@@ -36,6 +38,6 @@ final class ScheduledReportPolicy
 
     public function update(User $user, ScheduledReport $report): bool
     {
-        return $this->view($user, $report);
+        return $this->view($user, $report) && $this->create($user);
     }
 }

@@ -23,7 +23,8 @@ final class PerformanceTargetPolicy
     public function manage(User $user): bool
     {
         return $this->tenantContext->id() !== null
-            && $this->tenantContext->hasAnyPermission(['reports.view', 'settings.manage']);
+            && ! $this->tenantContext->hasRole('observer')
+            && $this->tenantContext->hasAnyPermission(['settings.manage', 'branches.manage']);
     }
 
     public function update(User $user, PerformanceTarget $target): bool

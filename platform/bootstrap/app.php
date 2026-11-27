@@ -5,6 +5,7 @@ use App\Presentation\Http\Middleware\CheckPermission;
 use App\Presentation\Http\Middleware\EnsurePlatformAdmin;
 use App\Presentation\Http\Middleware\EnsureUserIsActive;
 use App\Presentation\Http\Middleware\ResolveTenantContext;
+use App\Presentation\Http\Middleware\SecurityHeadersMiddleware;
 use App\Presentation\Http\Middleware\SetLocaleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -22,9 +23,14 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
+            SecurityHeadersMiddleware::class,
             SetLocaleMiddleware::class,
             EnsureUserIsActive::class,
             ResolveTenantContext::class,
+        ]);
+
+        $middleware->api(append: [
+            SecurityHeadersMiddleware::class,
         ]);
 
         $middleware->alias([

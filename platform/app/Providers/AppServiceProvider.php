@@ -43,7 +43,10 @@ use App\Presentation\Livewire\ProductsCatalogWorkspace;
 use App\Presentation\Livewire\ReportsCenterWorkspace;
 use App\Presentation\Livewire\SystemStatus;
 use App\Presentation\Livewire\TeamManager;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 
@@ -84,5 +87,23 @@ class AppServiceProvider extends ServiceProvider
         Livewire::component('header-notification-bell', HeaderNotificationBell::class);
         Livewire::component('alerts-center-workspace', AlertsCenterWorkspace::class);
         Livewire::component('reports-center-workspace', ReportsCenterWorkspace::class);
+
+        RateLimiter::for('login', fn (Request $request): Limit => Limit::perMinute(15)->by(
+            strtolower((string) $request->input('email', '')).'|'.$request->ip()
+        ));
+
+        RateLimiter::for('agent-enroll', fn (Request $request): Limit => Limit::perMinute(10)->by((string) $request->ip()));
+
+        RateLimiter::for('agent-sync', fn (Request $request): Limit => Limit::perMinute(60)->by(
+            ($request->attributes->get('connector_instance')?->id ?? 'anon').'|'.$request->ip()
+        ));
+
+        RateLimiter::for('webhooks', fn (Request $request): Limit => Limit::perMinute(30)->by(
+            (string) $request->route('dataSource').'|'.$request->ip()
+        ));
+
+        RateLimiter::for('reports-download', fn (Request $request): Limit => Limit::perMinute(20)->by(
+            ($request->user()?->id ?? 'guest').'|'.$request->ip()
+        ));
     }
 }

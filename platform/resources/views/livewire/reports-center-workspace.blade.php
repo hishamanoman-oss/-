@@ -139,7 +139,8 @@
         </div>
 
     @elseif ($activeTab === 'targets')
-        <div wire:key="tab-panel-targets" data-testid="tab-panel-targets" class="grid gap-6 lg:grid-cols-3">
+        <div wire:key="tab-panel-targets" data-testid="tab-panel-targets" class="grid gap-6 {{ $canManageTargets ? 'lg:grid-cols-3' : 'lg:grid-cols-1' }}">
+            @if ($canManageTargets)
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
                 <h2 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('ui.create_performance_target') }}</h2>
                 <form wire:submit="createTarget" class="mt-4 space-y-3 text-xs">
@@ -188,8 +189,9 @@
                     </button>
                 </form>
             </div>
+            @endif
 
-            <div class="space-y-3 lg:col-span-2">
+            <div class="space-y-3 {{ $canManageTargets ? 'lg:col-span-2' : '' }}">
                 @forelse ($targets as $t)
                     <div wire:key="target-card-{{ $t['id'] }}" data-testid="target-card-{{ $t['id'] }}" class="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-slate-900">
                         <div class="flex flex-wrap items-center justify-between gap-2">
@@ -199,9 +201,11 @@
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="font-mono text-sm font-bold text-sky-700 dark:text-sky-300">{{ number_format((float) $t['attainment_percent'], 1) }}%</span>
+                                @if ($canManageTargets)
                                 <button type="button" wire:click="deleteTarget({{ $t['id'] }})" class="rounded-lg border border-rose-200 px-2 py-1 text-[11px] font-semibold text-rose-700 hover:bg-rose-50 dark:border-rose-900 dark:text-rose-300">
                                     {{ __('ui.delete') }}
                                 </button>
+                                @endif
                             </div>
                         </div>
                         <div class="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
@@ -221,7 +225,8 @@
         </div>
 
     @else
-        <div wire:key="tab-panel-scheduled" data-testid="tab-panel-scheduled" class="grid gap-6 lg:grid-cols-3">
+        <div wire:key="tab-panel-scheduled" data-testid="tab-panel-scheduled" class="grid gap-6 {{ $canManageScheduled ? 'lg:grid-cols-3' : 'lg:grid-cols-1' }}">
+            @if ($canManageScheduled)
             <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
                 <h2 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('ui.create_scheduled_report') }}</h2>
                 <form wire:submit="createScheduledReport" class="mt-4 space-y-3 text-xs">
@@ -269,8 +274,9 @@
                     </button>
                 </form>
             </div>
+            @endif
 
-            <div class="lg:col-span-2">
+            <div class="{{ $canManageScheduled ? 'lg:col-span-2' : '' }}">
                 <x-ui.data-table :empty="$scheduledReports->isEmpty()" :empty-message="__('ui.no_scheduled_reports')">
                     <x-slot:head>
                         <tr>
@@ -295,6 +301,7 @@
                                 </x-ui.status-badge>
                             </td>
                             <td class="px-4 py-3 text-end">
+                                @if ($canManageScheduled)
                                 <div class="inline-flex flex-wrap gap-1.5">
                                     <button type="button" wire:click="runScheduledNow({{ $sr->id }})" class="rounded-lg bg-sky-700 px-2.5 py-1 text-xs font-semibold text-white hover:bg-sky-600">
                                         {{ __('ui.run_now') }}
@@ -303,6 +310,9 @@
                                         {{ $sr->is_active ? __('ui.pause') : __('ui.activate') }}
                                     </button>
                                 </div>
+                                @else
+                                    <span class="text-xs text-slate-400">—</span>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

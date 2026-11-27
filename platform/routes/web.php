@@ -40,7 +40,9 @@ Route::post('/preferences/theme', [ContextController::class, 'switchTheme'])->na
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
+    Route::post('/login', [AuthController::class, 'login'])
+        ->middleware('throttle:login')
+        ->name('login.attempt');
 });
 
 Route::middleware(['auth', 'active.user', 'tenant.context'])->group(function (): void {
@@ -99,8 +101,12 @@ Route::middleware(['auth', 'active.user', 'tenant.context'])->group(function ():
         ->name('reports.index');
 
     Route::get('/reports/export', ReportDownloadController::class)
-        ->middleware('permission:reports.view')
+        ->middleware(['permission:reports.view', 'throttle:reports-download'])
         ->name('reports.export');
+
+    Route::get('/reports/download', ReportDownloadController::class)
+        ->middleware(['permission:reports.view', 'throttle:reports-download'])
+        ->name('reports.download');
 
     Route::get('/alerts', AlertsCenterWorkspace::class)
         ->name('alerts.index');
