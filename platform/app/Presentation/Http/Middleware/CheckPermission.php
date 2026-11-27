@@ -17,7 +17,9 @@ final class CheckPermission
 
     public function handle(Request $request, Closure $next, string $permission): Response
     {
-        if (! $this->tenantContext->hasPermission($permission)) {
+        $candidates = array_values(array_filter(array_map('trim', explode('|', $permission))));
+
+        if (! $this->tenantContext->hasAnyPermission($candidates)) {
             abort(403, "Missing required permission [{$permission}].");
         }
 

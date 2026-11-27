@@ -43,6 +43,8 @@ final class FinancialMetricsService
         ?array $allowedBranchIds = null,
         ?CarbonInterface $snapshotDate = null,
         string|int|null $operatingExpenses = null,
+        ?CarbonInterface $from = null,
+        ?CarbonInterface $to = null,
     ): array {
         $query = Order::query()->where('order_status', '!=', 'cancelled');
 
@@ -54,6 +56,8 @@ final class FinancialMetricsService
 
         if ($snapshotDate !== null) {
             $query->whereDate('placed_at', $snapshotDate->toDateString());
+        } elseif ($from !== null && $to !== null) {
+            $query->whereBetween('placed_at', [$from, $to]);
         }
 
         $orders = $query->get();
@@ -121,6 +125,45 @@ final class FinancialMetricsService
             'orders_count' => $orders->count(),
             'incomplete_cost_orders_count' => $incompleteCostCount,
         ];
+    }
+
+    /**
+     * @param  list<int>|null  $allowedBranchIds
+     * @return list<array<string, mixed>>
+     */
+    public function summarizeByBranch(
+        ?int $branchId = null,
+        ?array $allowedBranchIds = null,
+        ?CarbonInterface $from = null,
+        ?CarbonInterface $to = null,
+    ): array {
+        $branchesQuery = \App\Domain\Organizations\Models\Branch::query()->orderBy('id');
+
+        if ($branchId !== null) {
+            $branchesQuery->where('id', $branchId);
+        } elseif (is_array($allowedBranchIds)) {
+            $branchesQuery->whereIn('id', $allowedBranchIds === [] ? [-1] : $allowedBranchIds);
+        }
+
+        $rows = [];
+        foreach ($branchesQuery->get() as $branch) {
+            $metrics = $this->summarize(
+                branchId: $branch->id,
+                allowedBranchIds: $allowedBranchIds,
+                from: $from,
+                to: $to,
+            );
+
+            $rows[] = array_merge($metrics, [
+                'branch_id' => (int) $branch->id,
+                'branch_name' => (string) $branch->name,
+                'branch_code' => (string) $branch->code,
+            ]);
+        }
+
+        usort($rows, fn (array $a, array $b): int => DecimalMath::comp($b['net_sales'], $a['net_sales']));
+
+        return $rows;
     }
 
     public function computeAndStoreSnapshot(

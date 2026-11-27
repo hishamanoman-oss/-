@@ -150,6 +150,46 @@ final class TenantContext
         return in_array($permissionKey, $this->permissionKeys(), true);
     }
 
+    /**
+     * @param  list<string>  $permissionKeys
+     */
+    public function hasAnyPermission(array $permissionKeys): bool
+    {
+        foreach ($permissionKeys as $key) {
+            if ($this->hasPermission(trim($key))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function hasRole(string $roleSlug): bool
+    {
+        return in_array($roleSlug, $this->roleSlugs(), true);
+    }
+
+    /**
+     * @param  list<string>  $roleSlugs
+     */
+    public function hasAnyRole(array $roleSlugs): bool
+    {
+        $assigned = $this->roleSlugs();
+        foreach ($roleSlugs as $slug) {
+            if (in_array($slug, $assigned, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function canViewCost(): bool
+    {
+        return $this->tenantId !== null
+            && $this->hasAnyRole(['tenant_owner', 'general_manager', 'accountant', 'inventory_manager']);
+    }
+
     public function hasFullBranchAccess(): bool
     {
         $roles = $this->roleSlugs();

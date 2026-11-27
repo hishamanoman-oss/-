@@ -159,6 +159,15 @@
                                 </li>
                             @endif
 
+                            @if ($ctx->hasAnyPermission(['inventory.view', 'sales.view']))
+                                <li>
+                                    <a href="{{ route('products.index') }}" data-testid="nav-products" class="flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition {{ request()->routeIs('products.index') ? 'bg-sky-600 text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">
+                                        <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"/></svg>
+                                        <span x-show="!collapsed" class="truncate">{{ __('ui.nav_products') }}</span>
+                                    </a>
+                                </li>
+                            @endif
+
                             @if ($ctx->hasPermission('inventory.view'))
                                 <li>
                                     <a href="{{ route('inventory.index') }}" data-testid="nav-inventory" class="flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition {{ request()->routeIs('inventory.index') ? 'bg-sky-600 text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">
@@ -170,12 +179,28 @@
 
                             @if ($ctx->hasPermission('sales.view'))
                                 <li>
-                                    <a href="{{ route('orders.index') }}" data-testid="nav-orders" class="flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition {{ request()->routeIs('orders.index') ? 'bg-sky-600 text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">
+                                    <a href="{{ route('orders.index') }}" data-testid="nav-orders" class="flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition {{ request()->routeIs('orders.index') || request()->routeIs('orders.invoice') ? 'bg-sky-600 text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">
                                         <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                         <span x-show="!collapsed" class="truncate">{{ __('ui.nav_sales') }}</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ route('customers.index') }}" data-testid="nav-customers" class="flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition {{ request()->routeIs('customers.index') ? 'bg-sky-600 text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">
+                                        <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                        <span x-show="!collapsed" class="truncate">{{ __('ui.nav_customers') }}</span>
+                                    </a>
+                                </li>
                             @endif
+
+                            @if ($ctx->hasAnyPermission(['reports.view', 'sales.view']))
+                                <li>
+                                    <a href="{{ route('financials.index') }}" data-testid="nav-financials" class="flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition {{ request()->routeIs('financials.index') ? 'bg-sky-600 text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">
+                                        <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <span x-show="!collapsed" class="truncate">{{ __('ui.nav_financials') }}</span>
+                                    </a>
+                                </li>
+                            @endif
+
                             @if ($ctx->hasPermission('integrations.view'))
                                 <li>
                                     <a href="{{ route('integrations.index') }}" data-testid="nav-integrations" class="flex items-center gap-3 rounded-lg px-3 py-2 font-medium transition {{ request()->routeIs('integrations.index') ? 'bg-sky-600 text-white' : 'text-slate-300 hover:bg-slate-900 hover:text-white' }}">
@@ -191,7 +216,7 @@
                     @php
                         $upcomingLinks = array_filter([
                             ($ctx->hasPermission('commands.request') || $ctx->hasPermission('commands.approve')) ? ['label' => __('ui.nav_commands'), 'phase' => 'P07'] : null,
-                            $ctx->hasPermission('reports.view') ? ['label' => __('ui.nav_reports'), 'phase' => 'P06'] : null,
+                            $ctx->hasPermission('reports.view') ? ['label' => __('ui.nav_reports'), 'phase' => 'P08'] : null,
                         ]);
                     @endphp
                     @if (count($upcomingLinks) > 0)

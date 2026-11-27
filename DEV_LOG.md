@@ -577,3 +577,21 @@
 - **إصلاح الأداء المحلي وتوجيه الصفحة الرئيسية**:
   - تفعيل `Zend OPcache` في `C:\rbd-runtime\php\php.ini` (`opcache.enable=1`, `opcache.enable_cli=1`) ورفع `max_execution_time = 120` لحل خطأ مهلة 30 ثانية وتخفيض زمن استجابة `/` و `/dashboard` من `10s` إلى `< 250ms`.
   - تحديث المسار `/` في [`platform/routes/web.php`](file:///c:/xampp/htdocs/myproject/platform/routes/web.php) ليوجه `is_platform_admin` بدون عضوية مستأجر إلى `/platform/tenants` بدلاً من `/dashboard`.
+
+### 30. المرحلة السادسة — لوحة ذكاء الأعمال الفورية، كتالوج المنتجات، ذكاء المخزون، العملاء، والمالية (Phase 06):
+- **التاريخ**: 2026-11-27
+- **خدمات التحليلات الدقيقة (`platform/app/Domain/Analytics/Services/`, بدقة `DecimalMath` بدون `float`)**:
+  - [`AnalyticsPeriod.php`](file:///c:/xampp/htdocs/myproject/platform/app/Domain/Analytics/Services/AnalyticsPeriod.php): احتساب الفترات (`today`, `7d`, `30d`, `this_month`, `custom`) ونطاق الفترة السابقة المقابلة بالضبط.
+  - [`SalesAnalyticsService.php`](file:///c:/xampp/htdocs/myproject/platform/app/Domain/Analytics/Services/SalesAnalyticsService.php): صافي المبيعات وإجمالي المبيعات والخصومات والمرتجعات والضرائب والمدفوع والمتبقي، متوسط قيمة الطلب، الطلبات الملغاة والمتأخرة، مقارنة الفترة السابقة (`delta_amount`, `delta_percent`)، أعلى الفروع، وأعلى المنتجات مبيعاً.
+  - [`InventoryIntelligenceService.php`](file:///c:/xampp/htdocs/myproject/platform/app/Domain/Analytics/Services/InventoryIntelligenceService.php): تنبيهات نقص المخزون (`available <= reorder_point`) والنافذ (`available <= 0`)، المخزون الراكد (رصيد > 0 بمبيعات صفرية في الفترة)، والتقييم المالي للمخزون مع الشفافية التامة حول `valued_sku_count` مقابل `missing_cost_sku_count`.
+  - [`CustomerIntelligenceService.php`](file:///c:/xampp/htdocs/myproject/platform/app/Domain/Analytics/Services/CustomerIntelligenceService.php): إجمالي العملاء والعملاء النشطين والمتكررين (`orders_count >= 2`)، القيمة العمرية `lifetime_value`، الذمم المستحقة، وآخر طلب مقيدة بنطاق الفروع.
+  - توسيع [`FinancialMetricsService.php`](file:///c:/xampp/htdocs/myproject/platform/app/Domain/Finance/Services/FinancialMetricsService.php) لدعم التصفية بالتاريخ والمقارنة فرعاً بفرع (`summarizeByBranch()`).
+- **الواجهات الحية ومساحات العمل الجديدة**:
+  - ترقية `/dashboard` عبر [`BusinessDashboardWorkspace.php`](file:///c:/xampp/htdocs/myproject/platform/app/Presentation/Livewire/BusinessDashboardWorkspace.php): لوحة متكيفة حسب الدور، مبدّل فترات، روابط انتقال مباشر لمساحات العمل، لوحة "يتطلب انتباهك"، وتحديث فوري عبر Reverb (`sync-realtime-refresh`).
+  - تفعيل `/products` ([`ProductsCatalogWorkspace.php`](file:///c:/xampp/htdocs/myproject/platform/app/Presentation/Livewire/ProductsCatalogWorkspace.php)) مع حجب `cost_price` عن غير المصرح لهم (`sales_staff` و `observer`) عبر `TenantContext::canViewCost()`.
+  - تفعيل `/customers` ([`CustomersCrmWorkspace.php`](file:///c:/xampp/htdocs/myproject/platform/app/Presentation/Livewire/CustomersCrmWorkspace.php)) و `/financials` ([`FinancialsWorkspace.php`](file:///c:/xampp/htdocs/myproject/platform/app/Presentation/Livewire/FinancialsWorkspace.php)) المحظورتين `403` على `inventory_manager`، وإضافة عرض الفاتورة القابلة للطباعة `/orders/{order}/invoice` ([`OrderInvoiceController.php`](file:///c:/xampp/htdocs/myproject/platform/app/Presentation/Http/Controllers/Web/OrderInvoiceController.php)) مع عزل صارم للفروع والمستأجرين.
+  - ترقية `/inventory` ([`InventoryWorkspace.php`](file:///c:/xampp/htdocs/myproject/platform/app/Presentation/Livewire/InventoryWorkspace.php)) بفلاتر (`الكل` / `منخفض ونافذ` / `مخزون راكد`) وبطاقة شفافية تقييم المخزون.
+- **التحقق الآلي والحي**:
+  - اجتياز `php -l` لـ `130 / 130` ملف PHP، واجتياز بناء Vite (`877ms`).
+  - اجتياز `dotnet test` (**7 / 7**)، واجتياز `php artisan test --no-ansi` (**34 / 34** اختباراً، **263 تأكيداً**) بما فيها [`Phase06AnalyticsAndWorkspacesTest.php`](file:///c:/xampp/htdocs/myproject/platform/tests/Feature/Phase06AnalyticsAndWorkspacesTest.php).
+  - اجتياز `npx.cmd playwright test --reporter=list` (**7 / 7** اختبارات E2E في `57.1s`) شاملة [`phase06-bi-workspaces.spec.js`](file:///c:/xampp/htdocs/myproject/platform/tests/e2e/phase06-bi-workspaces.spec.js) بصفر أخطاء Console/Page، وبقاء جميع ملفات النظام القديم غير معدّلة.

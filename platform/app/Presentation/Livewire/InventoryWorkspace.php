@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Presentation\Livewire;
 
+use App\Domain\Analytics\Services\AnalyticsPeriod;
+use App\Domain\Analytics\Services\InventoryIntelligenceService;
 use App\Domain\Finance\Support\DecimalMath;
 use App\Domain\Inventory\Models\InventoryBalance;
 use App\Domain\Inventory\Models\StockMovement;
@@ -16,6 +18,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -26,6 +29,9 @@ final class InventoryWorkspace extends Component
     public string $search = '';
 
     public string $warehouseFilter = 'all';
+
+    #[Url]
+    public string $stockFilter = 'all';
 
     // Movements Drawer
     public bool $showMovementsDrawer = false;
@@ -79,6 +85,14 @@ final class InventoryWorkspace extends Component
     public function updatingWarehouseFilter(): void
     {
         $this->resetPage();
+    }
+
+    public function setStockFilter(string $filter): void
+    {
+        if (in_array($filter, ['all', 'low_stock', 'slow_moving'], true)) {
+            $this->stockFilter = $filter;
+            $this->resetPage();
+        }
     }
 
     public function openMovements(int $balanceId): void
@@ -180,28 +194,46 @@ final class InventoryWorkspace extends Component
         $this->dispatch('toast', message: __('ui.saved_successfully'), type: 'success');
     }
 
-    public function render(TenantContext $tenantContext): View
+    public function render(TenantContext $tenantContext, InventoryIntelligenceService $inventoryIntelligence): View
     {
         Gate::authorize('viewAny', InventoryBalance::class);
 
         $accessibleBranchIds = $tenantContext->accessibleBranchIds();
+        $activeBranchId = $tenantContext->activeBranchId();
 
         $warehousesQuery = Warehouse::query()->with('branch')->orderBy('name');
         if (is_array($accessibleBranchIds)) {
             $warehousesQuery->whereIn('branch_id', $accessibleBranchIds === [] ? [-1] : $accessibleBranchIds);
         }
-        if ($tenantContext->activeBranchId() !== null) {
-            $warehousesQuery->where('branch_id', $tenantContext->activeBranchId());
+        if ($activeBranchId !== null) {
+            $warehousesQuery->where('branch_id', $activeBranchId);
         }
         $warehouses = $warehousesQuery->get();
         $allowedWarehouseIds = $warehouses->pluck('id')->all();
+
+        $selectedWarehouseIdFilter = $this->warehouseFilter !== 'all' ? (int) $this->warehouseFilter : null;
+        $intel = $inventoryIntelligence->analyze(
+            tenantId: $tenantContext->id(),
+            allowedBranchIds: $accessibleBranchIds,
+            branchId: $activeBranchId,
+            warehouseId: $selectedWarehouseIdFilter,
+            period: AnalyticsPeriod::resolve('30d'),
+        );
 
         $balancesQuery = InventoryBalance::query()
             ->with(['warehouse.branch', 'product', 'variant'])
             ->whereIn('warehouse_id', $allowedWarehouseIds === [] ? [-1] : $allowedWarehouseIds);
 
-        if ($this->warehouseFilter !== 'all') {
-            $balancesQuery->where('warehouse_id', (int) $this->warehouseFilter);
+        if ($selectedWarehouseIdFilter !== null) {
+            $balancesQuery->where('warehouse_id', $selectedWarehouseIdFilter);
+        }
+
+        if ($this->stockFilter === 'low_stock') {
+            $ids = $intel['low_stock_balance_ids'];
+            $balancesQuery->whereIn('id', $ids === [] ? [-1] : $ids);
+        } elseif ($this->stockFilter === 'slow_moving') {
+            $ids = $intel['slow_moving_balance_ids'];
+            $balancesQuery->whereIn('id', $ids === [] ? [-1] : $ids);
         }
 
         if ($this->search !== '') {
@@ -227,6 +259,9 @@ final class InventoryWorkspace extends Component
             'warehouses' => $warehouses,
             'products' => Product::query()->where('status', 'active')->orderBy('name')->get(),
             'movements' => $movements,
+            'intelligence' => $intel,
+            'canViewCost' => $tenantContext->canViewCost(),
+            'currency' => $tenantContext->tenant()?->default_currency ?? 'SAR',
             'canAdjust' => $tenantContext->hasPermission('inventory.adjust'),
             'decimalHelper' => DecimalMath::class,
         ]);

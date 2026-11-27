@@ -29,6 +29,56 @@
         @endif
     </div>
 
+    {{-- Inventory Intelligence & Valuation Transparency Strip --}}
+    @if ($canViewCost)
+        <div data-testid="inventory-valuation-card" class="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-slate-900 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('ui.inventory_valuation') }}</p>
+                <p class="mt-1 font-mono text-lg font-bold text-slate-900 dark:text-white">
+                    {{ $decimalHelper::formatDisplay($intelligence['valuation']['total_valuation'], 2) }} {{ $currency }}
+                </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 text-xs">
+                <x-ui.status-badge variant="live" :dot="false">
+                    {{ __('ui.valued_skus') }}: {{ $intelligence['valuation']['valued_sku_count'] }}
+                </x-ui.status-badge>
+                @if ($intelligence['valuation']['has_incomplete_valuation'])
+                    <x-ui.status-badge variant="delayed" :dot="false" data-testid="missing-cost-skus-badge">
+                        {{ __('ui.missing_cost_skus') }}: {{ $intelligence['valuation']['missing_cost_sku_count'] }}
+                    </x-ui.status-badge>
+                @endif
+            </div>
+        </div>
+    @endif
+
+    {{-- Intelligence Filter Pills --}}
+    <div class="flex flex-wrap gap-2">
+        <button
+            type="button"
+            wire:click="setStockFilter('all')"
+            data-testid="stock-filter-all"
+            class="rounded-lg px-3 py-1.5 text-xs font-semibold transition {{ $stockFilter === 'all' ? 'bg-sky-700 text-white' : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-800' }}"
+        >
+            {{ __('ui.filter_all_stock') }} ({{ $intelligence['total_skus'] }})
+        </button>
+        <button
+            type="button"
+            wire:click="setStockFilter('low_stock')"
+            data-testid="stock-filter-low"
+            class="rounded-lg px-3 py-1.5 text-xs font-semibold transition {{ $stockFilter === 'low_stock' ? 'bg-rose-700 text-white' : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-800' }}"
+        >
+            {{ __('ui.filter_low_stock') }} ({{ $intelligence['low_stock_count'] }})
+        </button>
+        <button
+            type="button"
+            wire:click="setStockFilter('slow_moving')"
+            data-testid="stock-filter-slow"
+            class="rounded-lg px-3 py-1.5 text-xs font-semibold transition {{ $stockFilter === 'slow_moving' ? 'bg-amber-600 text-white' : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-800' }}"
+        >
+            {{ __('ui.filter_slow_moving') }} ({{ $intelligence['slow_moving_count'] }})
+        </button>
+    </div>
+
     <x-ui.data-table :empty="$balances->isEmpty()" :empty-message="__('ui.no_inventory_found')">
         <x-slot:toolbar>
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

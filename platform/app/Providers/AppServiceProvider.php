@@ -18,11 +18,15 @@ use App\Domain\Organizations\Policies\BranchPolicy;
 use App\Domain\Organizations\Policies\WarehousePolicy;
 use App\Domain\Tenants\Services\TenantContext;
 use App\Presentation\Livewire\BranchesManager;
+use App\Presentation\Livewire\BusinessDashboardWorkspace;
+use App\Presentation\Livewire\CustomersCrmWorkspace;
 use App\Presentation\Livewire\DashboardOverview;
+use App\Presentation\Livewire\FinancialsWorkspace;
 use App\Presentation\Livewire\IntegrationCenterWorkspace;
 use App\Presentation\Livewire\InventoryWorkspace;
 use App\Presentation\Livewire\OrdersWorkspace;
 use App\Presentation\Livewire\PlatformTenantsManager;
+use App\Presentation\Livewire\ProductsCatalogWorkspace;
 use App\Presentation\Livewire\SystemStatus;
 use App\Presentation\Livewire\TeamManager;
 use Illuminate\Support\Facades\Gate;
@@ -47,11 +51,15 @@ class AppServiceProvider extends ServiceProvider
 
         Livewire::component('system-status', SystemStatus::class);
         Livewire::component('dashboard-overview', DashboardOverview::class);
+        Livewire::component('business-dashboard-workspace', BusinessDashboardWorkspace::class);
         Livewire::component('branches-manager', BranchesManager::class);
         Livewire::component('team-manager', TeamManager::class);
         Livewire::component('platform-tenants-manager', PlatformTenantsManager::class);
         Livewire::component('inventory-workspace', InventoryWorkspace::class);
         Livewire::component('orders-workspace', OrdersWorkspace::class);
         Livewire::component('integration-center-workspace', IntegrationCenterWorkspace::class);
+        Livewire::component('products-catalog-workspace', ProductsCatalogWorkspace::class);
+        Livewire::component('customers-crm-workspace', CustomersCrmWorkspace::class);
+        Livewire::component('financials-workspace', FinancialsWorkspace::class);
     }
 }

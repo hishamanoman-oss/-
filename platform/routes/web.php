@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 use App\Presentation\Http\Controllers\Web\AuthController;
 use App\Presentation\Http\Controllers\Web\ContextController;
+use App\Presentation\Http\Controllers\Web\OrderInvoiceController;
 use App\Presentation\Http\Controllers\Web\SystemStatusController;
 use App\Presentation\Livewire\BranchesManager;
-use App\Presentation\Livewire\DashboardOverview;
+use App\Presentation\Livewire\BusinessDashboardWorkspace;
+use App\Presentation\Livewire\CustomersCrmWorkspace;
+use App\Presentation\Livewire\FinancialsWorkspace;
 use App\Presentation\Livewire\IntegrationCenterWorkspace;
 use App\Presentation\Livewire\InventoryWorkspace;
 use App\Presentation\Livewire\OrdersWorkspace;
 use App\Presentation\Livewire\PlatformTenantsManager;
+use App\Presentation\Livewire\ProductsCatalogWorkspace;
 use App\Presentation\Livewire\TeamManager;
 use Illuminate\Support\Facades\Route;
 
@@ -41,7 +45,7 @@ Route::middleware(['auth', 'active.user', 'tenant.context'])->group(function ():
     Route::post('/context/switch-tenant', [ContextController::class, 'switchTenant'])->name('context.switch-tenant');
     Route::post('/context/switch-branch', [ContextController::class, 'switchBranch'])->name('context.switch-branch');
 
-    Route::get('/dashboard', DashboardOverview::class)
+    Route::get('/dashboard', BusinessDashboardWorkspace::class)
         ->middleware('permission:dashboard.view')
         ->name('dashboard');
 
@@ -53,6 +57,10 @@ Route::middleware(['auth', 'active.user', 'tenant.context'])->group(function ():
         ->middleware('permission:team.view')
         ->name('team.index');
 
+    Route::get('/products', ProductsCatalogWorkspace::class)
+        ->middleware('permission:inventory.view|sales.view')
+        ->name('products.index');
+
     Route::get('/inventory', InventoryWorkspace::class)
         ->middleware('permission:inventory.view')
         ->name('inventory.index');
@@ -60,6 +68,19 @@ Route::middleware(['auth', 'active.user', 'tenant.context'])->group(function ():
     Route::get('/orders', OrdersWorkspace::class)
         ->middleware('permission:sales.view')
         ->name('orders.index');
+
+    Route::get('/orders/{order}/invoice', OrderInvoiceController::class)
+        ->whereNumber('order')
+        ->middleware('permission:sales.view')
+        ->name('orders.invoice');
+
+    Route::get('/customers', CustomersCrmWorkspace::class)
+        ->middleware('permission:sales.view')
+        ->name('customers.index');
+
+    Route::get('/financials', FinancialsWorkspace::class)
+        ->middleware('permission:reports.view|sales.view')
+        ->name('financials.index');
 
     Route::get('/integrations', IntegrationCenterWorkspace::class)
         ->middleware('permission:integrations.view')

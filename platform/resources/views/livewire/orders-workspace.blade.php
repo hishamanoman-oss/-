@@ -130,6 +130,16 @@
                     <x-ui.status-badge variant="info" :dot="false">{{ $selectedOrder->currency_code }}</x-ui.status-badge>
                 </div>
 
+                <div class="flex justify-end">
+                    <a
+                        href="{{ route('orders.invoice', $selectedOrder) }}"
+                        data-testid="open-invoice-link-{{ $selectedOrder->order_number }}"
+                        class="rounded-lg bg-sky-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-sky-600"
+                    >
+                        {{ __('ui.open_printable_invoice') }}
+                    </a>
+                </div>
+
                 <div>
                     <p class="mb-2 font-bold text-slate-700 dark:text-slate-200">{{ __('ui.order_items_snapshot') }}</p>
                     <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800">
